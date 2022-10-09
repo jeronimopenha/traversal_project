@@ -1,10 +1,15 @@
+from math import sqrt
+
 
 class St4Choice:
     def __init__(self,
-                 n_threads: int = 1,
-                 choices: list() = []
+                 n_threads: int,
+                 matrix_len: int,
+                 choices: list()
                  ):
         self.n_threads = n_threads
+        self.matrix_len = matrix_len
+        self.matrix_sqrt = int(sqrt(self.matrix_len))
         self.choices = []
         for i in range(self.n_threads):
             self.choices.append(choices.copy())
@@ -18,7 +23,7 @@ class St4Choice:
             'n_next': 0,
             'c_current': 0,
             'process': False,
-            'c_next': 0
+            'c_next': None
         }
         self.output = self.output_new.copy()
 
@@ -27,19 +32,33 @@ class St4Choice:
 
         idx = _in['idx']
         v = _in['v']
-        edge_add = _in['edge_addr']
+
+        #print('st_4_th:%d v:%d, sw_wr:' % (idx, v, ))
+
+        edge_addr = _in['edge_addr']
         choice = _in['choice']
         n_current = _in['n_current']
         n_next = _in['n_next']
         c_current = _in['c_current']
         process = _in['process']
 
-        c_next = self.choices[idx][choice] + c_current
+        c_next = None
+        if v:
+            if choice >= len(self.choices):
+                ch = self.choices[idx][-1]
+            else:
+                ch = self.choices[idx][choice]
+            l = c_current // self.matrix_sqrt
+            c = c_current % self.matrix_sqrt
+            l += ch[0]
+            c += ch[1]
+            if not(l < 0 or l > self.matrix_sqrt-1 or c < 0 or c > self.matrix_sqrt-1):
+                c_next = (l*self.matrix_sqrt) + c
 
         self.output_new = {
             'idx': idx,
             'v': v,
-            'edge_addr': edge_add,
+            'edge_addr': edge_addr,
             'choice': choice,
             'n_current': n_current,
             'n_next': n_next,

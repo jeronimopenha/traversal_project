@@ -20,15 +20,16 @@ class TrGraph:
         self.n_nodes = len(self.nodes)
         edges = list(g.edges)
 
-        # finding the top nodes (with no predecessors)
-        upper_nodes = {}
-        for p in g._pred:
-            if len(g._pred[p]) == 0:
-                upper_nodes[p] = 0
+        # finding the bottom node (with no successors)
+        lower_node = None
+        for p in g._succ:
+            if len(g._succ[p]) == 0:
+                lower_node = p
+                break
 
-        # finding the longest path from the top nodes
+        '''# finding the longest path from the top nodes
         first_node = None
-        for n in upper_nodes.keys():
+        for n in lower_node.keys():
             su = g.successors(n)
             counter = 0
             while True:
@@ -37,38 +38,35 @@ class TrGraph:
                     counter += 1
                     su = g.successors(s)
                 except:
-                    upper_nodes[n] = counter
+                    lower_node[n] = counter
                     if first_node is None:
                         first_node = n
-                    elif upper_nodes[first_node] < upper_nodes[n]:
+                    elif lower_node[first_node] < lower_node[n]:
                         first_node = n
-                    break
+                    break'''
 
         # creating the edges list
         # first to the longest initial node path
-        upper_nodes.pop(first_node)
-        r = first_node
+        r = lower_node
         q = []
         q.append(r)
         working = True
-        while working:    
+        while working:
             working = False
             for e in edges:
-                if e[0] == r:
-                    self.edges.append(e)
+                if e[1] == r:
+                    self.edges.append((e[1], e[0]))
                     edges.remove(e)
-                    q.append(e[1])
-                    r = e[1]
+                    q.append(e[0])
+                    r = e[0]
                     working = True
                     break
-            if q  and not working:
+            if q and edges and not working:
                 q = q[:-1]
                 if q:
                     r = q[-1]
                     working = True
-                
-                elif edges:
+                '''elif edges:
                     q.append(edges[0][0])
                     r = edges[0][0]
-                    working = True
-                
+                    working = True'''
