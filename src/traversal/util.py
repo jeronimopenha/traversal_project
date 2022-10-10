@@ -46,7 +46,6 @@ class TrGraph:
                     break'''
 
         # creating the edges list
-        # first to the longest initial node path
         r = lower_node
         q = []
         q.append(r)
