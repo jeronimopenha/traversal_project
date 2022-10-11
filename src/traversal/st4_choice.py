@@ -10,9 +10,9 @@ class St4Choice:
         self.n_threads = n_threads
         self.matrix_len = matrix_len
         self.matrix_sqrt = int(sqrt(self.matrix_len))
-        self.choices = []
-        for i in range(self.n_threads):
-            self.choices.append(choices.copy())
+        self.choices = choices.copy()
+        #for i in range(self.n_threads):
+        #    self.choices.append(choices.copy())
 
         self.output_new = {
             'idx': 0,

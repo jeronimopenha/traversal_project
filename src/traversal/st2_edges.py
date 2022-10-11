@@ -18,6 +18,7 @@ class St2Edges:
             'v': False,
             'edge_addr': 0,
             'choice': 0,
+            'choice_l': 0,
             'n_current': 0,
             'n_next': 0
         }
@@ -33,6 +34,7 @@ class St2Edges:
             v = _in['v']
             edge_addr = _in['edge_addr']
             choice = _in['choice']
+            #choice_l = _in['']
         else:
             idx = _p_in['idx']
             v = _p_in['v']
