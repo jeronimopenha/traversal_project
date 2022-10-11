@@ -39,8 +39,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="2.9469416"
-     inkscape:cx="211.59882"
-     inkscape:cy="1024.907"
+     inkscape:cx="149.16121"
+     inkscape:cy="1023.5497"
      inkscape:window-width="1920"
      inkscape:window-height="1043"
      inkscape:window-x="1920"
@@ -314,19 +314,14 @@
        y="9.4649696" />
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:1.94028px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3;stroke-dasharray:none;stop-color:#000000"
+       style="font-weight:bold;font-size:1.94027996px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.30000001;stroke-dasharray:none"
        x="67.618515"
        y="11.709229"
        id="text990-5-9-9"><tspan
          sodipodi:role="line"
-         style="stroke-width:0.3"
+         style="stroke-width:0.30000001"
          x="67.618515"
          y="11.709229"
-         id="tspan1193-0">Matriz</tspan><tspan
-         sodipodi:role="line"
-         style="stroke-width:0.3"
-         x="67.618515"
-         y="14.13458"
          id="tspan2768">c2n</tspan></text>
     <text
        xml:space="preserve"

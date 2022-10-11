@@ -22,7 +22,8 @@ class St5C2n:
             'v': False,
             'edge_addr': 0,
             'choice': 0,
-            'sw': {'idx': 0, 'wr': False,'c_next': 0, 'n_next': 0}
+            'choice_l': 0,
+            'sw': {'idx': 0, 'wr': False, 'c_next': 0, 'n_next': 0}
 
         }
         self.output = self.output_new.copy()
@@ -34,12 +35,13 @@ class St5C2n:
         v = _in['v']
         edge_addr = _in['edge_addr']
         choice = _in['choice']
+        choice_l = _in['choice_l']
         n_current = _in['n_current']
         n_next = _in['n_next']
         c_current = _in['c_current']
         process = _in['process']
         c_next = _in['c_next']
-        sw = {'idx': 0, 'wr': False,'c_next': 0, 'n_next': 0}
+        sw = {'idx': 0, 'wr': False, 'c_next': 0, 'n_next': 0}
 
         # update c2n table
         b_sw = _sw['sw']
@@ -49,7 +51,8 @@ class St5C2n:
             self.c2n[b_sw['idx']][b_sw['c_next']] = b_sw['n_next']
             #print('TH %d' % b_sw['idx'])
             #for l in range(self.matrix_sqrt):
-            #    print(self.c2n[b_sw['idx']][l*self.matrix_sqrt:(l*self.matrix_sqrt)+self.matrix_sqrt])
+            #    print(
+            #        self.c2n[b_sw['idx']][l*self.matrix_sqrt:(l*self.matrix_sqrt)+self.matrix_sqrt])
             #print()
 
         # se process então ver se pode alocar
@@ -66,10 +69,12 @@ class St5C2n:
                 sw['idx'] = idx
                 choice = 0
                 edge_addr += 1
+                choice_l = (choice_l + 1) if choice_l < 8-1 else 0
             else:
                 choice += 1
         elif v:
             edge_addr += 1
+            choice_l = (choice_l + 1) if choice_l < 8-1 else 0
             choice = 0
 
         self.output_new = {
@@ -77,6 +82,7 @@ class St5C2n:
             'v': v,
             'edge_addr': edge_addr,
             'choice': choice,
+            'choice_l': choice_l,
             'sw': sw
 
         }

@@ -21,6 +21,7 @@ class St3N2c:
             'v': False,
             'edge_addr': 0,
             'choice': 0,
+            'choice_l': 0,
             'n_current': 0,
             'n_next': 0,
             'c_current': 0,
@@ -38,6 +39,7 @@ class St3N2c:
 
         edge_addr = _in['edge_addr']
         choice = _in['choice']
+        choice_l = _in['choice_l']
         n_current = _in['n_current']
         n_next = _in['n_next']
         c_current = self.n2c[idx][n_current]
@@ -60,6 +62,7 @@ class St3N2c:
             'v': v,
             'edge_addr': edge_addr,
             'choice': choice,
+            'choice_l': choice_l,
             'n_current': n_current,
             'n_next': n_next,
             'c_current': c_current,

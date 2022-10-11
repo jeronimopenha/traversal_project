@@ -1,3 +1,6 @@
+from random import choices
+
+
 class St2Edges:
     def __init__(self,
                  n_threads: int,
@@ -20,7 +23,8 @@ class St2Edges:
             'choice': 0,
             'choice_l': 0,
             'n_current': 0,
-            'n_next': 0
+            'n_next': 0,
+            'state': -1
         }
         self.output = self.output_new.copy()
 
@@ -34,17 +38,22 @@ class St2Edges:
             v = _in['v']
             edge_addr = _in['edge_addr']
             choice = _in['choice']
-            #choice_l = _in['']
+            choice_l = _in['choice_l']
         else:
             idx = _p_in['idx']
             v = _p_in['v']
             edge_addr = _p_in['edge_addr']
             choice = _p_in['choice']
-
+            choice_l = _p_in['choice_l']
+        state = -1
         n_current = 0
         n_next = 0
         if edge_addr >= len(self.edges_table):
             v = False
+            state = 1
+        elif choice > 16-1:
+            v = False
+            state = 0
         else:
             n_current = self.edges_table[edge_addr][0]
             n_next = self.edges_table[edge_addr][1]
@@ -54,6 +63,8 @@ class St2Edges:
             'v': v,
             'edge_addr': edge_addr,
             'choice': choice,
+            'choice_l': choice_l,
             'n_current': n_current,
-            'n_next': n_next
+            'n_next': n_next,
+            'state': state
         }

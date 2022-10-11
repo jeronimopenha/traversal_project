@@ -19,6 +19,7 @@ class St4Choice:
             'v': False,
             'edge_addr': 0,
             'choice': 0,
+            'choice_l':0,
             'n_current': 0,
             'n_next': 0,
             'c_current': 0,
@@ -37,6 +38,7 @@ class St4Choice:
 
         edge_addr = _in['edge_addr']
         choice = _in['choice']
+        choice_l = _in['choice_l']
         n_current = _in['n_current']
         n_next = _in['n_next']
         c_current = _in['c_current']
@@ -45,9 +47,9 @@ class St4Choice:
         c_next = None
         if v:
             if choice >= len(self.choices):
-                ch = self.choices[idx][-1]
+                ch = self.choices[choice_l][-1]
             else:
-                ch = self.choices[idx][choice]
+                ch = self.choices[choice_l][choice]
             l = c_current // self.matrix_sqrt
             c = c_current % self.matrix_sqrt
             l += ch[0]
@@ -60,6 +62,7 @@ class St4Choice:
             'v': v,
             'edge_addr': edge_addr,
             'choice': choice,
+            'choice_l': choice_l,
             'n_current': n_current,
             'n_next': n_next,
             'c_current': c_current,
