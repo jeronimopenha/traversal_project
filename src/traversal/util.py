@@ -40,7 +40,7 @@ class TrGraph:
             working = False
             for e in temp_edges:
                 if e[1] == r:
-                    r_edges.append((e[1], e[0]))
+                    r_edges.append([e[1], e[0]])
                     temp_edges.remove(e)
                     q.append(e[0])
                     r = e[0]
