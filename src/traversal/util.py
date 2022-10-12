@@ -1,7 +1,11 @@
 import networkx as nx
-from numpy import empty
 import pygraphviz as pgv
+from numpy import empty
+from enum import Enum
 
+class AlgTypeEnum(Enum):
+    DEPTH = 0
+    ZIGZAG = 1
 
 class TrGraph:
     def __init__(self, dot: str):
@@ -57,7 +61,9 @@ class TrGraph:
                     working = True'''
         return r_edges
 
-    def zigzag_algorithm(g):
+    def zigzag_algorithm(self):
+
+        g = self.g
 
         OutputList = []
         # get the node inputs
@@ -93,7 +99,8 @@ class TrGraph:
                     L_fanout[a].remove(b)
                     L_fanin[b].remove(a)
 
-                    EDGES.append([a, b, 0])
+                    #EDGES.append([a, b, 0])
+                    EDGES.append([a, b])
 
                 elif fanin >= 1:  # Case 2
 
@@ -106,7 +113,8 @@ class TrGraph:
                     L_fanin[a].remove(b)
                     L_fanout[b].remove(a)
 
-                    EDGES.append([a, b, 1])
+                    #EDGES.append([a, b, 1])
+                    EDGES.append([a, b])
 
             else:  # direction == 'OUT'
 
@@ -121,7 +129,8 @@ class TrGraph:
                     L_fanin[a].remove(b)
                     L_fanout[b].remove(a)
 
-                    EDGES.append([a, b, 1])
+                    #EDGES.append([a, b, 1])
+                    EDGES.append([a, b])
 
                 elif fanout >= 1:  # Case 2
 
@@ -134,6 +143,7 @@ class TrGraph:
                     L_fanout[a].remove(b)
                     L_fanin[b].remove(a)
 
-                    EDGES.append([a, b, 0])
+                    #EDGES.append([a, b, 0])
+                    EDGES.append([a, b])
 
         return EDGES

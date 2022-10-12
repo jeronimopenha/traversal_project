@@ -6,6 +6,8 @@ if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 
 from math import sqrt
+import argparse
+import traceback
 import random
 import time
 import st1_th_controller as _st1
@@ -99,16 +101,28 @@ def traversal(tr_graph,
     return results
 
 
-def maize_router(results: list()) -> list():
+def maze_router(results: list()) -> list():
     pass
 
 
-def main(dot: str, times: int = 1):
+def main():
+    # main(dot=os.getcwd() + '/src/dot/mac.dot',
+    # times=100)
+    # FIXME These three var shall be removed after the tests
+    dot = dot = os.getcwd() + '/src/dot/mac.dot'
+    times = 100
+    init_algorithm = _u.AlgTypeEnum.ZIGZAG
+    #
+
     tr_graph = _u.TrGraph(dot)
     n_threads = 5
     matrix_len: int = 16
     matrix_len_sqrt = int(sqrt(matrix_len))
-    edges = tr_graph.depth_algorithm()
+    edges = []
+    if init_algorithm == _u.AlgTypeEnum.DEPTH:
+        edges = tr_graph.depth_algorithm()
+    elif init_algorithm == _u.AlgTypeEnum.ZIGZAG:
+        edges = tr_graph.zigzag_algorithm()
     first_node = int(edges[0][0])
 
     results = traversal(tr_graph=tr_graph,
@@ -120,10 +134,45 @@ def main(dot: str, times: int = 1):
                         times=times
                         )
 
+    r = []
     for d in results:
+        for k in d.keys():
+            if d[k] not in r:
+                r.append(d[k])
+    for d in r:
         print(d)
+
+    '''args = create_args()
+    running_path = os.getcwd()
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    tr_root = os.getcwd()
+
+    #FIXME After the tests, this code shall be implemented
+    if args.output == '.':
+        args.output = running_path
+
+    if args.dot:
+        #args.dot = running_path + '/' + args.dot
+        create_project(tr_root, args.dot, args.copies, args.name, args.output)
+        print('Project successfully created in %s/%s' % (args.output, args.name))
+    else:
+        msg = 'Missing parameters. Run create_project -h to see all parameters needed'
+        raise Exception(msg)'''
+
+
+def create_args():
+    parser = argparse.ArgumentParser('create_project -h')
+    parser.add_argument('-d', '--dot', help='Dot file', type=str)
+    parser.add_argument('-a', '--init_algorithm',
+                        help='Algorithm por placer initialization: 0 - depth, 1 - zigzag', type=int, default=1)
+    parser.add_argument(
+        '-o', '--output', help='Output folder', type=str, default='.')
+    return parser.parse_args()
 
 
 if __name__ == '__main__':
-    main(dot=os.getcwd() + '/src/dot/mac.dot',
-         times=100)
+    try:
+        main()
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
