@@ -22,7 +22,7 @@ class St1ThController:
         }
         self.output = self.output_new.copy()
 
-    def execute(self, _in:dict()):
+    def execute(self, _in: dict()):
         self.output = self.output_new.copy()
 
         start = False
@@ -48,15 +48,15 @@ class St1ThController:
             edge_addr = 0
             choice = 0
             choice_l = 0
-        
+
         _in_idx = _in['idx']
         _in_state = _in['state']
-        if _in_state in [0,1]:
+        _in_done = _in['done']
+        if _in_done:
             self.threads_done[_in_idx] = _in_state
-            self.done_cnt+=1
+            self.done_cnt += 1
         if self.done_cnt == self.n_threads:
             self.done = True
-        
 
         self.output_new = {
             'start': start,

@@ -6,11 +6,13 @@ class St5C2n:
                  n_threads: int,
                  matrix_len: int,
                  first_node: int,
-                 first_cell: list()
+                 first_cell: list(), 
+                 choices_l_qty: int
                  ):
         self.n_threads = n_threads
         self.matrix_len = matrix_len
         self.matrix_sqrt = int(sqrt(self.matrix_len))
+        self.choices_l_qty = choices_l_qty
         self.c2n = []
         for i in range(self.n_threads):
             self.c2n.append([None for i in range(self.matrix_len)])
@@ -28,6 +30,7 @@ class St5C2n:
         }
         self.output = self.output_new.copy()
 
+    #FIXME Corrigir as constantes da quantidade de linhas de escolha para um parâmetro
     def execute(self, _in: dict(), _sw):
         self.output = self.output_new.copy()
 
@@ -69,12 +72,12 @@ class St5C2n:
                 sw['idx'] = idx
                 choice = 0
                 edge_addr += 1
-                choice_l = (choice_l + 1) if choice_l < 8-1 else 0
+                choice_l = (choice_l + 1) if choice_l < self.choices_l_qty-1 else 0
             else:
                 choice += 1
         elif v:
             edge_addr += 1
-            choice_l = (choice_l + 1) if choice_l < 8-1 else 0
+            choice_l = (choice_l + 1) if choice_l < self.choices_l_qty-1 else 0
             choice = 0
 
         self.output_new = {

@@ -24,6 +24,7 @@ class St2Edges:
             'choice_l': 0,
             'n_current': 0,
             'n_next': 0,
+            'done': False,
             'state': -1
         }
         self.output = self.output_new.copy()
@@ -45,18 +46,22 @@ class St2Edges:
             edge_addr = _p_in['edge_addr']
             choice = _p_in['choice']
             choice_l = _p_in['choice_l']
+        done = False
         state = -1
         n_current = 0
         n_next = 0
-        if edge_addr >= len(self.edges_table):
-            v = False
-            state = 1
-        elif choice > 16-1:
-            v = False
-            state = 0
-        else:
-            n_current = self.edges_table[edge_addr][0]
-            n_next = self.edges_table[edge_addr][1]
+        if v:
+            if edge_addr >= len(self.edges_table):
+                v = False
+                state = 1
+                done = True
+            elif choice > 16-1:
+                v = False
+                state = 0
+                done = True
+            else:
+                n_current = self.edges_table[edge_addr][0]
+                n_next = self.edges_table[edge_addr][1]
 
         self.output_new = {
             'idx': idx,
@@ -66,5 +71,6 @@ class St2Edges:
             'choice_l': choice_l,
             'n_current': n_current,
             'n_next': n_next,
+            'done': done,
             'state': state
         }

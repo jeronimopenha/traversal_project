@@ -74,7 +74,8 @@ def traversal(tr_graph,
         st2 = _st2.St2Edges(n_threads, matrix_len, edges)
         st3 = _st3.St3N2c(n_threads, matrix_len, first_node, first_cell)
         st4 = _st4.St4Choice(n_threads, matrix_len, choices)
-        st5 = _st5.St5C2n(n_threads, matrix_len, first_node, first_cell)
+        st5 = _st5.St5C2n(n_threads, matrix_len, first_node,
+                          first_cell, len(choices))
 
         while not st1.done:
             st1.execute(st2.output)
@@ -86,37 +87,33 @@ def traversal(tr_graph,
         for t in range(n_threads):
             if st1.threads_done[t] == 1:
                 results.append({'th%d' % t: st5.c2n[t]})
-                #print('TH: %d', t)
-                # for l in range(matrix_len_sqrt):
-                #    _str = ''
-                #    for c in range(matrix_len_sqrt):
-                #        d = st5.c2n[t][(matrix_len_sqrt*l) + c]
-                #        if d is None:
-                #            _str += '   _'
-                #        else:
-                #            _str += '%03d_' % d
-                #    print(_str)
-                # print()
+                '''print('TH: %d', t)
+                for l in range(matrix_len_sqrt):
+                    _str = ''
+                    for c in range(matrix_len_sqrt):
+                        d = st5.c2n[t][(matrix_len_sqrt*l) + c]
+                        if d is None:
+                            _str += '   _'
+                        else:
+                            _str += '%03d_' % d
+                    print(_str)
+                print()'''
         del st1, st2, st3, st4, st5, t
     return results
-
-
-def maze_router(results: list()) -> list():
-    pass
 
 
 def main():
     # main(dot=os.getcwd() + '/src/dot/mac.dot',
     # times=100)
     # FIXME These three var shall be removed after the tests
-    dot = dot = os.getcwd() + '/src/dot/mac.dot'
+    dot = os.getcwd() + '/src/dot/mults1.dot'
     times = 100
     init_algorithm = _u.AlgTypeEnum.ZIGZAG
     #
 
     tr_graph = _u.TrGraph(dot)
     n_threads = 5
-    matrix_len: int = 16
+    matrix_len: int = 25
     matrix_len_sqrt = int(sqrt(matrix_len))
     edges = []
     if init_algorithm == _u.AlgTypeEnum.DEPTH:
@@ -141,6 +138,7 @@ def main():
                 r.append(d[k])
     for d in r:
         print(d)
+        done, route = _u.routing_mesh(edges, matrix_len_sqrt, d)
 
     '''args = create_args()
     running_path = os.getcwd()
