@@ -86,7 +86,16 @@ def traversal(tr_graph,
 
         for t in range(n_threads):
             if st1.threads_done[t] == 1:
-                results.append({'th%d' % t: st5.c2n[t]})
+                node_dict = {}
+                for c in range(matrix_len):
+                    if st5.c2n[t][c] is None:
+                        continue
+                    line = c//matrix_len_sqrt
+                    col = c % matrix_len_sqrt
+                    node_dict[str(st5.c2n[t][c])] = [line, col]
+                results.append(node_dict)
+                #results.append({'th%d' % t: st5.c2n[t]})
+
                 '''print('TH: %d', t)
                 for l in range(matrix_len_sqrt):
                     _str = ''
@@ -113,7 +122,7 @@ def main():
 
     tr_graph = _u.TrGraph(dot)
     n_threads = 5
-    matrix_len: int = 25
+    matrix_len: int = 36
     matrix_len_sqrt = int(sqrt(matrix_len))
     edges = []
     if init_algorithm == _u.AlgTypeEnum.DEPTH:
@@ -133,12 +142,12 @@ def main():
 
     r = []
     for d in results:
-        for k in d.keys():
-            if d[k] not in r:
-                r.append(d[k])
+        if d not in r:
+            r.append(d)
     for d in r:
         print(d)
         done, route = _u.routing_mesh(edges, matrix_len_sqrt, d)
+        print(done, route)
 
     '''args = create_args()
     running_path = os.getcwd()

@@ -171,7 +171,7 @@ def routing_mesh(list_edge, GRID_SIZE, positions):
     # uma matriz que sera preenchida com os nodos
     grid = np.full((TOTAL_GRID_SIZE, 4, 1), -1, dtype=int)
     dic_path = {}
-    
+
     # verify if is routing
     for j in range(0, len(list_edge)):
         a = int(list_edge[j][0])
@@ -255,10 +255,10 @@ def routing_mesh(list_edge, GRID_SIZE, positions):
                     #print("top 1")
 
                 if not change:  # not routing
-                    return False
+                    return False, grid
 
             if not change:  # not routing
-                return False
+                return False, grid
 
             dist_i, dist_j = abs(
                 pos_b_i - pos_node_i), abs(pos_b_j - pos_node_j)
@@ -266,10 +266,10 @@ def routing_mesh(list_edge, GRID_SIZE, positions):
             change = False
 
         if change:  # stop, give errors
-            return False
+            return False, grid
 
         pe_final = pos_node_i * GRID_SIZE + pos_node_j
-    return True
+    return True, grid
 
 
 def routing_1hop(list_edge, GRID_SIZE, positions):
