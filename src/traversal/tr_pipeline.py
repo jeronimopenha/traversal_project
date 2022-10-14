@@ -146,7 +146,7 @@ def main():
             r.append(d)
     for d in r:
         print(d)
-        done, route = _u.routing_mesh(edges, matrix_len_sqrt, d)
+        done, route, dic_path = _u.routing_mesh(edges, matrix_len_sqrt, d)
         print(done, route)
 
     '''args = create_args()

@@ -255,10 +255,10 @@ def routing_mesh(list_edge, GRID_SIZE, positions):
                     #print("top 1")
 
                 if not change:  # not routing
-                    return False, grid
+                    return False, grid, dic_path
 
             if not change:  # not routing
-                return False, grid
+                return False, grid, dic_path
 
             dist_i, dist_j = abs(
                 pos_b_i - pos_node_i), abs(pos_b_j - pos_node_j)
@@ -266,10 +266,10 @@ def routing_mesh(list_edge, GRID_SIZE, positions):
             change = False
 
         if change:  # stop, give errors
-            return False, grid
+            return False, grid, dic_path
 
         pe_final = pos_node_i * GRID_SIZE + pos_node_j
-    return True, grid
+    return True, grid, dic_path
 
 
 def routing_1hop(list_edge, GRID_SIZE, positions):

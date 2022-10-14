@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+volatile int * N;
+volatile int *a;
+volatile int *b;
+int *c;
+int **A;
+int **B;
+int **C;
+int main() {
+    int i, j, k, alpha = 2;
+    int n = *N;
+
+    int sum = 0;
+    for (k = 1; k< n-1; k++) {
+    //DFGLoop: loop
+       C[i][j] += alpha * A[i][k] * B[j][k];
+	  C[i][j] += alpha * B[i][k] * A[j][k];
+    }
+
+    return sum;
+}
