@@ -5,7 +5,7 @@ import sys
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 
-from math import sqrt
+from math import sqrt, ceil
 import argparse
 import traceback
 import random
@@ -115,15 +115,16 @@ def main():
     # main(dot=os.getcwd() + '/src/dot/mac.dot',
     # times=100)
     # FIXME These three var shall be removed after the tests
-    dot = os.getcwd() + '/src/dot/mults1.dot'
+    # os.getcwd() + '/home/jeronimo/Documentos/GIT/yolt/cpu_map/bench/lisa/dac/atax.dot'
+    dot = '/home/jeronimo/Documentos/GIT/yolt/cpu_map/bench/lisa/dac/atax.dot'
     times = 100
     init_algorithm = _u.AlgTypeEnum.ZIGZAG
     #
 
     tr_graph = _u.TrGraph(dot)
     n_threads = 5
-    matrix_len: int = 36
-    matrix_len_sqrt = int(sqrt(matrix_len))
+    matrix_len_sqrt = ceil(sqrt(tr_graph.n_nodes))
+    matrix_len = matrix_len_sqrt*matrix_len_sqrt
     edges = []
     if init_algorithm == _u.AlgTypeEnum.DEPTH:
         edges = tr_graph.depth_algorithm()
@@ -145,9 +146,11 @@ def main():
         if d not in r:
             r.append(d)
     for d in r:
-        print(d)
+        #print(d)
         done, route, dic_path = _u.routing_mesh(edges, matrix_len_sqrt, d)
-        print(done, route)
+        if done:
+            _u.save_routed_dot(dic_path, tr_graph.g)
+            #print(dic_path)
 
     '''args = create_args()
     running_path = os.getcwd()
