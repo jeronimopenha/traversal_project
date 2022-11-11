@@ -5,6 +5,7 @@ import sys
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 
+import json
 from math import sqrt, ceil
 import argparse
 import traceback
@@ -93,46 +94,37 @@ def traversal(tr_graph,
                     line = c//matrix_len_sqrt
                     col = c % matrix_len_sqrt
                     node_dict[str(st5.c2n[t][c])] = [line, col]
-                results.append(node_dict)
-                #results.append({'th%d' % t: st5.c2n[t]})
-
-                '''print('TH: %d', t)
-                for l in range(matrix_len_sqrt):
-                    _str = ''
-                    for c in range(matrix_len_sqrt):
-                        d = st5.c2n[t][(matrix_len_sqrt*l) + c]
-                        if d is None:
-                            _str += '   _'
-                        else:
-                            _str += '%03d_' % d
-                    print(_str)
-                print()'''
+                results.append([i*5+t, node_dict])
         del st1, st2, st3, st4, st5, t
     return results
 
 
-def main():
-    # main(dot=os.getcwd() + '/src/dot/mac.dot',
-    # times=100)
-    # FIXME These three var shall be removed after the tests
-    # os.getcwd() + '/home/jeronimo/Documentos/GIT/yolt/cpu_map/bench/lisa/dac/atax.dot'
-    dot = '/home/jeronimo/Documentos/GIT/yolt/cpu_map/bench/lisa/dac/atax.dot'
-    times = 100
+def create_placement_json():
+    input_path = '/home/jeronimo/Documents/GIT/traversal_project/bench/m_bench/dac/'
+    output_path = '/home/jeronimo/Documents/GIT/traversal_project/bench/results/m_bench/simple_traverse/place_1000_tries/'
+    files_l = []
+    for dir, folder, files in os.walk(input_path):
+        for f in files:
+            files_l.append(
+                [os.path.join(dir, f), f, dir.replace('.', '').replace('/', '_')])
+
+    times = 400  # 100x/5th
     init_algorithm = _u.AlgTypeEnum.ZIGZAG
     #
+    results = []
+    for dot in files_l:
+        tr_graph = _u.TrGraph(dot[0])
+        n_threads = 5
+        matrix_len_sqrt = ceil(sqrt(tr_graph.n_nodes))
+        matrix_len = matrix_len_sqrt*matrix_len_sqrt
+        edges = []
+        if init_algorithm == _u.AlgTypeEnum.DEPTH:
+            edges = tr_graph.depth_algorithm()
+        elif init_algorithm == _u.AlgTypeEnum.ZIGZAG:
+            edges = tr_graph.zigzag_algorithm()
+        first_node = int(edges[0][0])
 
-    tr_graph = _u.TrGraph(dot)
-    n_threads = 5
-    matrix_len_sqrt = ceil(sqrt(tr_graph.n_nodes))
-    matrix_len = matrix_len_sqrt*matrix_len_sqrt
-    edges = []
-    if init_algorithm == _u.AlgTypeEnum.DEPTH:
-        edges = tr_graph.depth_algorithm()
-    elif init_algorithm == _u.AlgTypeEnum.ZIGZAG:
-        edges = tr_graph.zigzag_algorithm()
-    first_node = int(edges[0][0])
-
-    results = traversal(tr_graph=tr_graph,
+        res = traversal(tr_graph=tr_graph,
                         edges=edges,
                         first_node=first_node,
                         n_threads=n_threads,
@@ -140,34 +132,43 @@ def main():
                         matrix_len_sqrt=matrix_len_sqrt,
                         times=times
                         )
+        # edges costs
+        for r_c in range(len(res)):
+            r_id = res[r_c][0]
+            r_dict = res[r_c][1]
+            total_cost = 0
+            edges_costs = []
+            for edge in edges:
+                ca = r_dict[edge[0]]
+                cb = r_dict[edge[1]]
+                cost = abs(ca[0]-cb[0]) + abs(ca[1]-cb[1])
+                total_cost += cost
+                edges_costs.append([edge, cost])
+            res[r_c].append({'edges_costs': edges_costs, 'ideal_cost': len(
+                edges), 'total_cost': total_cost})
 
-    r = []
-    for d in results:
-        if d not in r:
-            r.append(d)
-    for d in r:
-        #print(d)
-        done, route, dic_path = _u.routing_mesh(edges, matrix_len_sqrt, d)
-        if done:
-            _u.save_routed_dot(dic_path, tr_graph.g)
-            #print(dic_path)
+        results.append(
+            {'name': dot[1], 'grid_size': matrix_len, 'placements': res})
+    for r in results:
+        r_name = r['name']
+        r_placements = r['placements']
+        r_grid_size = r['grid_size']
+        for r_p in r_placements:
+            data = {}
+            data['name'] = r_name
+            data['iteration_id'] = r_p[0]
+            data['ideal_cost'] = r_p[2]['ideal_cost']
+            data['total_cost'] = r_p[2]['total_cost']
+            data['grid_size'] = r_grid_size
+            data['edges_costs'] = r_p[2]['edges_costs']
+            data['placement'] = r_p[1]
+            json_d = json.dumps(data)
+            arq = open('%s%s/%s_it_%d_placement.json' %
+                       (output_path, r_name, r_name, r_p[0]), 'w')
+            arq.write(json_d)
+            arq.close()
 
-    '''args = create_args()
-    running_path = os.getcwd()
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    tr_root = os.getcwd()
-
-    #FIXME After the tests, this code shall be implemented
-    if args.output == '.':
-        args.output = running_path
-
-    if args.dot:
-        #args.dot = running_path + '/' + args.dot
-        create_project(tr_root, args.dot, args.copies, args.name, args.output)
-        print('Project successfully created in %s/%s' % (args.output, args.name))
-    else:
-        msg = 'Missing parameters. Run create_project -h to see all parameters needed'
-        raise Exception(msg)'''
+# TODO Future improvement
 
 
 def create_args():
@@ -182,7 +183,7 @@ def create_args():
 
 if __name__ == '__main__':
     try:
-        main()
+        create_placement_json()
     except Exception as e:
         print(e)
         traceback.print_exc()
