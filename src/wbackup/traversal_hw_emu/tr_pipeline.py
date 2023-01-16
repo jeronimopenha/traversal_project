@@ -113,15 +113,15 @@ def create_placement_json():
     #
     results = []
     for dot in files_l:
-        tr_graph = _u.TrGraph(dot[0])
+        tr_graph = _u.PRGraph(dot[0])
         n_threads = 5
         matrix_len_sqrt = ceil(sqrt(tr_graph.n_nodes))
         matrix_len = matrix_len_sqrt*matrix_len_sqrt
         edges = []
         if init_algorithm == _u.AlgTypeEnum.DEPTH:
-            edges = tr_graph.depth_algorithm()
+            edges = tr_graph.get_edges_dfa()
         elif init_algorithm == _u.AlgTypeEnum.ZIGZAG:
-            edges = tr_graph.zigzag_algorithm()
+            edges = tr_graph.get_edges_zza()
         first_node = int(edges[0][0])
 
         res = traversal(tr_graph=tr_graph,

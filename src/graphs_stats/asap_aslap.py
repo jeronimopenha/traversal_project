@@ -1,8 +1,7 @@
 import networkx as nx
 
 
-g = nx.DiGraph(nx.nx_pydot.read_dot(
-    '/home/jeronimo/Documents/GIT/traversal_project/bench/m_bench/dac/ewf.dot'))
+g = nx.DiGraph(nx.nx_pydot.read_dot('/home/jeronimo/Documentos/GIT/traversal_project/bench/test_bench/conv3.dot'))
 g.remove_node('\\n')
 nodes = g.nodes()
 edges = g.edges()
@@ -41,5 +40,5 @@ while q_alap:
 for i in n.keys():
     g.nodes[i]['alap'] = n[i]['alap']
     g.nodes[i]['asap'] = n[i]['asap']
-nx.nx_pydot.write_dot(g,'./teste.dot')
+nx.nx_pydot.write_dot(g,'/home/jeronimo/Documentos/GIT/traversal_project/bench/test_bench/conv3.dot')
     #print(i, ': ', n[i]['asap'], ' ', n[i]['alap'])
