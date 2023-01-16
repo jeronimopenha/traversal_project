@@ -41,6 +41,7 @@ def create_placement_json(pr_graph: _u.PRGraph, times: int = 2, init_algorithm: 
             placements[i][c] = n[r]
             n.pop(r)
             c += 1
+    
 
     '''first_node = int(edges[0][0])
     res = traversal(tr_graph=tr_graph,
