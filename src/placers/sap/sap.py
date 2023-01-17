@@ -1,33 +1,37 @@
+import traceback
 import os
 import sys
 
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 
-import src.util as _u
-from math import ceil, sqrt
+import pr_graph as _u
+from math import ceil, sqrt, exp
 import random as _r
+import json
 
 
 def sa_placer(initial_placement: dict(),
               matrix_len: int,
-              matrix_len_sqrt: int,
-              exec_times: int
+              matrix_len_sqrt: int
               ):
-    placement = initial_placement['initial_placement'].copy()
+    placement = initial_placement['placement']
     edges = initial_placement['edges']
-    total_cost = initial_placement['initial_cost']
-    r_total_swaps = 0
+    #total_cost = initial_placement['initial_cost']
+    total_swaps = 0
 
     # SA implementation
     t = 100
     while t >= 0.00001:
-        for i in range(matrix_len_sqrt):
-            for j in range(matrix_len_sqrt):
+        if t < 1.2:
+            a = 1
+        for i in range(matrix_len):
+            for j in range(matrix_len):
                 if i == j:
                     continue
                 if placement[i] is None and placement[j] is None:
                     continue
+                initial_placement['total_tries'] += 1
                 # Current costs for a and b
                 a = placement[i]
                 b = placement[j]
@@ -37,11 +41,11 @@ def sa_placer(initial_placement: dict(),
                 edges_b_keys = []
                 for e in edges.keys():
                     if a is not None:
-                        if edges[e]['n1'] == a:
+                        if edges[e]['a'] == a:
                             edges_a_keys.append(e)
                             curr_cost_a += edges[e]['final_cost']
                     if b is not None:
-                        if edges[e]['n1'] == b:
+                        if edges[e]['a'] == b:
                             edges_b_keys.append(e)
                             curr_cost_b += edges[e]['final_cost']
                 current_cost = curr_cost_a + curr_cost_b
@@ -49,40 +53,68 @@ def sa_placer(initial_placement: dict(),
                 # New costs for a and b
                 # for new 'a' position
                 new_cost_a = 0
+                edges_a_new_costs = []
                 if a is not None:
                     n1 = j
                     for e in edges_a_keys:
-                        n2 = placement.index(edges[e]['n2'], 0, matrix_len)
+                        v = edges[e]['b']
+                        n2 = placement.index(v, 0, matrix_len)
+                        if n2 == n1:
+                            n2 = i
                         l1 = n1//matrix_len_sqrt
                         c1 = n1 % matrix_len_sqrt
                         l2 = n2//matrix_len_sqrt
                         c2 = n2 % matrix_len_sqrt
                         edge_cost = abs(l1-l2) + abs(c1-c2)
+                        new_cost_a += edge_cost
+                        edges_a_new_costs.append(edge_cost)
+                        del n2, l1, l2, c1, c2, edge_cost, v
+                    del n1
+
                 # for new 'b' position
                 new_cost_b = 0
+                edges_b_new_costs = []
                 if b is not None:
                     n1 = i
                     for e in edges_b_keys:
-                        n2 = placement.index(edges[e]['n2'], 0, matrix_len)
+                        v = edges[e]['b']
+                        n2 = placement.index(v, 0, matrix_len)
+                        if n2 == n1:
+                            n2 = j
                         l1 = n1//matrix_len_sqrt
                         c1 = n1 % matrix_len_sqrt
                         l2 = n2//matrix_len_sqrt
                         c2 = n2 % matrix_len_sqrt
                         edge_cost = abs(l1-l2) + abs(c1-c2)
+                        new_cost_b += edge_cost
+                        edges_b_new_costs.append(edge_cost)
+                        del n2, l1, l2, c1, c2, edge_cost, v
+                    del n1
 
-                nai = j
-                nbj = i
-                new_cost_b = 0
+                new_cost = new_cost_a + new_cost_b
+                valor = exp(-1*(new_cost-current_cost)/t)
+                rand = _r.random()
+                if rand <= valor:
+                    a = 1
+                if new_cost < current_cost or rand <= valor:
+                    placement[i], placement[j] = placement[j], placement[i]
+                    initial_placement['total_cost'] += new_cost-current_cost
+                    initial_placement['total_swaps'] += 1
+                    for e in range(len(edges_a_keys)):
+                        edges[edges_a_keys[e]]['final_cost'] = edges_a_new_costs[e]
+                    for e in range(len(edges_b_keys)):
+                        edges[edges_b_keys[e]]['final_cost'] = edges_b_new_costs[e]
 
-                n1 = placements[str(i)]['initial_placement'].index(
-                    e[0], 0, matrix_len)
-                n2 = placements[str(i)]['initial_placement'].index(
-                    e[1], 0, matrix_len)
+                del a, b, curr_cost_a, curr_cost_b, edges_a_keys, edges_b_keys, e
+                del new_cost_a, edges_a_new_costs, current_cost, new_cost, valor, rand
+                del new_cost_b, edges_b_new_costs
+                if initial_placement['total_cost'] == initial_placement['min_cost']:
+                    return
+            t *= 0.999
 
 
 def create_placement_json(pr_graph: _u.PRGraph,
-                          n_placements: int = 2,
-                          exec_times: int = 2
+                          n_placements: int = 1
                           ):
     # TODO
     # docstring
@@ -107,9 +139,10 @@ def create_placement_json(pr_graph: _u.PRGraph,
         placements[str(i)] = {'placement': [],
                               'initial_placement': [None for j in range(matrix_len)],
                               'edges': {},
-                              'max_cost': n_edges,
+                              'min_cost': n_edges,
                               'initial_cost': 0,
                               'total_cost': 0,
+                              'total_tries': 0,
                               'total_swaps': 0
                               }
         while n:
@@ -117,6 +150,8 @@ def create_placement_json(pr_graph: _u.PRGraph,
             placements[str(i)]['initial_placement'][c] = n[r]
             n.pop(r)
             c += 1
+        placements[str(i)]['placement'] = placements[str(i)
+                                                     ]['initial_placement'].copy()
     del i, c, n, r
     # calculating the total cost for every initial placement
     for i in range(n_placements):
@@ -134,8 +169,8 @@ def create_placement_json(pr_graph: _u.PRGraph,
             edge_cost = abs(l1-l2) + abs(c1-c2)
             placements[str(i)]['initial_cost'] += edge_cost
             placements[str(i)]['edges']['%s_%s' % (e[0], e[1])] = {}
-            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['n1'] = e[0]
-            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['n2'] = e[1]
+            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['a'] = e[0]
+            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['b'] = e[1]
             placements[str(i)]['edges']['%s_%s' %
                                         (e[0], e[1])]['initial_cost'] = edge_cost
             placements[str(i)]['edges']['%s_%s' %
@@ -144,23 +179,11 @@ def create_placement_json(pr_graph: _u.PRGraph,
     del i, e, n1, n2, l1, l2, c1, c2, edge_cost
     # executing the SA algorithm
     for i in range(n_placements):
-        r_placement, r_total_cost, r_total_swaps = sa_placer(
-            placements[str(i)], matrix_len, matrix_len_sqrt, exec_times)
+        sa_placer(placements[str(i)], matrix_len, matrix_len_sqrt)
+        with open('dados.json', 'w') as json_file:
+            json.dump(placements[str(i)], json_file, indent=4)
 
-        placements[str(i)]['placement'] = r_placement
-        placements[str(i)]['total_cost'] = r_total_cost
-        placements[str(i)]['total_swaps'] = r_total_swaps
-    del r_placement, r_total_cost, r_total_swaps
-
-    '''first_node = int(edges[0][0])
-    res = traversal(tr_graph=tr_graph,
-                        edges=edges,
-                        first_node=first_node,
-                        n_threads=n_threads,
-                        matrix_len=matrix_len,
-                        matrix_len_sqrt=matrix_len_sqrt,
-                        times=times
-                        )
+    '''
         # edges costs
         for r_c in range(len(res)):
             r_id = res[r_c][0]
@@ -196,3 +219,36 @@ def create_placement_json(pr_graph: _u.PRGraph,
                        (output_path, r_name, r_name, r_p[0]), 'w')
             arq.write(json_d)
             arq.close()'''
+
+
+if __name__ == '__main__':
+    try:
+        input_path = '/home/jeronimo/Documentos/GIT/traversal_project/bench/test_bench/'
+        output_path = '/home/jeronimo/Documentos/GIT/traversal_project/exp_results/placements/sa/'
+        files_l = []
+
+        for dir, folder, files in os.walk(input_path):
+            flag = False
+            for f in files:
+                flag = True
+                files_l.append(
+                    [os.path.join(dir, f), f, '%s.dot' % f.split('.')[0]])
+            if flag:
+                stat = {
+                    'n_placements': 0,
+                    'n_routes_valids': 0,
+                    'ideal_cost': 0,
+                    'place_min_cost': None,
+                    'place_max_cost': 0,
+                    'histogram': {}
+                }
+                stats['%s.dot' % f.split('.')[0]] = stat
+
+        experimental_dot = '/home/jeronimo/Documentos/GIT/traversal_project/bench/test_bench/conv3.dot'
+        pr_graph = _u.PRGraph(experimental_dot)
+        ret = _sap.create_placement_json(pr_graph)
+        print(ret)
+
+    except Exception as e:
+        print(e)
+        traceback.print_exc()

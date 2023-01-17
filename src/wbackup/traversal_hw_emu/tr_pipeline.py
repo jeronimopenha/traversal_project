@@ -16,7 +16,7 @@ import st2_edges as _st2
 import st3_n2c as _st3
 import st4_choice as _st4
 import st5_c2n as _st5
-import util as _u
+import pr_graph as _u
 
 
 def traversal(tr_graph,
