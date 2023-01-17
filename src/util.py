@@ -28,7 +28,7 @@ class PRGraph:
         self.n_nodes = len(self.nodes)
 
     def get_edges(self):
-        return self.g.edges
+        return list(self.g.edges)
 
     def get_edges_dfa(self) -> list(list()):
         """_summary_

@@ -9,19 +9,83 @@ from math import ceil, sqrt
 import random as _r
 
 
-def sa_placer():
-    pass
+def sa_placer(initial_placement: dict(),
+              matrix_len: int,
+              matrix_len_sqrt: int,
+              exec_times: int
+              ):
+    placement = initial_placement['initial_placement'].copy()
+    edges = initial_placement['edges']
+    total_cost = initial_placement['initial_cost']
+    r_total_swaps = 0
+
+    # SA implementation
+    t = 100
+    while t >= 0.00001:
+        for i in range(matrix_len_sqrt):
+            for j in range(matrix_len_sqrt):
+                if i == j:
+                    continue
+                if placement[i] is None and placement[j] is None:
+                    continue
+                # Current costs for a and b
+                a = placement[i]
+                b = placement[j]
+                curr_cost_a = 0
+                curr_cost_b = 0
+                edges_a_keys = []
+                edges_b_keys = []
+                for e in edges.keys():
+                    if a is not None:
+                        if edges[e]['n1'] == a:
+                            edges_a_keys.append(e)
+                            curr_cost_a += edges[e]['final_cost']
+                    if b is not None:
+                        if edges[e]['n1'] == b:
+                            edges_b_keys.append(e)
+                            curr_cost_b += edges[e]['final_cost']
+                current_cost = curr_cost_a + curr_cost_b
+
+                # New costs for a and b
+                # for new 'a' position
+                new_cost_a = 0
+                if a is not None:
+                    n1 = j
+                    for e in edges_a_keys:
+                        n2 = placement.index(edges[e]['n2'], 0, matrix_len)
+                        l1 = n1//matrix_len_sqrt
+                        c1 = n1 % matrix_len_sqrt
+                        l2 = n2//matrix_len_sqrt
+                        c2 = n2 % matrix_len_sqrt
+                        edge_cost = abs(l1-l2) + abs(c1-c2)
+                # for new 'b' position
+                new_cost_b = 0
+                if b is not None:
+                    n1 = i
+                    for e in edges_b_keys:
+                        n2 = placement.index(edges[e]['n2'], 0, matrix_len)
+                        l1 = n1//matrix_len_sqrt
+                        c1 = n1 % matrix_len_sqrt
+                        l2 = n2//matrix_len_sqrt
+                        c2 = n2 % matrix_len_sqrt
+                        edge_cost = abs(l1-l2) + abs(c1-c2)
+
+                nai = j
+                nbj = i
+                new_cost_b = 0
+
+                n1 = placements[str(i)]['initial_placement'].index(
+                    e[0], 0, matrix_len)
+                n2 = placements[str(i)]['initial_placement'].index(
+                    e[1], 0, matrix_len)
 
 
-def create_placement_json(pr_graph: _u.PRGraph, times: int = 2, init_algorithm: _u.AlgTypeEnum = _u.AlgTypeEnum.ZIGZAG):
+def create_placement_json(pr_graph: _u.PRGraph,
+                          n_placements: int = 2,
+                          exec_times: int = 2
+                          ):
     # TODO
-    """_summary_
-
-    Args:
-        prgraph (_u.PRGraph): _description_
-        times (int, optional): _description_. Defaults to 1.
-        init_algorithm (_u.AlgTypeEnum, optional): _description_. Defaults to _u.AlgTypeEnum.ZIGZAG.
-    """
+    # docstring
 
     # FIXME
     # for debug only
@@ -31,17 +95,62 @@ def create_placement_json(pr_graph: _u.PRGraph, times: int = 2, init_algorithm: 
     matrix_len = matrix_len_sqrt*matrix_len_sqrt
     n_nodes = pr_graph.n_nodes
     nodes = pr_graph.nodes
+    edges = pr_graph.get_edges()
+    n_edges = len(edges)
+    min_cost = n_edges
 
-    placements = [[None for i in range(matrix_len)] for j in range(times)]
-    for i in range(times):
+    placements = {}
+    # initialize the placements randomly
+    for i in range(n_placements):
         n = nodes.copy()
         c = 0
+        placements[str(i)] = {'placement': [],
+                              'initial_placement': [None for j in range(matrix_len)],
+                              'edges': {},
+                              'max_cost': n_edges,
+                              'initial_cost': 0,
+                              'total_cost': 0,
+                              'total_swaps': 0
+                              }
         while n:
             r = _r.randint(0, len(n)-1)
-            placements[i][c] = n[r]
+            placements[str(i)]['initial_placement'][c] = n[r]
             n.pop(r)
             c += 1
-    
+    del i, c, n, r
+    # calculating the total cost for every initial placement
+    for i in range(n_placements):
+        cost = 0
+        for e in edges:
+            # finding the positions for each node of the edge
+            n1 = placements[str(i)]['initial_placement'].index(
+                e[0], 0, matrix_len)
+            n2 = placements[str(i)]['initial_placement'].index(
+                e[1], 0, matrix_len)
+            l1 = n1//matrix_len_sqrt
+            c1 = n1 % matrix_len_sqrt
+            l2 = n2//matrix_len_sqrt
+            c2 = n2 % matrix_len_sqrt
+            edge_cost = abs(l1-l2) + abs(c1-c2)
+            placements[str(i)]['initial_cost'] += edge_cost
+            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])] = {}
+            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['n1'] = e[0]
+            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['n2'] = e[1]
+            placements[str(i)]['edges']['%s_%s' %
+                                        (e[0], e[1])]['initial_cost'] = edge_cost
+            placements[str(i)]['edges']['%s_%s' %
+                                        (e[0], e[1])]['final_cost'] = edge_cost
+        placements[str(i)]['total_cost'] = placements[str(i)]['initial_cost']
+    del i, e, n1, n2, l1, l2, c1, c2, edge_cost
+    # executing the SA algorithm
+    for i in range(n_placements):
+        r_placement, r_total_cost, r_total_swaps = sa_placer(
+            placements[str(i)], matrix_len, matrix_len_sqrt, exec_times)
+
+        placements[str(i)]['placement'] = r_placement
+        placements[str(i)]['total_cost'] = r_total_cost
+        placements[str(i)]['total_swaps'] = r_total_swaps
+    del r_placement, r_total_cost, r_total_swaps
 
     '''first_node = int(edges[0][0])
     res = traversal(tr_graph=tr_graph,
