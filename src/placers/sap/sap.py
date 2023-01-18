@@ -14,22 +14,20 @@ import multiprocessing as mp
 import src.pr_graph as _u
 
 
-def thread_function(id: int, n_threads: int, n_placements: int, q,
+def thread_function(id: int, n_threads: int, n_placements: int, return_dict: mp.Manager().dict(),
                     placements: dict(),
                     matrix_len: int,
                     matrix_len_sqrt: int
                     ):
-    #print("Thread %d: starting" % id)
-
+    result = []
     for i in range(id, n_placements, n_threads):
         idx = i
         if ((idx) < n_placements):
             print("Running placer %d" % (idx))
             sa_placer(placements[str((idx))], matrix_len, matrix_len_sqrt)
-            q.put([str((idx)), placements[str((idx))]])
-            #print("Thread %d: ending placer %d" % (id, idx))
-    print("Thread %d: done" % id)
-    return
+            result.append([str((idx)), placements[str((idx))]])
+    return_dict[str(id)] = result
+    
 
 
 def sa_placer(initial_placement: dict(),
@@ -201,40 +199,37 @@ def create_placement_json(pr_graph: _u.PRGraph,
     # executing the SA algorithm in multithreads
     threads = list()
     n_threads = 8
-    #ctx = mp.get_context('spawn')
-    q = mp.Queue()
-    #b = mp.Barrier(n_threads)
+    manager = mp.Manager()
+    return_dict = manager.dict()
     for i in range(n_threads):
         x = mp.Process(target=thread_function, args=(i,
                                                      n_threads,
-                                                     n_placements, q,
+                                                     n_placements, 
+                                                     return_dict,
                                                      placements,
                                                      matrix_len,
                                                      matrix_len_sqrt,
                                                      ))
         print("Main    : create and start %s." % x.name)
-        # x.start()
         threads.append(x)
         x.start()
 
-    results = [q.get() for th in threads]
-    
+
     for th in threads:
         th.join()
         print("Main    : %s done." % th.name)
-    #    th.join()
-    #    print("Main    : thread %d done" % i)
-    for i in range(n_placements):
-        d = results[i]
-        placements[d[0]] = d[1]
+
+    for v in return_dict.values():
+        for d in v:
+            placements[d[0]] = d[1]
     return placements
 
 
 if __name__ == '__main__':
     try:
-        input_path = '/home/jeronimo/Documentos/GIT/traversal_project/bench/test_bench/'
-        output_path = '/home/jeronimo/Documentos/GIT/traversal_project/exp_results/placements/sa/'
-        n_exec = 20
+        input_path = '/home/jeronimo/Documents/GIT/traversal_project/bench/test_bench/'
+        output_path = '/home/jeronimo/Documents/GIT/traversal_project/exp_results/placements/sa/'
+        n_exec = 1000
         files_l = []
 
         for dir, folder, files in os.walk(input_path):
@@ -248,7 +243,7 @@ if __name__ == '__main__':
             pr_graph = _u.PRGraph(files_l[i][0])
             ret = create_placement_json(pr_graph, n_exec)
             for j in range(len(ret)):
-                with open('/home/jeronimo/Documentos/GIT/traversal_project/exp_results/placements/sa/%d_%s.json' % (j, files_l[i][2]), 'w') as json_file:
+                with open('%s%d_%s.json' % (output_path,j, files_l[i][2]), 'w') as json_file:
                     json.dump(ret[str(j)], json_file, indent=4)
 
     except Exception as e:

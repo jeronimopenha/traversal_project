@@ -1,0 +1,219 @@
+{
+    "placement": [
+        "22",
+        "21",
+        "13",
+        "14",
+        "6",
+        "1",
+        "16",
+        "15",
+        "19",
+        "5",
+        "0",
+        "2",
+        "17",
+        "18",
+        "20",
+        "11",
+        "7",
+        "9",
+        "10",
+        "12",
+        "23",
+        "8",
+        "24",
+        "4",
+        "3"
+    ],
+    "initial_placement": [
+        "3",
+        "6",
+        "20",
+        "1",
+        "10",
+        "15",
+        "18",
+        "2",
+        "14",
+        "0",
+        "19",
+        "4",
+        "7",
+        "12",
+        "24",
+        "23",
+        "21",
+        "5",
+        "9",
+        "8",
+        "13",
+        "22",
+        "16",
+        "17",
+        "11"
+    ],
+    "edges": {
+        "0_2": {
+            "a": "0",
+            "b": "2",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "1_0": {
+            "a": "1",
+            "b": "0",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "2_3": {
+            "a": "2",
+            "b": "3",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "3_12": {
+            "a": "3",
+            "b": "12",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "4_3": {
+            "a": "4",
+            "b": "3",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "5_0": {
+            "a": "5",
+            "b": "0",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "5_7": {
+            "a": "5",
+            "b": "7",
+            "initial_cost": 1,
+            "final_cost": 1
+        },
+        "5_13": {
+            "a": "5",
+            "b": "13",
+            "initial_cost": 3,
+            "final_cost": 2
+        },
+        "5_21": {
+            "a": "5",
+            "b": "21",
+            "initial_cost": 1,
+            "final_cost": 1
+        },
+        "6_5": {
+            "a": "6",
+            "b": "5",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "7_9": {
+            "a": "7",
+            "b": "9",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "8_7": {
+            "a": "8",
+            "b": "7",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "9_10": {
+            "a": "9",
+            "b": "10",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "10_12": {
+            "a": "10",
+            "b": "12",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "11_10": {
+            "a": "11",
+            "b": "10",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "12_20": {
+            "a": "12",
+            "b": "20",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "13_15": {
+            "a": "13",
+            "b": "15",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "14_13": {
+            "a": "14",
+            "b": "13",
+            "initial_cost": 6,
+            "final_cost": 1
+        },
+        "15_17": {
+            "a": "15",
+            "b": "17",
+            "initial_cost": 6,
+            "final_cost": 1
+        },
+        "16_15": {
+            "a": "16",
+            "b": "15",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "17_18": {
+            "a": "17",
+            "b": "18",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "18_20": {
+            "a": "18",
+            "b": "20",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "19_18": {
+            "a": "19",
+            "b": "18",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "20_24": {
+            "a": "20",
+            "b": "24",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "21_23": {
+            "a": "21",
+            "b": "23",
+            "initial_cost": 1,
+            "final_cost": 1
+        },
+        "22_21": {
+            "a": "22",
+            "b": "21",
+            "initial_cost": 1,
+            "final_cost": 1
+        }
+    },
+    "min_cost": 26,
+    "initial_cost": 82,
+    "total_cost": 27,
+    "total_tries": 387000,
+    "total_swaps": 96679
+}
