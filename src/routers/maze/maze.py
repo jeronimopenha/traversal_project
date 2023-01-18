@@ -253,6 +253,7 @@ def routing_1hop(list_edge, GRID_SIZE, positions):
 
 
 def save_routed_dot(dic_path: dict(), graph: nx.DiGraph(), name: str = 'routed.dot', path: str = './'):
-    ng = nx.DiGraph()
+    '''ng = nx.DiGraph()
     for node in graph.nodes(data=True):
-        a = 1
+        a = 1'''
+    pass

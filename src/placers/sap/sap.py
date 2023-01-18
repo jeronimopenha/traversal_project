@@ -1,14 +1,35 @@
-import traceback
 import os
 import sys
 
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 
-import pr_graph as _u
-from math import ceil, sqrt, exp
+import traceback
+import logging
 import random as _r
 import json
+import time
+from math import ceil, sqrt, exp
+import multiprocessing as mp
+import src.pr_graph as _u
+
+
+def thread_function(id: int, n_threads: int, n_placements: int, q,
+                    placements: dict(),
+                    matrix_len: int,
+                    matrix_len_sqrt: int
+                    ):
+    #print("Thread %d: starting" % id)
+
+    for i in range(id, n_placements, n_threads):
+        idx = i
+        if ((idx) < n_placements):
+            print("Running placer %d" % (idx))
+            sa_placer(placements[str((idx))], matrix_len, matrix_len_sqrt)
+            q.put([str((idx)), placements[str((idx))]])
+            #print("Thread %d: ending placer %d" % (id, idx))
+    print("Thread %d: done" % id)
+    return
 
 
 def sa_placer(initial_placement: dict(),
@@ -177,54 +198,43 @@ def create_placement_json(pr_graph: _u.PRGraph,
                                         (e[0], e[1])]['final_cost'] = edge_cost
         placements[str(i)]['total_cost'] = placements[str(i)]['initial_cost']
     del i, e, n1, n2, l1, l2, c1, c2, edge_cost
-    # executing the SA algorithm
+    # executing the SA algorithm in multithreads
+    threads = list()
+    n_threads = 8
+    #ctx = mp.get_context('spawn')
+    q = mp.Queue()
+    #b = mp.Barrier(n_threads)
+    for i in range(n_threads):
+        x = mp.Process(target=thread_function, args=(i,
+                                                     n_threads,
+                                                     n_placements, q,
+                                                     placements,
+                                                     matrix_len,
+                                                     matrix_len_sqrt,
+                                                     ))
+        print("Main    : create and start %s." % x.name)
+        # x.start()
+        threads.append(x)
+        x.start()
+
+    results = [q.get() for th in threads]
+    
+    for th in threads:
+        th.join()
+        print("Main    : %s done." % th.name)
+    #    th.join()
+    #    print("Main    : thread %d done" % i)
     for i in range(n_placements):
-        sa_placer(placements[str(i)], matrix_len, matrix_len_sqrt)
-        with open('dados.json', 'w') as json_file:
-            json.dump(placements[str(i)], json_file, indent=4)
-
-    '''
-        # edges costs
-        for r_c in range(len(res)):
-            r_id = res[r_c][0]
-            r_dict = res[r_c][1]
-            total_cost = 0
-            edges_costs = []
-            for edge in edges:
-                ca = r_dict[edge[0]]
-                cb = r_dict[edge[1]]
-                cost = abs(ca[0]-cb[0]) + abs(ca[1]-cb[1])
-                total_cost += cost
-                edges_costs.append([edge, cost])
-            res[r_c].append({'edges_costs': edges_costs, 'ideal_cost': len(
-                edges), 'total_cost': total_cost})
-
-        results.append(
-            {'name': dot[1], 'grid_size': matrix_len, 'placements': res})
-    for r in results:
-        r_name = r['name']
-        r_placements = r['placements']
-        r_grid_size = r['grid_size']
-        for r_p in r_placements:
-            data = {}
-            data['name'] = r_name
-            data['iteration_id'] = r_p[0]
-            data['ideal_cost'] = r_p[2]['ideal_cost']
-            data['total_cost'] = r_p[2]['total_cost']
-            data['grid_size'] = r_grid_size
-            data['edges_costs'] = r_p[2]['edges_costs']
-            data['placement'] = r_p[1]
-            json_d = json.dumps(data)
-            arq = open('%s%s/%s_it_%d_placement.json' %
-                       (output_path, r_name, r_name, r_p[0]), 'w')
-            arq.write(json_d)
-            arq.close()'''
+        d = results[i]
+        placements[d[0]] = d[1]
+    return placements
 
 
 if __name__ == '__main__':
     try:
         input_path = '/home/jeronimo/Documentos/GIT/traversal_project/bench/test_bench/'
         output_path = '/home/jeronimo/Documentos/GIT/traversal_project/exp_results/placements/sa/'
+        n_exec = 20
         files_l = []
 
         for dir, folder, files in os.walk(input_path):
@@ -233,21 +243,13 @@ if __name__ == '__main__':
                 flag = True
                 files_l.append(
                     [os.path.join(dir, f), f, '%s.dot' % f.split('.')[0]])
-            if flag:
-                stat = {
-                    'n_placements': 0,
-                    'n_routes_valids': 0,
-                    'ideal_cost': 0,
-                    'place_min_cost': None,
-                    'place_max_cost': 0,
-                    'histogram': {}
-                }
-                stats['%s.dot' % f.split('.')[0]] = stat
 
-        experimental_dot = '/home/jeronimo/Documentos/GIT/traversal_project/bench/test_bench/conv3.dot'
-        pr_graph = _u.PRGraph(experimental_dot)
-        ret = _sap.create_placement_json(pr_graph)
-        print(ret)
+        for i in range(len(files_l)):
+            pr_graph = _u.PRGraph(files_l[i][0])
+            ret = create_placement_json(pr_graph, n_exec)
+            for j in range(len(ret)):
+                with open('/home/jeronimo/Documentos/GIT/traversal_project/exp_results/placements/sa/%d_%s.json' % (j, files_l[i][2]), 'w') as json_file:
+                    json.dump(ret[str(j)], json_file, indent=4)
 
     except Exception as e:
         print(e)
