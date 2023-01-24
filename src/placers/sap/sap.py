@@ -20,14 +20,12 @@ def thread_function(id: int, n_threads: int, n_placements: int, return_dict: mp.
                     matrix_len_sqrt: int
                     ):
     result = []
-    for i in range(id, n_placements, n_threads):
-        idx = i
-        if ((idx) < n_placements):
-            print("Running placer %d" % (idx))
-            sa_placer(placements[str((idx))], matrix_len, matrix_len_sqrt)
-            result.append([str((idx)), placements[str((idx))]])
+    for idx in range(id, n_placements, n_threads):
+        if (idx < n_placements):
+            print("Running placer %d" % idx)
+            sa_placer(placements[str(idx)], matrix_len, matrix_len_sqrt)
+            result.append([str(idx), placements[str(idx)]])
     return_dict[str(id)] = result
-    
 
 
 def sa_placer(initial_placement: dict(),
@@ -111,7 +109,10 @@ def sa_placer(initial_placement: dict(),
                     del n1
 
                 new_cost = new_cost_a + new_cost_b
-                valor = exp(-1*(new_cost-current_cost)/t)
+                try:
+                    valor = exp(-1*(new_cost-current_cost)/t)
+                except Exception as e:
+                    valor = 0
                 rand = _r.random()
                 if rand <= valor:
                     a = 1
@@ -130,6 +131,7 @@ def sa_placer(initial_placement: dict(),
                 if initial_placement['total_cost'] == initial_placement['min_cost']:
                     return
             t *= 0.999
+    return
 
 
 def create_placement_json(pr_graph: _u.PRGraph,
@@ -155,14 +157,14 @@ def create_placement_json(pr_graph: _u.PRGraph,
     for i in range(n_placements):
         n = nodes.copy()
         c = 0
-        placements[str(i)] = {'placement': [],
-                              'initial_placement': [None for j in range(matrix_len)],
-                              'edges': {},
-                              'min_cost': n_edges,
+        placements[str(i)] = {'min_cost': n_edges,
                               'initial_cost': 0,
                               'total_cost': 0,
                               'total_tries': 0,
-                              'total_swaps': 0
+                              'total_swaps': 0,
+                              'placement': [],
+                              'initial_placement': [None for j in range(matrix_len)],
+                              'edges': {}
                               }
         while n:
             r = _r.randint(0, len(n)-1)
@@ -196,28 +198,28 @@ def create_placement_json(pr_graph: _u.PRGraph,
                                         (e[0], e[1])]['final_cost'] = edge_cost
         placements[str(i)]['total_cost'] = placements[str(i)]['initial_cost']
     del i, e, n1, n2, l1, l2, c1, c2, edge_cost
+
     # executing the SA algorithm in multithreads
     threads = list()
-    n_threads = 8
+    n_threads = os.cpu_count()
     manager = mp.Manager()
     return_dict = manager.dict()
     for i in range(n_threads):
         x = mp.Process(target=thread_function, args=(i,
                                                      n_threads,
-                                                     n_placements, 
+                                                     n_placements,
                                                      return_dict,
                                                      placements,
                                                      matrix_len,
                                                      matrix_len_sqrt,
                                                      ))
-        print("Main    : create and start %s." % x.name)
+        print("SA Main    : create and start %s." % x.name)
         threads.append(x)
         x.start()
 
-
     for th in threads:
         th.join()
-        print("Main    : %s done." % th.name)
+        print("SA Main    : %s done." % th.name)
 
     for v in return_dict.values():
         for d in v:
@@ -227,9 +229,9 @@ def create_placement_json(pr_graph: _u.PRGraph,
 
 if __name__ == '__main__':
     try:
-        input_path = '/home/jeronimo/Documents/GIT/traversal_project/bench/test_bench/'
-        output_path = '/home/jeronimo/Documents/GIT/traversal_project/exp_results/placements/sa/'
-        n_exec = 1000
+        input_path = './bench/test_bench/'
+        output_path = './exp_results/placements/sa/'
+        n_exec = 10
         files_l = []
 
         for dir, folder, files in os.walk(input_path):
@@ -243,7 +245,9 @@ if __name__ == '__main__':
             pr_graph = _u.PRGraph(files_l[i][0])
             ret = create_placement_json(pr_graph, n_exec)
             for j in range(len(ret)):
-                with open('%s%d_%s.json' % (output_path,j, files_l[i][2]), 'w') as json_file:
+                #FIXME
+                if not os.path.exists()
+                with open('%s%s/%s_%d.json' % (output_path, files_l[i][2], j), 'w') as json_file:
                     json.dump(ret[str(j)], json_file, indent=4)
 
     except Exception as e:
