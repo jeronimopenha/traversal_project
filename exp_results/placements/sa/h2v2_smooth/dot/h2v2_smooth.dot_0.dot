@@ -73,7 +73,7 @@ strict digraph "h2v2_smooth" {
 6 -> 47  [port=0, w=0];
 7 -> 48  [port=0, w=0];
 8 -> 33  [port=0, w=0];
-9 -> 48  [port=1, w=0];
+9 -> 48  [port=1, w=1];
 9 -> 51  [port=0, w=0];
 10 -> 16  [port=0, w=0];
 11 -> 41  [port=0, w=0];
@@ -83,7 +83,7 @@ strict digraph "h2v2_smooth" {
 15 -> 9  [port=0, w=0];
 15 -> 26  [port=0, w=0];
 16 -> 6  [port=0, w=0];
-17 -> 8  [port=0, w=0];
+17 -> 8  [port=0, w=1];
 18 -> 32  [port=0, w=0];
 19 -> 30  [port=0, w=0];
 20 -> 40  [port=0, w=0];

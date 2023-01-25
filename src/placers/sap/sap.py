@@ -203,7 +203,7 @@ def create_placement_json(pr_graph: _u.PRGraph,
     n_threads = os.cpu_count()
     manager = mp.Manager()
     return_dict = manager.dict()
-    for i in range(n_threads):
+    for i in range(min(n_threads, n_placements)):
         x = mp.Process(target=thread_function, args=(i,
                                                      n_threads,
                                                      n_placements,
@@ -244,12 +244,30 @@ if __name__ == '__main__':
             pr_graph = _u.PRGraph(files_l[i][0])
             ret = create_placement_json(pr_graph, n_exec)
             for j in range(len(ret)):
-                # FIXME
-                if not os.path.exists('%s%s/' % (output_path, files_l[i][2].replace('.dot', ''))):
-                    os.mkdir('%s%s/' %
-                             (output_path, files_l[i][2].replace('.dot', '')))
-                with open('%s%s/%s_%d.json' % (output_path, files_l[i][2].replace('.dot', ''), files_l[i][2], j), 'w') as json_file:
+                # placement
+                r_folder = '%s%s/' % (output_path,
+                                      files_l[i][2].replace('.dot', ''))
+                if not os.path.exists(r_folder):
+                    os.mkdir(r_folder)
+                pl_folder = '%spl/' % (r_folder)
+                if not os.path.exists(pl_folder):
+                    os.mkdir(pl_folder)
+                with open('%s%s_%d.json' % (pl_folder, files_l[i][2], j), 'w') as json_file:
                     json.dump(ret[str(j)], json_file, indent=4)
+
+                # dot with weighted edges
+                dot_folder = '%sdot/' % (r_folder)
+                if not os.path.exists(dot_folder):
+                    os.mkdir(dot_folder)
+                for k in ret.keys():
+                    edges = ret[k]['edges']
+                    for e in edges.keys():
+                        p = edges[e]['a']
+                        s = edges[e]['b']
+                        w = str(edges[e]['final_cost']-1)
+                        pr_graph.g.edges._adjdict[p][s]['w'] = w
+                pr_graph.save_dot('%s%s_%d.dot' %
+                                  (dot_folder, files_l[i][2], j))
 
     except Exception as e:
         print(e)

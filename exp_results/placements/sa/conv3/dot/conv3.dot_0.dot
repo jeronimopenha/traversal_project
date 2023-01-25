@@ -32,7 +32,7 @@ strict digraph "conv3" {
 5 -> 0  [port=1, w=0];
 5 -> 7  [port=0, w=0];
 5 -> 13  [port=0, w=0];
-5 -> 21  [port=0, w=0];
+5 -> 21  [port=0, w=2];
 6 -> 5  [port=0, w=0];
 7 -> 9  [port=0, w=0];
 8 -> 7  [port=1, w=0];

@@ -11,19 +11,24 @@ class AlgTypeEnum(Enum):
 
 
 class PRGraph:
-    def __init__(self, dot: str):
-        self.dot = dot
+    def __init__(self, sdot: str):
+        self.sdot = sdot
         self.nodes = []
         self.n_nodes = 0
         #self.edges = []
         self.g = None
         self.get_dot_vars()
 
+    def save_dot(self, tdot: str):
+        nx.nx_pydot.write_dot(self.g, tdot)
+
+
     def get_dot_vars(self):
-        dot = self.dot
+        dot = self.sdot
         # g = nx.Graph(nx.nx_pydot.read_dot(dot))
-        gv = pgv.AGraph(dot, strict=False, directed=True)
-        self.g = nx.DiGraph(gv)
+        self.g = nx.DiGraph(nx.nx_pydot.read_dot(self.sdot))
+        #gv = pgv.AGraph(dot, strict=False, directed=True)
+        #self.g = nx.DiGraph(gv)
         self.nodes = list(self.g.nodes)
         self.n_nodes = len(self.nodes)
 
