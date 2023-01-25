@@ -5,7 +5,6 @@ if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 
 import traceback
-import logging
 import random as _r
 import json
 import time
@@ -231,7 +230,7 @@ if __name__ == '__main__':
     try:
         input_path = './bench/test_bench/'
         output_path = './exp_results/placements/sa/'
-        n_exec = 10
+        n_exec = 1
         files_l = []
 
         for dir, folder, files in os.walk(input_path):
@@ -245,9 +244,11 @@ if __name__ == '__main__':
             pr_graph = _u.PRGraph(files_l[i][0])
             ret = create_placement_json(pr_graph, n_exec)
             for j in range(len(ret)):
-                #FIXME
-                if not os.path.exists()
-                with open('%s%s/%s_%d.json' % (output_path, files_l[i][2], j), 'w') as json_file:
+                # FIXME
+                if not os.path.exists('%s%s/' % (output_path, files_l[i][2].replace('.dot', ''))):
+                    os.mkdir('%s%s/' %
+                             (output_path, files_l[i][2].replace('.dot', '')))
+                with open('%s%s/%s_%d.json' % (output_path, files_l[i][2].replace('.dot', ''), files_l[i][2], j), 'w') as json_file:
                     json.dump(ret[str(j)], json_file, indent=4)
 
     except Exception as e:

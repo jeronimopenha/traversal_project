@@ -1,5 +1,37 @@
-import traceback
+import os
+import sys
 
+if os.getcwd() not in sys.path:
+    sys.path.append(os.getcwd())
+
+import traceback
+import networkx as nx
+
+
+def fix_graphs(s_dot:str):
+    g = nx.DiGraph(nx.nx_pydot.read_dot(s_dot))
+    g.remove_node('\\n')
+    nodes = g.nodes()
+    edges = g.edges()
+    for n in nodes.keys():
+        lb = nodes[n]['label'] = nodes[n]['label'].lower()
+        # Finding the type of the node
+        if 'mul' in lb:
+            nodes[n]['op'] = 'mul'
+        elif 'add' in lb:
+            nodes[n]['op'] = 'add'
+        elif 'sub' in lb:
+            nodes[n]['op'] = 'sub'
+        elif 'reg' in lb or 'lod' in lb or 'load' in lb:
+            nodes[n]['op'] = 'reg'
+        elif 'const' in lb or 'in' in lb:
+            nodes[n]['op'] = 'in'
+        elif 'out' in lb or 'str' in lb or 'store' in lb:
+            nodes[n]['op'] = 'out'
+        else:
+            nodes[i]['op'] = 'NONE'
+
+    a = 1
 
 def main(dot: str):
     name = 'dot'
@@ -118,10 +150,21 @@ def main(dot: str):
     dot_str += '}'
     print(dot_str)
 
-
 if __name__ == '__main__':
     try:
-        main('./bench/m_bench/h2v2_smooth.dot')
+        input_path = './bench/test_bench/'
+        files_l = []
+
+        for dir, folder, files in os.walk(input_path):
+            flag = False
+            for f in files:
+                flag = True
+                files_l.append(
+                    [os.path.join(dir, f), f, '%s.dot' % f.split('.')[0]])
+
+        for i in range(len(files_l)):
+            fix_graphs(files_l[i][0])
+
     except Exception as e:
         print(e)
         traceback.print_exc()
