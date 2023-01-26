@@ -10,7 +10,7 @@ import json
 import time
 from math import ceil, sqrt, exp
 import multiprocessing as mp
-import src.pr_graph as _u
+import networkx as nx
 
 
 def thread_function(id: int, n_threads: int, n_placements: int, return_dict: mp.Manager().dict(),
@@ -33,7 +33,7 @@ def sa_placer(initial_placement: dict(),
               ):
     placement = initial_placement['placement']
     edges = initial_placement['edges']
-    #total_cost = initial_placement['initial_cost']
+    # total_cost = initial_placement['initial_cost']
     total_swaps = 0
 
     # SA implementation
@@ -133,7 +133,7 @@ def sa_placer(initial_placement: dict(),
     return
 
 
-def create_placement_json(pr_graph: _u.PRGraph,
+def create_placement(g: nx.DiGraph(),
                           n_placements: int = 1
                           ):
     # TODO
@@ -143,11 +143,12 @@ def create_placement_json(pr_graph: _u.PRGraph,
     # for debug only
     _r.seed(0)
 
-    matrix_len_sqrt = ceil(sqrt(pr_graph.n_nodes))
+    nodes = list(g.nodes)
+    n_nodes = len(nodes)
+    matrix_len_sqrt = ceil(sqrt(n_nodes))
     matrix_len = matrix_len_sqrt*matrix_len_sqrt
-    n_nodes = pr_graph.n_nodes
-    nodes = pr_graph.nodes
-    edges = pr_graph.get_edges()
+
+    edges = list(g.edges)
     n_edges = len(edges)
     min_cost = n_edges
 
@@ -212,7 +213,7 @@ def create_placement_json(pr_graph: _u.PRGraph,
                                                      matrix_len,
                                                      matrix_len_sqrt,
                                                      ))
-        print("SA Main    : create and start %s." % x.name)
+        print("SA Main    : creating and starting %s." % x.name)
         threads.append(x)
         x.start()
 
@@ -230,7 +231,7 @@ if __name__ == '__main__':
     try:
         input_path = './bench/test_bench/'
         output_path = './exp_results/placements/sa/'
-        n_exec = 1
+        n_exec = 1000
         files_l = []
 
         for dir, folder, files in os.walk(input_path):
@@ -241,8 +242,8 @@ if __name__ == '__main__':
                     [os.path.join(dir, f), f, '%s.dot' % f.split('.')[0]])
 
         for i in range(len(files_l)):
-            pr_graph = _u.PRGraph(files_l[i][0])
-            ret = create_placement_json(pr_graph, n_exec)
+            g = nx.DiGraph(nx.nx_pydot.read_dot(files_l[i][0]))
+            ret = create_placement(g, n_exec)
             for j in range(len(ret)):
                 # placement
                 r_folder = '%s%s/' % (output_path,
@@ -255,7 +256,7 @@ if __name__ == '__main__':
                 with open('%s%s_%d.json' % (pl_folder, files_l[i][2], j), 'w') as json_file:
                     json.dump(ret[str(j)], json_file, indent=4)
 
-                # dot with weighted edges
+                '''# dot with weighted edges
                 dot_folder = '%sdot/' % (r_folder)
                 if not os.path.exists(dot_folder):
                     os.mkdir(dot_folder)
@@ -267,7 +268,7 @@ if __name__ == '__main__':
                         w = str(edges[e]['final_cost']-1)
                         pr_graph.g.edges._adjdict[p][s]['w'] = w
                 pr_graph.save_dot('%s%s_%d.dot' %
-                                  (dot_folder, files_l[i][2], j))
+                                  (dot_folder, files_l[i][2], j))'''
 
     except Exception as e:
         print(e)

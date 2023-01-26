@@ -19,8 +19,8 @@ class PRGraph:
         self.g = None
         self.get_dot_vars()
 
-    def save_dot(self, tdot: str):
-        nx.nx_pydot.write_dot(self.g, tdot)
+    def save_dot(self, sdot: str):
+        nx.nx_pydot.write_dot(self.g, sdot)
 
 
     def get_dot_vars(self):

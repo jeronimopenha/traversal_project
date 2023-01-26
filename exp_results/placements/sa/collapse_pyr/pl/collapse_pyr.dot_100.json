@@ -1,0 +1,783 @@
+{
+    "min_cost": 95,
+    "initial_cost": 634,
+    "total_cost": 99,
+    "total_tries": 1572115,
+    "total_swaps": 398483,
+    "placement": [
+        null,
+        "10",
+        "34",
+        "35",
+        "43",
+        "65",
+        "12",
+        "62",
+        "67",
+        "79",
+        null,
+        null,
+        "45",
+        "54",
+        "15",
+        "82",
+        "41",
+        "38",
+        "36",
+        "83",
+        "60",
+        "66",
+        "14",
+        "76",
+        "31",
+        null,
+        null,
+        "44",
+        null,
+        "17",
+        "77",
+        "46",
+        "40",
+        "21",
+        "48",
+        "23",
+        "68",
+        null,
+        "33",
+        "69",
+        "57",
+        "49",
+        "9",
+        "63",
+        "50",
+        "58",
+        "8",
+        "1",
+        "20",
+        "47",
+        "84",
+        "61",
+        "25",
+        "78",
+        "7",
+        "2",
+        null,
+        "18",
+        "51",
+        "32",
+        "22",
+        "5",
+        null,
+        "39",
+        "74",
+        "56",
+        "81",
+        "75",
+        "70",
+        "30",
+        "13",
+        "37",
+        null,
+        "4",
+        "29",
+        "11",
+        "64",
+        "24",
+        "0",
+        "52",
+        "85",
+        null,
+        "59",
+        "53",
+        "3",
+        "19",
+        "27",
+        "55",
+        null,
+        "42",
+        null,
+        "73",
+        null,
+        "28",
+        "80",
+        "72",
+        "6",
+        "16",
+        "71",
+        "26"
+    ],
+    "initial_placement": [
+        "63",
+        "9",
+        "27",
+        "66",
+        "48",
+        "64",
+        "82",
+        "56",
+        "34",
+        "23",
+        "0",
+        "72",
+        "38",
+        "6",
+        "12",
+        "5",
+        "54",
+        "77",
+        "70",
+        "80",
+        "20",
+        "33",
+        "10",
+        "32",
+        "36",
+        "79",
+        "24",
+        "35",
+        "50",
+        "58",
+        "31",
+        "83",
+        "14",
+        "39",
+        "16",
+        "13",
+        "78",
+        "43",
+        "8",
+        "37",
+        "46",
+        "52",
+        "15",
+        "45",
+        "75",
+        "21",
+        "57",
+        "71",
+        "44",
+        "41",
+        "59",
+        "25",
+        "4",
+        "19",
+        "40",
+        "51",
+        "3",
+        "30",
+        "85",
+        "26",
+        "29",
+        "61",
+        "18",
+        "62",
+        "81",
+        "28",
+        "74",
+        "73",
+        "84",
+        "68",
+        "22",
+        "49",
+        "67",
+        "7",
+        "55",
+        "60",
+        "69",
+        "47",
+        "1",
+        "11",
+        "17",
+        "2",
+        "65",
+        "53",
+        "76",
+        "42",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "edges": {
+        "0_24": {
+            "a": "0",
+            "b": "24",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "1_26": {
+            "a": "1",
+            "b": "26",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "1_41": {
+            "a": "1",
+            "b": "41",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "2_12": {
+            "a": "2",
+            "b": "12",
+            "initial_cost": 10,
+            "final_cost": 1
+        },
+        "3_16": {
+            "a": "3",
+            "b": "16",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "4_3": {
+            "a": "4",
+            "b": "3",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "5_0": {
+            "a": "5",
+            "b": "0",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "5_48": {
+            "a": "5",
+            "b": "48",
+            "initial_cost": 2,
+            "final_cost": 2
+        },
+        "6_11": {
+            "a": "6",
+            "b": "11",
+            "initial_cost": 12,
+            "final_cost": 1
+        },
+        "7_22": {
+            "a": "7",
+            "b": "22",
+            "initial_cost": 3,
+            "final_cost": 3
+        },
+        "7_54": {
+            "a": "7",
+            "b": "54",
+            "initial_cost": 9,
+            "final_cost": 2
+        },
+        "8_40": {
+            "a": "8",
+            "b": "40",
+            "initial_cost": 6,
+            "final_cost": 1
+        },
+        "9_63": {
+            "a": "9",
+            "b": "63",
+            "initial_cost": 1,
+            "final_cost": 1
+        },
+        "10_8": {
+            "a": "10",
+            "b": "8",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "10_63": {
+            "a": "10",
+            "b": "63",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "11_19": {
+            "a": "11",
+            "b": "19",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "13_37": {
+            "a": "13",
+            "b": "37",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "14_37": {
+            "a": "14",
+            "b": "37",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "14_66": {
+            "a": "14",
+            "b": "66",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "15_77": {
+            "a": "15",
+            "b": "77",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "15_58": {
+            "a": "15",
+            "b": "58",
+            "initial_cost": 9,
+            "final_cost": 1
+        },
+        "17_25": {
+            "a": "17",
+            "b": "25",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "18_0": {
+            "a": "18",
+            "b": "0",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "18_1": {
+            "a": "18",
+            "b": "1",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "19_13": {
+            "a": "19",
+            "b": "13",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "19_23": {
+            "a": "19",
+            "b": "23",
+            "initial_cost": 11,
+            "final_cost": 1
+        },
+        "20_61": {
+            "a": "20",
+            "b": "61",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "21_2": {
+            "a": "21",
+            "b": "2",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "22_5": {
+            "a": "22",
+            "b": "5",
+            "initial_cost": 11,
+            "final_cost": 1
+        },
+        "22_26": {
+            "a": "22",
+            "b": "26",
+            "initial_cost": 11,
+            "final_cost": 1
+        },
+        "24_64": {
+            "a": "24",
+            "b": "64",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "26_42": {
+            "a": "26",
+            "b": "42",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "27_67": {
+            "a": "27",
+            "b": "67",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "28_53": {
+            "a": "28",
+            "b": "53",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "29_28": {
+            "a": "29",
+            "b": "28",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "30_70": {
+            "a": "30",
+            "b": "70",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "31_68": {
+            "a": "31",
+            "b": "68",
+            "initial_cost": 12,
+            "final_cost": 1
+        },
+        "31_69": {
+            "a": "31",
+            "b": "69",
+            "initial_cost": 10,
+            "final_cost": 1
+        },
+        "32_51": {
+            "a": "32",
+            "b": "51",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "33_9": {
+            "a": "33",
+            "b": "9",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "33_27": {
+            "a": "33",
+            "b": "27",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "34_35": {
+            "a": "34",
+            "b": "35",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "35_62": {
+            "a": "35",
+            "b": "62",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "35_71": {
+            "a": "35",
+            "b": "71",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "36_3": {
+            "a": "36",
+            "b": "3",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "36_21": {
+            "a": "36",
+            "b": "21",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "37_78": {
+            "a": "37",
+            "b": "78",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "38_81": {
+            "a": "38",
+            "b": "81",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "38_56": {
+            "a": "38",
+            "b": "56",
+            "initial_cost": 6,
+            "final_cost": 1
+        },
+        "41_38": {
+            "a": "41",
+            "b": "38",
+            "initial_cost": 10,
+            "final_cost": 1
+        },
+        "42_52": {
+            "a": "42",
+            "b": "52",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "43_15": {
+            "a": "43",
+            "b": "15",
+            "initial_cost": 6,
+            "final_cost": 1
+        },
+        "44_17": {
+            "a": "44",
+            "b": "17",
+            "initial_cost": 12,
+            "final_cost": 1
+        },
+        "45_34": {
+            "a": "45",
+            "b": "34",
+            "initial_cost": 9,
+            "final_cost": 1
+        },
+        "46_10": {
+            "a": "46",
+            "b": "10",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "46_30": {
+            "a": "46",
+            "b": "30",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "47_20": {
+            "a": "47",
+            "b": "20",
+            "initial_cost": 12,
+            "final_cost": 1
+        },
+        "47_70": {
+            "a": "47",
+            "b": "70",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "48_50": {
+            "a": "48",
+            "b": "50",
+            "initial_cost": 6,
+            "final_cost": 1
+        },
+        "49_80": {
+            "a": "49",
+            "b": "80",
+            "initial_cost": 14,
+            "final_cost": 1
+        },
+        "49_44": {
+            "a": "49",
+            "b": "44",
+            "initial_cost": 10,
+            "final_cost": 1
+        },
+        "50_55": {
+            "a": "50",
+            "b": "55",
+            "initial_cost": 9,
+            "final_cost": 1
+        },
+        "50_82": {
+            "a": "50",
+            "b": "82",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "51_20": {
+            "a": "51",
+            "b": "20",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "52_32": {
+            "a": "52",
+            "b": "32",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "52_85": {
+            "a": "52",
+            "b": "85",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "53_4": {
+            "a": "53",
+            "b": "4",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "53_79": {
+            "a": "53",
+            "b": "79",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "54_45": {
+            "a": "54",
+            "b": "45",
+            "initial_cost": 6,
+            "final_cost": 1
+        },
+        "54_65": {
+            "a": "54",
+            "b": "65",
+            "initial_cost": 11,
+            "final_cost": 1
+        },
+        "55_27": {
+            "a": "55",
+            "b": "27",
+            "initial_cost": 9,
+            "final_cost": 1
+        },
+        "56_2": {
+            "a": "56",
+            "b": "2",
+            "initial_cost": 14,
+            "final_cost": 1
+        },
+        "57_49": {
+            "a": "57",
+            "b": "49",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "58_8": {
+            "a": "58",
+            "b": "8",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "59_30": {
+            "a": "59",
+            "b": "30",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "60_21": {
+            "a": "60",
+            "b": "21",
+            "initial_cost": 3,
+            "final_cost": 1
+        },
+        "60_51": {
+            "a": "60",
+            "b": "51",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "62_9": {
+            "a": "62",
+            "b": "9",
+            "initial_cost": 8,
+            "final_cost": 1
+        },
+        "63_84": {
+            "a": "63",
+            "b": "84",
+            "initial_cost": 14,
+            "final_cost": 1
+        },
+        "64_39": {
+            "a": "64",
+            "b": "39",
+            "initial_cost": 5,
+            "final_cost": 1
+        },
+        "64_59": {
+            "a": "64",
+            "b": "59",
+            "initial_cost": 10,
+            "final_cost": 1
+        },
+        "65_43": {
+            "a": "65",
+            "b": "43",
+            "initial_cost": 10,
+            "final_cost": 1
+        },
+        "66_46": {
+            "a": "66",
+            "b": "46",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "66_60": {
+            "a": "66",
+            "b": "60",
+            "initial_cost": 9,
+            "final_cost": 1
+        },
+        "68_14": {
+            "a": "68",
+            "b": "14",
+            "initial_cost": 10,
+            "final_cost": 1
+        },
+        "68_36": {
+            "a": "68",
+            "b": "36",
+            "initial_cost": 9,
+            "final_cost": 1
+        },
+        "69_33": {
+            "a": "69",
+            "b": "33",
+            "initial_cost": 10,
+            "final_cost": 1
+        },
+        "69_47": {
+            "a": "69",
+            "b": "47",
+            "initial_cost": 1,
+            "final_cost": 1
+        },
+        "70_83": {
+            "a": "70",
+            "b": "83",
+            "initial_cost": 9,
+            "final_cost": 1
+        },
+        "72_6": {
+            "a": "72",
+            "b": "6",
+            "initial_cost": 2,
+            "final_cost": 1
+        },
+        "73_29": {
+            "a": "73",
+            "b": "29",
+            "initial_cost": 7,
+            "final_cost": 1
+        },
+        "74_7": {
+            "a": "74",
+            "b": "7",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "75_18": {
+            "a": "75",
+            "b": "18",
+            "initial_cost": 4,
+            "final_cost": 1
+        },
+        "76_31": {
+            "a": "76",
+            "b": "31",
+            "initial_cost": 9,
+            "final_cost": 1
+        },
+        "77_57": {
+            "a": "77",
+            "b": "57",
+            "initial_cost": 4,
+            "final_cost": 1
+        }
+    }
+}
