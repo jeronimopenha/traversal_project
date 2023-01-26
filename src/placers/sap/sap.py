@@ -134,8 +134,8 @@ def sa_placer(initial_placement: dict(),
 
 
 def create_placement(g: nx.DiGraph(),
-                          n_placements: int = 1
-                          ):
+                     n_placements: int = 1
+                     ):
     # TODO
     # docstring
 
@@ -150,7 +150,6 @@ def create_placement(g: nx.DiGraph(),
 
     edges = list(g.edges)
     n_edges = len(edges)
-    min_cost = n_edges
 
     placements = {}
     # initialize the placements randomly

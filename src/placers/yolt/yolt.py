@@ -133,11 +133,56 @@ def sa_placer(initial_placement: dict(),
     return
 
 
+def yolt_placer(initial_placement: dict(),
+                matrix_len: int,
+                matrix_len_sqrt: int,
+                distance_matrix: list(list()),
+                nodes_positions: list()
+                ):
+    # FIXME Corrigir zigzag
+    edges = initial_placement['edges']
+    placement = initial_placement['placement']
+    total_cost = 0
+    for e in edges.keys():
+        a = edges[e]['a']
+        b = edges[e]['b']
+        if nodes_positions[b] is None:
+            while True:
+                choice = _r.randint(0, matrix_len-1)
+                if placement[choice] is None:
+                    nodes_positions[b] = choice
+                    placement[choice] = b
+                    break
+        d = 0
+        positioned = False
+        for dm_line in distance_matrix:
+            d = d+1
+            pl = nodes_positions[b]//matrix_len_sqrt
+            pc = nodes_positions[b] % matrix_len_sqrt
+            for dm_column in dm_line:
+                nl = pl+dm_column[0]
+                nc = pc+dm_column[1]
+                if nl > matrix_len_sqrt-1 or \
+                        nc > matrix_len_sqrt-1 or \
+                        nl < 0 or nc < 0:
+                    continue
+                cell = nl*matrix_len_sqrt + nc
+                if placement[cell] is None:
+                    nodes_positions[a] = cell
+                    placement[cell] = a
+                    edges[e]['final_cost'] = d
+                    total_cost += d
+                    positioned = True
+                    break
+            if positioned:
+                break
+
+
 def get_edges_depth_first(g: nx.DiGraph()) -> list(list()):
     # FIXME Acertar o algoritmo para grafos não conectados
     # FIXME docstring
     """_summary_
-        Returns a list of edges according 
+        Returns a list of edges according
         with the depth first algorithm
 
     Args:
@@ -186,7 +231,7 @@ def get_edges_depth_first(g: nx.DiGraph()) -> list(list()):
 def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
     # FIXME docstring
     """_summary_
-        Returns a list of edges according 
+        Returns a list of edges according
         with the zig zag algorithm
     Returns:
         _type_: _description_
@@ -226,8 +271,9 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
                 L_fanout[a].remove(b)
                 L_fanin[b].remove(a)
 
-                #EDGES.append([a, b, 0])
-                EDGES.append([a, b, 'IN'])
+                # EDGES.append([a, b, 0])
+                # EDGES.append([a, b, 'OUT'])
+                EDGES.append([b, a])
 
             elif fanin >= 1:  # Case 2
 
@@ -240,8 +286,9 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
                 L_fanin[a].remove(b)
                 L_fanout[b].remove(a)
 
-                #EDGES.append([a, b, 1])
-                EDGES.append([a, b, 'OUT'])
+                # EDGES.append([a, b, 1])
+                # EDGES.append([a, b, 'IN'])
+                EDGES.append([b, a])
 
         else:  # direction == 'OUT'
 
@@ -256,7 +303,8 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
                 L_fanin[a].remove(b)
                 L_fanout[b].remove(a)
 
-                #EDGES.append([a, b, 1])
+                # EDGES.append([a, b, 1])
+                # EDGES.append([a, b, 'IN'])
                 EDGES.append([a, b])
 
             elif fanout >= 1:  # Case 2
@@ -270,15 +318,16 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
                 L_fanout[a].remove(b)
                 L_fanin[b].remove(a)
 
-                #EDGES.append([a, b, 0])
+                # EDGES.append([a, b, 0])
+                # EDGES.append([a, b, 'OUT'])
                 EDGES.append([a, b])
 
     return EDGES
 
 
 def create_placement(g: nx.DiGraph(),
-                          n_placements: int = 1
-                          ):
+                     n_placements: int = 1
+                     ):
     # TODO
     # docstring
 
@@ -290,61 +339,66 @@ def create_placement(g: nx.DiGraph(),
     n_nodes = len(nodes)
     matrix_len_sqrt = ceil(sqrt(n_nodes))
     matrix_len = matrix_len_sqrt*matrix_len_sqrt
-
     # call zigzag function
-
-    edges = list(g.edges)
+    edges = get_edges_zigzag(g)
     n_edges = len(edges)
-    min_cost = n_edges
+
+    # distance matrix construction
+    distance_matrix = [[]for i in range((matrix_len_sqrt-1)*2)]
+    for i in range(matrix_len_sqrt):
+        for j in range(matrix_len_sqrt):
+            if j == i == 0:
+                continue
+            d = i+j
+            if [i, j] not in distance_matrix[d-1]:
+                distance_matrix[d-1].append([i, j])
+            if [i, -j] not in distance_matrix[d-1]:
+                distance_matrix[d-1].append([i, -j])
+            if [-i, -j] not in distance_matrix[d-1]:
+                distance_matrix[d-1].append([-i, -j])
+            if [-i, j] not in distance_matrix[d-1]:
+                distance_matrix[d-1].append([-i, j])
+    del i, j, d
+
+    nodes_positions = {}
+    for n in nodes:
+        nodes_positions[n] = None
+    del n
+
+    edges_dict = {}
+    for e in edges:
+        edges_dict['%s_%s' % (e[0], e[1])] = {
+            'a': e[0],
+            'b': e[1],
+            'initial_cost': None,
+            'final_cost': None
+        }
+    del e
 
     placements = {}
-    # initialize the placements randomly
+    # initialize the data dictionary
     for i in range(n_placements):
-        n = nodes.copy()
-        c = 0
         placements[str(i)] = {'min_cost': n_edges,
                               'initial_cost': 0,
                               'total_cost': 0,
                               'total_tries': 0,
                               'total_swaps': 0,
-                              'placement': [],
-                              'initial_placement': [None for j in range(matrix_len)],
-                              'edges': {}
+                              'placement': [None for j in range(matrix_len)],
+                              'initial_placement': None,
+                              'edges': edges_dict.copy()
                               }
-        while n:
-            r = _r.randint(0, len(n)-1)
-            placements[str(i)]['initial_placement'][c] = n[r]
-            n.pop(r)
-            c += 1
-        placements[str(i)]['placement'] = placements[str(i)
-                                                     ]['initial_placement'].copy()
-    del i, c, n, r
-    # calculating the total cost for every initial placement
-    for i in range(n_placements):
-        cost = 0
-        for e in edges:
-            # finding the positions for each node of the edge
-            n1 = placements[str(i)]['initial_placement'].index(
-                e[0], 0, matrix_len)
-            n2 = placements[str(i)]['initial_placement'].index(
-                e[1], 0, matrix_len)
-            l1 = n1//matrix_len_sqrt
-            c1 = n1 % matrix_len_sqrt
-            l2 = n2//matrix_len_sqrt
-            c2 = n2 % matrix_len_sqrt
-            edge_cost = abs(l1-l2) + abs(c1-c2)
-            placements[str(i)]['initial_cost'] += edge_cost
-            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])] = {}
-            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['a'] = e[0]
-            placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['b'] = e[1]
-            placements[str(i)]['edges']['%s_%s' %
-                                        (e[0], e[1])]['initial_cost'] = edge_cost
-            placements[str(i)]['edges']['%s_%s' %
-                                        (e[0], e[1])]['final_cost'] = edge_cost
-        placements[str(i)]['total_cost'] = placements[str(i)]['initial_cost']
-    del i, e, n1, n2, l1, l2, c1, c2, edge_cost
+    del i, edges_dict
 
-    # executing the SA algorithm in multithreads
+    # executing the YOLT algorithm in multithreads
+    for i in range(n_placements):
+        ret = yolt_placer(placements[str(i)],
+                          matrix_len,
+                          matrix_len_sqrt,
+                          distance_matrix,
+                          nodes_positions
+                          )
+
+    '''
     threads = list()
     n_threads = os.cpu_count()
     manager = mp.Manager()
@@ -369,7 +423,7 @@ def create_placement(g: nx.DiGraph(),
     for v in return_dict.values():
         for d in v:
             placements[d[0]] = d[1]
-    return placements
+    return placements'''
 
 
 if __name__ == '__main__':
