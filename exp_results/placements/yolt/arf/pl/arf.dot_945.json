@@ -1,0 +1,301 @@
+{
+    "min_cost": 40,
+    "initial_cost": null,
+    "total_cost": 60,
+    "total_tries": 48,
+    "total_swaps": 37,
+    "placement": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "37",
+        null,
+        null,
+        null,
+        null,
+        null,
+        "6",
+        "34",
+        "28",
+        "0",
+        "29",
+        "35",
+        "7",
+        "11",
+        "27",
+        "4",
+        "32",
+        "8",
+        "1",
+        "2",
+        "30",
+        "14",
+        "5",
+        "33",
+        "31",
+        "3",
+        "9",
+        "16",
+        "12",
+        "10",
+        "36",
+        "26",
+        "24",
+        "21",
+        "19",
+        "23",
+        "17",
+        "13",
+        "15",
+        "20",
+        "18",
+        "22",
+        "25"
+    ],
+    "initial_placement": null,
+    "edges": {
+        "36_26": {
+            "a": "26",
+            "b": "36",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "26_24": {
+            "a": "24",
+            "b": "26",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "24_21": {
+            "a": "21",
+            "b": "24",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "21_19": {
+            "a": "19",
+            "b": "21",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "19_23": {
+            "a": "19",
+            "b": "23",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "23_25": {
+            "a": "23",
+            "b": "25",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "25_22": {
+            "a": "22",
+            "b": "25",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "22_18": {
+            "a": "18",
+            "b": "22",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "18_20": {
+            "a": "18",
+            "b": "20",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "20_24": {
+            "a": "20",
+            "b": "24",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "18_15": {
+            "a": "15",
+            "b": "18",
+            "initial_cost": null,
+            "final_cost": 2
+        },
+        "15_13": {
+            "a": "13",
+            "b": "15",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "13_17": {
+            "a": "13",
+            "b": "17",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "17_19": {
+            "a": "17",
+            "b": "19",
+            "initial_cost": null,
+            "final_cost": 6
+        },
+        "19_16": {
+            "a": "16",
+            "b": "19",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "16_12": {
+            "a": "12",
+            "b": "16",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "12_14": {
+            "a": "12",
+            "b": "14",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "14_18": {
+            "a": "14",
+            "b": "18",
+            "initial_cost": null,
+            "final_cost": 5
+        },
+        "12_9": {
+            "a": "9",
+            "b": "12",
+            "initial_cost": null,
+            "final_cost": 2
+        },
+        "9_3": {
+            "a": "3",
+            "b": "9",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "3_31": {
+            "a": "31",
+            "b": "3",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "9_2": {
+            "a": "2",
+            "b": "9",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "2_30": {
+            "a": "30",
+            "b": "2",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "13_10": {
+            "a": "10",
+            "b": "13",
+            "initial_cost": null,
+            "final_cost": 2
+        },
+        "10_5": {
+            "a": "5",
+            "b": "10",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "5_33": {
+            "a": "33",
+            "b": "5",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "10_4": {
+            "a": "4",
+            "b": "10",
+            "initial_cost": null,
+            "final_cost": 2
+        },
+        "4_32": {
+            "a": "32",
+            "b": "4",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "25_27": {
+            "a": "25",
+            "b": "27",
+            "initial_cost": null,
+            "final_cost": 4
+        },
+        "27_11": {
+            "a": "11",
+            "b": "27",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "11_7": {
+            "a": "7",
+            "b": "11",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "7_35": {
+            "a": "35",
+            "b": "7",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "11_6": {
+            "a": "6",
+            "b": "11",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "6_34": {
+            "a": "34",
+            "b": "6",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "27_37": {
+            "a": "27",
+            "b": "37",
+            "initial_cost": null,
+            "final_cost": 2
+        },
+        "26_8": {
+            "a": "8",
+            "b": "26",
+            "initial_cost": null,
+            "final_cost": 2
+        },
+        "8_1": {
+            "a": "1",
+            "b": "8",
+            "initial_cost": null,
+            "final_cost": 1
+        },
+        "1_29": {
+            "a": "29",
+            "b": "1",
+            "initial_cost": null,
+            "final_cost": 2
+        },
+        "8_0": {
+            "a": "0",
+            "b": "8",
+            "initial_cost": null,
+            "final_cost": 2
+        },
+        "0_28": {
+            "a": "28",
+            "b": "0",
+            "initial_cost": null,
+            "final_cost": 1
+        }
+    }
+}

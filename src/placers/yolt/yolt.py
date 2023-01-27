@@ -13,126 +13,6 @@ import multiprocessing as mp
 import networkx as nx
 
 
-def thread_function(id: int, n_threads: int, n_placements: int, return_dict: mp.Manager().dict(),
-                    placements: dict(),
-                    matrix_len: int,
-                    matrix_len_sqrt: int
-                    ):
-    result = []
-    for idx in range(id, n_placements, n_threads):
-        if (idx < n_placements):
-            print("Running placer %d" % idx)
-            sa_placer(placements[str(idx)], matrix_len, matrix_len_sqrt)
-            result.append([str(idx), placements[str(idx)]])
-    return_dict[str(id)] = result
-
-
-def sa_placer(initial_placement: dict(),
-              matrix_len: int,
-              matrix_len_sqrt: int
-              ):
-    placement = initial_placement['placement']
-    edges = initial_placement['edges']
-    # total_cost = initial_placement['initial_cost']
-    total_swaps = 0
-
-    # SA implementation
-    t = 100
-    while t >= 0.00001:
-        if t < 1.2:
-            a = 1
-        for i in range(matrix_len):
-            for j in range(matrix_len):
-                if i == j:
-                    continue
-                if placement[i] is None and placement[j] is None:
-                    continue
-                initial_placement['total_tries'] += 1
-                # Current costs for a and b
-                a = placement[i]
-                b = placement[j]
-                curr_cost_a = 0
-                curr_cost_b = 0
-                edges_a_keys = []
-                edges_b_keys = []
-                for e in edges.keys():
-                    if a is not None:
-                        if edges[e]['a'] == a:
-                            edges_a_keys.append(e)
-                            curr_cost_a += edges[e]['final_cost']
-                    if b is not None:
-                        if edges[e]['a'] == b:
-                            edges_b_keys.append(e)
-                            curr_cost_b += edges[e]['final_cost']
-                current_cost = curr_cost_a + curr_cost_b
-
-                # New costs for a and b
-                # for new 'a' position
-                new_cost_a = 0
-                edges_a_new_costs = []
-                if a is not None:
-                    n1 = j
-                    for e in edges_a_keys:
-                        v = edges[e]['b']
-                        n2 = placement.index(v, 0, matrix_len)
-                        if n2 == n1:
-                            n2 = i
-                        l1 = n1//matrix_len_sqrt
-                        c1 = n1 % matrix_len_sqrt
-                        l2 = n2//matrix_len_sqrt
-                        c2 = n2 % matrix_len_sqrt
-                        edge_cost = abs(l1-l2) + abs(c1-c2)
-                        new_cost_a += edge_cost
-                        edges_a_new_costs.append(edge_cost)
-                        del n2, l1, l2, c1, c2, edge_cost, v
-                    del n1
-
-                # for new 'b' position
-                new_cost_b = 0
-                edges_b_new_costs = []
-                if b is not None:
-                    n1 = i
-                    for e in edges_b_keys:
-                        v = edges[e]['b']
-                        n2 = placement.index(v, 0, matrix_len)
-                        if n2 == n1:
-                            n2 = j
-                        l1 = n1//matrix_len_sqrt
-                        c1 = n1 % matrix_len_sqrt
-                        l2 = n2//matrix_len_sqrt
-                        c2 = n2 % matrix_len_sqrt
-                        edge_cost = abs(l1-l2) + abs(c1-c2)
-                        new_cost_b += edge_cost
-                        edges_b_new_costs.append(edge_cost)
-                        del n2, l1, l2, c1, c2, edge_cost, v
-                    del n1
-
-                new_cost = new_cost_a + new_cost_b
-                try:
-                    valor = exp(-1*(new_cost-current_cost)/t)
-                except Exception as e:
-                    valor = 0
-                rand = _r.random()
-                if rand <= valor:
-                    a = 1
-                if new_cost < current_cost or rand <= valor:
-                    placement[i], placement[j] = placement[j], placement[i]
-                    initial_placement['total_cost'] += new_cost-current_cost
-                    initial_placement['total_swaps'] += 1
-                    for e in range(len(edges_a_keys)):
-                        edges[edges_a_keys[e]]['final_cost'] = edges_a_new_costs[e]
-                    for e in range(len(edges_b_keys)):
-                        edges[edges_b_keys[e]]['final_cost'] = edges_b_new_costs[e]
-
-                del a, b, curr_cost_a, curr_cost_b, edges_a_keys, edges_b_keys, e
-                del new_cost_a, edges_a_new_costs, current_cost, new_cost, valor, rand
-                del new_cost_b, edges_b_new_costs
-                if initial_placement['total_cost'] == initial_placement['min_cost']:
-                    return
-            t *= 0.999
-    return
-
-
 def yolt_placer(initial_placement: dict(),
                 matrix_len: int,
                 matrix_len_sqrt: int,
@@ -146,19 +26,27 @@ def yolt_placer(initial_placement: dict(),
     for e in edges.keys():
         a = edges[e]['a']
         b = edges[e]['b']
-        if nodes_positions[b] is None:
+        if nodes_positions[a] is None:
             while True:
                 choice = _r.randint(0, matrix_len-1)
                 if placement[choice] is None:
-                    nodes_positions[b] = choice
-                    placement[choice] = b
+                    nodes_positions[a] = choice
+                    placement[choice] = a
                     break
+        pl = nodes_positions[a]//matrix_len_sqrt
+        pc = nodes_positions[a] % matrix_len_sqrt
         d = 0
+        if nodes_positions[b] is not None:
+            nl = nodes_positions[b]//matrix_len_sqrt
+            nc = nodes_positions[b] % matrix_len_sqrt
+            d = abs(pl-nl)+abs(pc-nc)
+            edges[e]['final_cost'] = d
+            total_cost += d
+            continue
         positioned = False
         for dm_line in distance_matrix:
+            initial_placement['total_tries'] += 1
             d = d+1
-            pl = nodes_positions[b]//matrix_len_sqrt
-            pc = nodes_positions[b] % matrix_len_sqrt
             for dm_column in dm_line:
                 nl = pl+dm_column[0]
                 nc = pc+dm_column[1]
@@ -168,14 +56,16 @@ def yolt_placer(initial_placement: dict(),
                     continue
                 cell = nl*matrix_len_sqrt + nc
                 if placement[cell] is None:
-                    nodes_positions[a] = cell
-                    placement[cell] = a
+                    initial_placement['total_swaps'] += 1
+                    nodes_positions[b] = cell
+                    placement[cell] = b
                     edges[e]['final_cost'] = d
                     total_cost += d
                     positioned = True
                     break
             if positioned:
                 break
+    initial_placement['total_cost'] = total_cost
 
 
 def get_edges_depth_first(g: nx.DiGraph()) -> list(list()):
@@ -273,7 +163,7 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
 
                 # EDGES.append([a, b, 0])
                 # EDGES.append([a, b, 'OUT'])
-                EDGES.append([b, a])
+                EDGES.append([a, b, 0])
 
             elif fanin >= 1:  # Case 2
 
@@ -288,7 +178,7 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
 
                 # EDGES.append([a, b, 1])
                 # EDGES.append([a, b, 'IN'])
-                EDGES.append([b, a])
+                EDGES.append([a, b, 1])
 
         else:  # direction == 'OUT'
 
@@ -305,7 +195,7 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
 
                 # EDGES.append([a, b, 1])
                 # EDGES.append([a, b, 'IN'])
-                EDGES.append([a, b])
+                EDGES.append([a, b, 1])
 
             elif fanout >= 1:  # Case 2
 
@@ -320,7 +210,7 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
 
                 # EDGES.append([a, b, 0])
                 # EDGES.append([a, b, 'OUT'])
-                EDGES.append([a, b])
+                EDGES.append([a, b, 0])
 
     return EDGES
 
@@ -330,10 +220,6 @@ def create_placement(g: nx.DiGraph(),
                      ):
     # TODO
     # docstring
-
-    # FIXME
-    # for debug only
-    _r.seed(0)
 
     nodes = list(g.nodes)
     n_nodes = len(nodes)
@@ -365,72 +251,65 @@ def create_placement(g: nx.DiGraph(),
         nodes_positions[n] = None
     del n
 
-    edges_dict = {}
-    for e in edges:
-        edges_dict['%s_%s' % (e[0], e[1])] = {
-            'a': e[0],
-            'b': e[1],
-            'initial_cost': None,
-            'final_cost': None
-        }
-    del e
+    edges_dict_vec = []
+    for i in range(n_placements):
+        edges_dict = {}
+        for e in edges:
+            edges_dict['%s_%s' % (e[0], e[1])] = {
+                'a': e[0],
+                'b': e[1],
+                'initial_cost': None,
+                'final_cost': None
+            }
+        edges_dict_vec.append(edges_dict)
+    del e, i
 
     placements = {}
     # initialize the data dictionary
     for i in range(n_placements):
         placements[str(i)] = {'min_cost': n_edges,
-                              'initial_cost': 0,
+                              'initial_cost': None,
                               'total_cost': 0,
                               'total_tries': 0,
                               'total_swaps': 0,
                               'placement': [None for j in range(matrix_len)],
                               'initial_placement': None,
-                              'edges': edges_dict.copy()
+                              'edges': edges_dict_vec[i]
                               }
-    del i, edges_dict
+    del i
 
     # executing the YOLT algorithm in multithreads
+    print("SA Main    : creating and starting")
     for i in range(n_placements):
-        ret = yolt_placer(placements[str(i)],
-                          matrix_len,
-                          matrix_len_sqrt,
-                          distance_matrix,
-                          nodes_positions
-                          )
-
-    '''
-    threads = list()
-    n_threads = os.cpu_count()
-    manager = mp.Manager()
-    return_dict = manager.dict()
-    for i in range(min(n_threads, n_placements)):
-        x = mp.Process(target=thread_function, args=(i,
-                                                     n_threads,
-                                                     n_placements,
-                                                     return_dict,
-                                                     placements,
-                                                     matrix_len,
-                                                     matrix_len_sqrt,
-                                                     ))
-        print("SA Main    : creating and starting %s." % x.name)
-        threads.append(x)
-        x.start()
-
-    for th in threads:
-        th.join()
-        print("SA Main    : %s done." % th.name)
-
-    for v in return_dict.values():
-        for d in v:
-            placements[d[0]] = d[1]
-    return placements'''
+        yolt_placer(placements[str(i)],
+                    matrix_len,
+                    matrix_len_sqrt,
+                    distance_matrix,
+                    nodes_positions
+                    )
+        # correcting the edges
+        for e in edges:
+            if e[2] == 1:
+                a = placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['a']
+                b = placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['b']
+                placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['a'] = b
+                placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['b'] = a
+        for n in nodes:
+            nodes_positions[n] = None
+    print("SA Main    : Done process")
+    del i, e
+    return placements
 
 
 if __name__ == '__main__':
     try:
+        # FIXME
+        # for debug only
+        _r.seed(0)
+
         input_path = './bench/test_bench/'
         output_path = './exp_results/placements/yolt/'
-        n_exec = 1
+        n_exec = 1000
         files_l = []
 
         for dir, folder, files in os.walk(input_path):
@@ -442,6 +321,8 @@ if __name__ == '__main__':
 
         for i in range(len(files_l)):
             g = nx.DiGraph(nx.nx_pydot.read_dot(files_l[i][0]))
+            while '\\n' in list(g.nodes):
+                g.remove_node('\\n')
             ret = create_placement(g, n_exec)
             for j in range(len(ret)):
                 # placement
