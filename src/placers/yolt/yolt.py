@@ -336,20 +336,6 @@ if __name__ == '__main__':
                 with open('%s%s_%d.json' % (pl_folder, files_l[i][2], j), 'w') as json_file:
                     json.dump(ret[str(j)], json_file, indent=4)
 
-                '''# dot with weighted edges
-                dot_folder = '%sdot/' % (r_folder)
-                if not os.path.exists(dot_folder):
-                    os.mkdir(dot_folder)
-                for k in ret.keys():
-                    edges = ret[k]['edges']
-                    for e in edges.keys():
-                        p = edges[e]['a']
-                        s = edges[e]['b']
-                        w = str(edges[e]['final_cost']-1)
-                        pr_graph.g.edges._adjdict[p][s]['w'] = w
-                pr_graph.save_dot('%s%s_%d.dot' %
-                                  (dot_folder, files_l[i][2], j))'''
-
     except Exception as e:
         print(e)
         traceback.print_exc()
