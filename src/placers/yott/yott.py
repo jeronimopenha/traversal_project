@@ -79,57 +79,7 @@ def yott_placer(initial_placement: dict(),
     initial_placement['total_cost'] = total_cost
 
 
-def get_edges_depth_first(g: nx.DiGraph()) -> list(list()):
-    # FIXME Acertar o algoritmo para grafos não conectados
-    # FIXME docstring
-    """_summary_
-        Returns a list of edges according
-        with the depth first algorithm
-
-    Args:
-        self (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-    temp_edges = list(g.edges)
-    r_edges = []
-
-    # finding the bottom node (with no successors)
-    lower_node = None
-    for p in g._succ:
-        if len(g._succ[p]) == 0:
-            lower_node = p
-            break
-
-    # creating the edges list
-    r = lower_node
-    q = []
-    q.append(r)
-    working = True
-    while working:
-        working = False
-        for e in temp_edges:
-            if e[1] == r:
-                r_edges.append([e[1], e[0]])
-                temp_edges.remove(e)
-                q.append(e[0])
-                r = e[0]
-                working = True
-                break
-        if q and temp_edges and not working:
-            q = q[:-1]
-            if q:
-                r = q[-1]
-                working = True
-            '''elif edges:
-                    q.append(edges[0][0])
-                    r = edges[0][0]
-                    working = True'''
-    return r_edges
-
-
-def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
+def get_edges_yott(g: nx.DiGraph()) -> list(list()):
     # FIXME docstring
     """_summary_
         Returns a list of edges according
@@ -138,11 +88,17 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
         _type_: _description_
     """
 
+    first = True
+    visited = []
+    nodes_pairs = {}
     OutputList = []
     # get the node inputs
     for n in g.nodes():
         if g.out_degree(n) == 0:
             OutputList.append([n, 'IN'])
+        nodes_pairs[n] = {
+            'liberty_degree': 
+        }
 
     Stack = OutputList.copy()
 
