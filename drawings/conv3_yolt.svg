@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="desenho.svg"
+   sodipodi:docname="conv3_yolt.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -24,12 +24,12 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.0419012"
-     inkscape:cx="324.40696"
-     inkscape:cy="408.86794"
-     inkscape:window-width="1280"
-     inkscape:window-height="887"
-     inkscape:window-x="0"
+     inkscape:zoom="1.4734708"
+     inkscape:cx="363.76696"
+     inkscape:cy="433.66994"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="1280"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
@@ -730,5 +730,13 @@
        inkscape:connector-curvature="0"
        inkscape:connection-start="#rect234-3"
        inkscape:connection-end="#rect234-3-7-23" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker3410)"
+       d="M 34.476318,157.68802 V 67.112869"
+       id="path448"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect234-2"
+       inkscape:connection-end="#rect234" />
   </g>
 </svg>
