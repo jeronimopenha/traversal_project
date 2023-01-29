@@ -79,7 +79,45 @@ def yott_placer(initial_placement: dict(),
     initial_placement['total_cost'] = total_cost
 
 
-def get_edges_yott(g: nx.DiGraph()) -> list(list()):
+def create_annotation(g: nx.DiGraph, counter: int, a: str, b: str, direction: str, annotations: dict()):
+    if counter == 3:
+        return
+
+    if a == b:
+        return
+
+    if a not in annotations.keys():
+        annotations[a] = []
+    annotations[a].append([b, counter+1])
+
+    q = []
+    if direction == 'IN':
+        for s in g._succ[a].keys():
+            if len(g._succ[s]) > 0:
+                q.append(s)
+        for s in q:
+            create_annotation(g, counter+1, s, b, direction, annotations)
+    elif direction == 'OUT':
+        for p in g._pred[a].keys():
+            if len(g._pred[p]) > 0:
+                q.append(p)
+        for p in q:
+            create_annotation(g, counter+1, p, b, direction, annotations)
+
+
+def update_liberty_degree(a: str, visited: list(), liberty_degree: dict()):
+    if liberty_degree[a][1]:
+        return
+    for s in g._succ[a].keys():
+        if s in visited:
+            liberty_degree[a][0] -= 1
+    for p in g._pred[a].keys():
+        if p in visited:
+            liberty_degree[a][0] -= 1
+    liberty_degree[a][1] = True
+
+
+def get_edges_yott(g: nx.DiGraph) -> list(list()):
     # FIXME docstring
     """_summary_
         Returns a list of edges according
@@ -87,102 +125,132 @@ def get_edges_yott(g: nx.DiGraph()) -> list(list()):
     Returns:
         _type_: _description_
     """
-
-    first = True
     visited = []
-    nodes_pairs = {}
-    OutputList = []
+    annotations = {}
+    liberty_degree = {}
+    output_list = []
     # get the node inputs
     for n in g.nodes():
         if g.out_degree(n) == 0:
-            OutputList.append([n, 'IN'])
-        nodes_pairs[n] = {
-            'liberty_degree': 
-        }
+            output_list.append([n, 'IN'])
+        if g.in_degree(n) == 0:
+            liberty_degree[n] = [0, True]
+        else:
+            liberty_degree[n] = [g.out_degree(n) + g.in_degree(n), False]
 
-    Stack = OutputList.copy()
+    stack = output_list.copy()
 
-    EDGES = []
+    edges = []
 
-    L_fanin, L_fanout = {}, {}
+    l_fanin, l_fanout = {}, {}
     for no in g:
-        L_fanin[no] = list(g.predecessors(no))
-        L_fanout[no] = list(g.successors(no))
+        l_fanin[no] = list(g.predecessors(no))
+        l_fanout[no] = list(g.successors(no))
 
-    while Stack:
-        a, direction = Stack.pop(0)  # get the top1
+    while stack:
+        a, direction = stack.pop(0)  # get the top1
+        if a not in visited:
+            visited.append(a)
 
-        fanin = len(L_fanin[a])     # get size fanin
-        fanout = len(L_fanout[a])   # get size fanout
+        fanin = len(l_fanin[a])     # get size fanin
+        fanout = len(l_fanout[a])   # get size fanout
 
         if direction == 'IN':  # direction == 'IN'
 
             if fanout >= 1:  # Case 3
 
-                b = L_fanout[a][-1]  # get the element more the right side
+                b = l_fanout[a][-1]  # get the element more the right side
 
                 for i in range(fanin):
-                    Stack.insert(0, [a, 'IN'])
-                Stack.insert(0, [b, 'OUT'])  # insert into stack
+                    stack.insert(0, [a, 'IN'])
+                stack.insert(0, [b, 'OUT'])  # insert into stack
 
-                L_fanout[a].remove(b)
-                L_fanin[b].remove(a)
+                l_fanout[a].remove(b)
+                l_fanin[b].remove(a)
 
-                # EDGES.append([a, b, 0])
-                # EDGES.append([a, b, 'OUT'])
-                EDGES.append([a, b, 0])
+                edges.append([a, b, 'OUT'])
+
+                # luberty degree update
+                update_liberty_degree(a, visited, liberty_degree)
+
+                # cycle verification
+                if b not in visited:
+                    visited.append(b)
+                else:
+                    create_annotation(g, 0, a, b, 'OUT', annotations)
 
             elif fanin >= 1:  # Case 2
 
-                b = L_fanin[a][-1]      # get the elem more in the right
+                b = l_fanin[a][-1]      # get the elem more in the right
 
-                Stack.insert(0, [a, 'IN'])
+                stack.insert(0, [a, 'IN'])
                 for i in range(fanin):
-                    Stack.insert(0, [b, 'IN'])
+                    stack.insert(0, [b, 'IN'])
 
-                L_fanin[a].remove(b)
-                L_fanout[b].remove(a)
+                l_fanin[a].remove(b)
+                l_fanout[b].remove(a)
 
-                # EDGES.append([a, b, 1])
-                # EDGES.append([a, b, 'IN'])
-                EDGES.append([a, b, 1])
+                edges.append([a, b, 'IN'])
+
+                # luberty degree update
+                update_liberty_degree(a, visited, liberty_degree)
+
+                # cycle verification
+                if b not in visited:
+                    visited.append(b)
+                else:
+                    create_annotation(g, 0, a, b, 'IN', annotations)
 
         else:  # direction == 'OUT'
 
             if fanin >= 1:  # Case 3
 
-                b = L_fanin[a][0]  # get the element more left side
+                b = l_fanin[a][0]  # get the element more left side
 
                 for i in range(fanout):
-                    Stack.insert(0, [a, 'OUT'])
-                Stack.insert(0, [b, 'IN'])
+                    stack.insert(0, [a, 'OUT'])
+                stack.insert(0, [b, 'IN'])
 
-                L_fanin[a].remove(b)
-                L_fanout[b].remove(a)
+                l_fanin[a].remove(b)
+                l_fanout[b].remove(a)
 
-                # EDGES.append([a, b, 1])
-                # EDGES.append([a, b, 'IN'])
-                EDGES.append([a, b, 1])
+                edges.append([a, b, 'IN'])
+
+                # luberty degree update
+                update_liberty_degree(a, visited, liberty_degree)
+
+                # cycle verification
+                if b not in visited:
+                    visited.append(b)
+                else:
+                    create_annotation(g, 0, a, b, 'IN', annotations)
 
             elif fanout >= 1:  # Case 2
 
-                b = L_fanout[a][0]  # get the element more left side
+                b = l_fanout[a][0]  # get the element more left side
 
-                Stack.insert(0, [a, 'OUT'])
+                stack.insert(0, [a, 'OUT'])
                 for i in range(fanout):
-                    Stack.insert(0, [b, 'OUT'])
+                    stack.insert(0, [b, 'OUT'])
 
-                L_fanout[a].remove(b)
-                L_fanin[b].remove(a)
+                l_fanout[a].remove(b)
+                l_fanin[b].remove(a)
 
-                # EDGES.append([a, b, 0])
-                # EDGES.append([a, b, 'OUT'])
-                EDGES.append([a, b, 0])
+                edges.append([a, b, 'OUT'])
 
-    return EDGES
+                # luberty degree update
+                update_liberty_degree(a, visited, liberty_degree)
+
+                # cycle verification
+                if b not in visited:
+                    visited.append(b)
+                else:
+                    create_annotation(g, 0, a, b, 'OUT', annotations)
+
+    return edges, annotations, liberty_degree
 
 
-def create_placement(g: nx.DiGraph(),
+def create_placement(g: nx.DiGraph,
                      n_placements: int = 1
                      ):
     # TODO
@@ -193,7 +261,7 @@ def create_placement(g: nx.DiGraph(),
     matrix_len_sqrt = ceil(sqrt(n_nodes))
     matrix_len = matrix_len_sqrt*matrix_len_sqrt
     # call zigzag function
-    edges = get_edges_zigzag(g)
+    edges, annotations, liberty_degree = get_edges_yott(g)
     n_edges = len(edges)
 
     # distance matrix construction
@@ -275,8 +343,8 @@ if __name__ == '__main__':
         _r.seed(0)
 
         input_path = './bench/test_bench/'
-        output_path = './exp_results/placements/yolt/'
-        n_exec = 1000
+        output_path = './exp_results/placements/yott/'
+        n_exec = 1
         files_l = []
 
         for dir, folder, files in os.walk(input_path):

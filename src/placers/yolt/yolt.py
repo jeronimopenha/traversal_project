@@ -68,7 +68,7 @@ def yolt_placer(initial_placement: dict(),
     initial_placement['total_cost'] = total_cost
 
 
-def get_edges_depth_first(g: nx.DiGraph()) -> list(list()):
+def get_edges_depth_first(g: nx.DiGraph) -> list(list()):
     # FIXME Acertar o algoritmo para grafos não conectados
     # FIXME docstring
     """_summary_
@@ -118,7 +118,7 @@ def get_edges_depth_first(g: nx.DiGraph()) -> list(list()):
     return r_edges
 
 
-def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
+def get_edges_zigzag(g: nx.DiGraph) -> list(list()):
     # FIXME docstring
     """_summary_
         Returns a list of edges according
@@ -127,95 +127,87 @@ def get_edges_zigzag(g: nx.DiGraph()) -> list(list()):
         _type_: _description_
     """
 
-    OutputList = []
+    output_list = []
     # get the node inputs
     for n in g.nodes():
         if g.out_degree(n) == 0:
-            OutputList.append([n, 'IN'])
+            output_list.append([n, 'IN'])
 
-    Stack = OutputList.copy()
+    stack = output_list.copy()
 
-    EDGES = []
+    edges = []
 
-    L_fanin, L_fanout = {}, {}
+    l_fanin, l_fanout = {}, {}
     for no in g:
-        L_fanin[no] = list(g.predecessors(no))
-        L_fanout[no] = list(g.successors(no))
+        l_fanin[no] = list(g.predecessors(no))
+        l_fanout[no] = list(g.successors(no))
 
-    while Stack:
-        a, direction = Stack.pop(0)  # get the top1
+    while stack:
+        a, direction = stack.pop(0)  # get the top1
 
-        fanin = len(L_fanin[a])     # get size fanin
-        fanout = len(L_fanout[a])   # get size fanout
+        fanin = len(l_fanin[a])     # get size fanin
+        fanout = len(l_fanout[a])   # get size fanout
 
         if direction == 'IN':  # direction == 'IN'
 
             if fanout >= 1:  # Case 3
 
-                b = L_fanout[a][-1]  # get the element more the right side
+                b = l_fanout[a][-1]  # get the element more the right side
 
                 for i in range(fanin):
-                    Stack.insert(0, [a, 'IN'])
-                Stack.insert(0, [b, 'OUT'])  # insert into stack
+                    stack.insert(0, [a, 'IN'])
+                stack.insert(0, [b, 'OUT'])  # insert into stack
 
-                L_fanout[a].remove(b)
-                L_fanin[b].remove(a)
+                l_fanout[a].remove(b)
+                l_fanin[b].remove(a)
 
-                # EDGES.append([a, b, 0])
-                # EDGES.append([a, b, 'OUT'])
-                EDGES.append([a, b, 0])
+                edges.append([a, b, 'OUT'])
 
             elif fanin >= 1:  # Case 2
 
-                b = L_fanin[a][-1]      # get the elem more in the right
+                b = l_fanin[a][-1]      # get the elem more in the right
 
-                Stack.insert(0, [a, 'IN'])
+                stack.insert(0, [a, 'IN'])
                 for i in range(fanin):
-                    Stack.insert(0, [b, 'IN'])
+                    stack.insert(0, [b, 'IN'])
 
-                L_fanin[a].remove(b)
-                L_fanout[b].remove(a)
+                l_fanin[a].remove(b)
+                l_fanout[b].remove(a)
 
-                # EDGES.append([a, b, 1])
-                # EDGES.append([a, b, 'IN'])
-                EDGES.append([a, b, 1])
+                edges.append([a, b, 'IN'])
 
         else:  # direction == 'OUT'
 
             if fanin >= 1:  # Case 3
 
-                b = L_fanin[a][0]  # get the element more left side
+                b = l_fanin[a][0]  # get the element more left side
 
                 for i in range(fanout):
-                    Stack.insert(0, [a, 'OUT'])
-                Stack.insert(0, [b, 'IN'])
+                    stack.insert(0, [a, 'OUT'])
+                stack.insert(0, [b, 'IN'])
 
-                L_fanin[a].remove(b)
-                L_fanout[b].remove(a)
+                l_fanin[a].remove(b)
+                l_fanout[b].remove(a)
 
-                # EDGES.append([a, b, 1])
-                # EDGES.append([a, b, 'IN'])
-                EDGES.append([a, b, 1])
+                edges.append([a, b, 'IN'])
 
             elif fanout >= 1:  # Case 2
 
-                b = L_fanout[a][0]  # get the element more left side
+                b = l_fanout[a][0]  # get the element more left side
 
-                Stack.insert(0, [a, 'OUT'])
+                stack.insert(0, [a, 'OUT'])
                 for i in range(fanout):
-                    Stack.insert(0, [b, 'OUT'])
+                    stack.insert(0, [b, 'OUT'])
 
-                L_fanout[a].remove(b)
-                L_fanin[b].remove(a)
+                l_fanout[a].remove(b)
+                l_fanin[b].remove(a)
 
-                # EDGES.append([a, b, 0])
-                # EDGES.append([a, b, 'OUT'])
-                EDGES.append([a, b, 0])
+                edges.append([a, b, 'OUT'])
 
-    return EDGES
+    return edges
 
 
-def create_placement(g: nx.DiGraph(),
+def create_placement(g: nx.DiGraph,
                      n_placements: int = 1
                      ):
     # TODO
@@ -289,7 +281,7 @@ def create_placement(g: nx.DiGraph(),
                     )
         # correcting the edges
         for e in edges:
-            if e[2] == 1:
+            if e[2] == 'IN':
                 a = placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['a']
                 b = placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['b']
                 placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['a'] = b

@@ -133,7 +133,7 @@ def sa_placer(initial_placement: dict(),
     return
 
 
-def create_placement(g: nx.DiGraph(),
+def create_placement(g: nx.DiGraph,
                      n_placements: int = 1
                      ):
     # TODO
