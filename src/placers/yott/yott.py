@@ -40,71 +40,257 @@ def yott_placer(initial_placement: dict(),
     for e in edges.keys():
         a = edges[e]['a']
         b = edges[e]['b']
-        liberty_needed = liberty_degree[b]
+        b_degree = liberty_degree[b][0]
+        positioned = False
 
+        if nodes_positions[b] is not None:
+            continue
+
+        # If the left note is not positioned yet, I will put it in a random free place
         if nodes_positions[a] is None:
             while True:
-                choice = _r.randint(0, matrix_len-1)
-                if placement[choice] is None:
-                    nodes_positions[a] = choice
-                    placement[choice] = a
+                cell = _r.randint(0, matrix_len-1)
+                if placement[cell] is None:
+                    nodes_positions[a] = cell
+                    placement[cell] = a
+                    liberty_matrix[cell] = 0
+                    update_liberty_matrix(
+                        cell, matrix_len_sqrt, distance_matrix[0], liberty_matrix)
                     break
+            del cell
 
         # solve the cycles annotations
         if b in annotations.keys():
             condition_try = 0
-            conditions = annotations[b].copy()
+            conditions_removed = 0
+            # using only the useful conditions
+            conditions = []
+            temp = []
+            for t_1 in annotations[b]:
+                temp.append(t_1.copy())
+            del t_1
+
+            for c in temp:
+                t = nodes_positions[c[0]]
+                if t is not None:
+                    conditions.append(c)
+
+                del t
+
+            del temp, c
+
             conditions.append([a, 1])
-            cells = []
-            #finding the possible cells
-            for c in conditions:
-                distances
+            n_conditions = len(conditions)
 
-            #trying to intersect the found cells
+            intersection_cells = []
+            intersection = False
+            while not intersection:
+                cells = []
+                # finding the possible cells to place b
+                i = 0
+                while i < len(conditions):
+                    c = conditions[i]
 
-            #if cannot find an intersect, I will change one condition
-            #constant and try again and again
+                    cnp = nodes_positions[c[0]]
 
-            # finding the best place for b
+                    cells_temp = None
+                    a_l = cnp//matrix_len_sqrt
+                    a_c = cnp % matrix_len_sqrt
 
-        
+                    for d in distance_matrix[c[1]-1]:
+                        cell_l = a_l + d[0]
+                        cell_c = a_c + d[1]
+                        if cell_l < 0 or cell_l > matrix_len_sqrt-1 or\
+                                cell_c < 0 or cell_c > matrix_len_sqrt-1:
+                            continue
+                        cell = cell_l * matrix_len_sqrt + cell_c
+                        if placement[cell] is None:
+                            if cells_temp is None:
+                                cells_temp = []
+                            cells_temp.append(cell)
+                        del cell_l, cell_c, cell
+                    del cnp, a_l, a_c, d
 
-        al = nodes_positions[a]//matrix_len_sqrt
-        ac = nodes_positions[a] % matrix_len_sqrt
-        d = 0
-        if nodes_positions[b] is not None:
-            bl = nodes_positions[b]//matrix_len_sqrt
-            bc = nodes_positions[b] % matrix_len_sqrt
-            d = abs(al-bl)+abs(ac-bc)
-            edges[e]['final_cost'] = d
-            total_cost += d
-            continue
-        positioned = False
-        for dm_line in distance_matrix:
-            initial_placement['total_tries'] += 1
-            d = d+1
-            for dm_column in dm_line:
-                bl = al+dm_column[0]
-                bc = ac+dm_column[1]
-                if bl > matrix_len_sqrt-1 or \
-                        bc > matrix_len_sqrt-1 or \
-                        bl < 0 or bc < 0:
-                    continue
-                cell = bl*matrix_len_sqrt + bc
-                if placement[cell] is None:
-                    initial_placement['total_swaps'] += 1
-                    nodes_positions[b] = cell
-                    placement[cell] = b
-                    edges[e]['final_cost'] = d
-                    total_cost += d
+                    if cells_temp is not None:
+                        cells.append(cells_temp)
+                        i += 1
+                    else:
+                        conditions[i][1] += 1
+                del cells_temp, i, c,
+
+                # looking for an intersection between the conditions possible cells
+                cells_temp = {}
+                for cell_v in cells:
+                    for c in cell_v:
+                        if c in cells_temp.keys():
+                            cells_temp[c] += 1
+                        else:
+                            cells_temp[c] = 1
+                    del c
+                del cell_v
+                for k in cells_temp.keys():
+                    if cells_temp[k] == n_conditions:
+                        intersection_cells.append(k)
+                        intersection = True
+                del k, cells_temp
+
+                if not intersection:
+                    conditions[condition_try][1] += 1
+                    condition_try += 1
+                    if condition_try == n_conditions:
+                        condition_try = 0
+                    retry = False
+                    for c in conditions:
+                        if c[1] > (matrix_len_sqrt-1)*2:
+                            retry = True
+                            break
+                    del c
+                    if retry:
+                        conditions_removed += 1
+                        condition_try = 0
+                        # using only the useful conditions
+                        conditions = []
+                        temp = []
+                        for t_1 in annotations[b]:
+                            temp.append(t_1.copy())
+                        del t_1
+
+                        for c in temp:
+                            t = nodes_positions[c[0]]
+                            if t is not None:
+                                conditions.append(c)
+                            del t
+                        del temp, c
+
+                        for i in range(conditions_removed):
+                            conditions.pop(0)
+                        del i
+
+                        conditions.append([a, 1])
+                        n_conditions = len(conditions)
+                        del retry
+
+            del cells, condition_try, conditions, n_conditions, intersection, conditions_removed
+            # once we have some intersection cells,
+            # lets find out the better one to place de b node
+
+            better_cell = None
+            better_degree = None
+            for cell in intersection_cells:
+                cell_degree = liberty_matrix[cell]
+                if cell_degree == b_degree:
                     positioned = True
+                else:
+                    if better_cell == None:
+                        better_cell = cell
+                        better_degree = cell_degree
+                    else:
+                        if abs(cell_degree-b_degree) < abs(better_degree-b_degree):
+                            better_cell = cell
+                            better_degree = cell_degree
+                del cell_degree
+                if positioned:
                     break
-            if positioned:
-                break
-    initial_placement['total_cost'] = total_cost
+
+            if not positioned:
+                cell = better_cell
+            initial_placement['total_swaps'] += 1
+            nodes_positions[b] = cell
+            placement[cell] = b
+            liberty_matrix[cell] = 0
+            update_liberty_matrix(cell, matrix_len_sqrt,jsmtwtfs34
+            
+                                  distance_matrix[0], liberty_matrix)
+            # edges[e]['final_cost'] = d
+            # total_cost += d
+            del better_cell, better_degree, intersection_cells, cell, positioned
+
+        else:
+            # if the node is nos annotated, we will try to put it in a cell that
+            # has no more resources than it demands or in the better one possible
+
+            # finding the possible cells to place b
+            done = False
+            a_d = 1
+            cells = []
+            while not done:
+                cells_temp = None
+                a_p = nodes_positions[a]
+                a_l = a_p//matrix_len_sqrt
+                a_c = a_p % matrix_len_sqrt
+
+                for d in distance_matrix[a_d-1]:
+                    cell_l = a_l + d[0]
+                    cell_c = a_c + d[1]
+                    if cell_l < 0 or cell_l > matrix_len_sqrt-1 or\
+                            cell_c < 0 or cell_c > matrix_len_sqrt-1:
+                        continue
+                    cell = cell_l * matrix_len_sqrt + cell_c
+                    if placement[cell] is None:
+                        if cells_temp is None:
+                            cells_temp = []
+                        cells_temp.append(cell)
+                    del cell_l, cell_c, cell
+                del a_p, a_l, a_c, d
+
+                if cells_temp is not None:
+                    cells = cells_temp
+                    done = True
+                else:
+                    a_d += 1
+            del cells_temp
+
+            # once we have some possible cells,
+            # lets find out the better one to place de b node
+
+            better_cell = None
+            better_degree = None
+            for cell in cells:
+                cell_degree = liberty_matrix[cell]
+                if cell_degree == b_degree:
+                    positioned = True
+                else:
+                    if better_cell == None:
+                        better_cell = cell
+                        better_degree = cell_degree
+                    else:
+                        if abs(cell_degree-b_degree) < abs(better_degree-b_degree):
+                            better_cell = cell
+                            better_degree = cell_degree
+                del cell_degree
+                if positioned:
+                    break
+
+            if not positioned:
+                cell = better_cell
+            initial_placement['total_swaps'] += 1
+            nodes_positions[b] = cell
+            placement[cell] = b
+            liberty_matrix[cell] = 0
+            update_liberty_matrix(cell, matrix_len_sqrt,
+                                  distance_matrix[0], liberty_matrix)
+            # edges[e]['final_cost'] = d
+            # total_cost += d
+            del better_cell, better_degree, cells, cell, positioned
+    #initial_placement['total_cost'] = total_cost
+
+
+def update_liberty_matrix(position: int, matrix_len_sqrt: int, distance_matrix: list(), liberty_matrix: list(list())):
+    p_l = position//matrix_len_sqrt
+    p_c = position % matrix_len_sqrt
+    for d in distance_matrix:
+        n_l = p_l + d[0]
+        n_c = p_c + d[1]
+        if n_l < 0 or n_l > matrix_len_sqrt-1 or\
+                n_c < 0 or n_c > matrix_len_sqrt-1:
+            continue
+        cell = n_l*matrix_len_sqrt + n_c
+        if liberty_matrix[cell] > 0:
+            liberty_matrix[cell] -= 1
 
 
 def create_annotation(g: nx.DiGraph, counter: int, a: str, b: str, direction: str, annotations: dict()):
+
     if counter == 3:
         return
 
@@ -130,7 +316,7 @@ def create_annotation(g: nx.DiGraph, counter: int, a: str, b: str, direction: st
             create_annotation(g, counter+1, p, b, direction, annotations)
 
 
-def update_liberty_degree(a: str, visited: list(), liberty_degree: dict()):
+def create_liberty_degree(a: str, visited: list(), liberty_degree: dict()):
     if liberty_degree[a][1]:
         return
     for s in g._succ[a].keys():
@@ -158,10 +344,7 @@ def get_edges_yott(g: nx.DiGraph) -> list(list()):
     for n in g.nodes():
         if g.out_degree(n) == 0:
             output_list.append([n, 'IN'])
-        if g.in_degree(n) == 0:
-            liberty_degree[n] = [0, True]
-        else:
-            liberty_degree[n] = [g.out_degree(n) + g.in_degree(n), False]
+        liberty_degree[n] = [g.out_degree(n) + g.in_degree(n), False]
 
     stack = output_list.copy()
 
@@ -176,6 +359,9 @@ def get_edges_yott(g: nx.DiGraph) -> list(list()):
         a, direction = stack.pop(0)  # get the top1
         if a not in visited:
             visited.append(a)
+
+        # liberty degree update
+        create_liberty_degree(a, visited, liberty_degree)
 
         fanin = len(l_fanin[a])     # get size fanin
         fanout = len(l_fanout[a])   # get size fanout
@@ -195,9 +381,6 @@ def get_edges_yott(g: nx.DiGraph) -> list(list()):
 
                 edges.append([a, b, 'OUT'])
 
-                # luberty degree update
-                update_liberty_degree(a, visited, liberty_degree)
-
                 # cycle verification
                 if b not in visited:
                     visited.append(b)
@@ -216,9 +399,6 @@ def get_edges_yott(g: nx.DiGraph) -> list(list()):
                 l_fanout[b].remove(a)
 
                 edges.append([a, b, 'IN'])
-
-                # luberty degree update
-                update_liberty_degree(a, visited, liberty_degree)
 
                 # cycle verification
                 if b not in visited:
@@ -241,9 +421,6 @@ def get_edges_yott(g: nx.DiGraph) -> list(list()):
 
                 edges.append([a, b, 'IN'])
 
-                # luberty degree update
-                update_liberty_degree(a, visited, liberty_degree)
-
                 # cycle verification
                 if b not in visited:
                     visited.append(b)
@@ -262,9 +439,6 @@ def get_edges_yott(g: nx.DiGraph) -> list(list()):
                 l_fanin[b].remove(a)
 
                 edges.append([a, b, 'OUT'])
-
-                # luberty degree update
-                update_liberty_degree(a, visited, liberty_degree)
 
                 # cycle verification
                 if b not in visited:
@@ -361,8 +535,9 @@ def create_placement(g: nx.DiGraph,
     del i
 
     # executing the YOLT algorithm in multithreads
-    print("SA Main    : creating and starting")
+    print("YOTT Main    : creating and starting")
     for i in range(n_placements):
+        print("YOTT Main    : placing %d" % (i+1))
         yott_placer(placements[str(i)],
                     matrix_len,
                     matrix_len_sqrt,
@@ -384,7 +559,7 @@ def create_placement(g: nx.DiGraph,
         for n in nodes:
             nodes_positions[n] = None
         del n
-    print("SA Main    : Done process")
+    print("YOTT Main    : Done process")
     del i
     return placements
 

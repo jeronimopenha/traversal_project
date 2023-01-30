@@ -271,7 +271,7 @@ def create_placement(g: nx.DiGraph,
     del i
 
     # executing the YOLT algorithm in multithreads
-    print("SA Main    : creating and starting")
+    print("YOLT Main    : creating and starting")
     for i in range(n_placements):
         yolt_placer(placements[str(i)],
                     matrix_len,
@@ -288,7 +288,7 @@ def create_placement(g: nx.DiGraph,
                 placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['b'] = a
         for n in nodes:
             nodes_positions[n] = None
-    print("SA Main    : Done process")
+    print("YOLT Main    : Done process")
     del i, e
     return placements
 
