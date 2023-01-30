@@ -28,7 +28,10 @@ def yott_placer(initial_placement: dict(),
                 matrix_len: int,
                 matrix_len_sqrt: int,
                 distance_matrix: list(list()),
-                nodes_positions: list()
+                nodes_positions: list(),
+                liberty_matrix: list(list()),
+                annotations: dict(),
+                liberty_degree: dict()
                 ):
     # FIXME Corrigir zigzag
     edges = initial_placement['edges']
@@ -37,6 +40,8 @@ def yott_placer(initial_placement: dict(),
     for e in edges.keys():
         a = edges[e]['a']
         b = edges[e]['b']
+        liberty_needed = liberty_degree[b]
+
         if nodes_positions[a] is None:
             while True:
                 choice = _r.randint(0, matrix_len-1)
@@ -44,13 +49,33 @@ def yott_placer(initial_placement: dict(),
                     nodes_positions[a] = choice
                     placement[choice] = a
                     break
-        pl = nodes_positions[a]//matrix_len_sqrt
-        pc = nodes_positions[a] % matrix_len_sqrt
+
+        # solve the cycles annotations
+        if b in annotations.keys():
+            condition_try = 0
+            conditions = annotations[b].copy()
+            conditions.append([a, 1])
+            cells = []
+            #finding the possible cells
+            for c in conditions:
+                distances
+
+            #trying to intersect the found cells
+
+            #if cannot find an intersect, I will change one condition
+            #constant and try again and again
+
+            # finding the best place for b
+
+        
+
+        al = nodes_positions[a]//matrix_len_sqrt
+        ac = nodes_positions[a] % matrix_len_sqrt
         d = 0
         if nodes_positions[b] is not None:
-            nl = nodes_positions[b]//matrix_len_sqrt
-            nc = nodes_positions[b] % matrix_len_sqrt
-            d = abs(pl-nl)+abs(pc-nc)
+            bl = nodes_positions[b]//matrix_len_sqrt
+            bc = nodes_positions[b] % matrix_len_sqrt
+            d = abs(al-bl)+abs(ac-bc)
             edges[e]['final_cost'] = d
             total_cost += d
             continue
@@ -59,13 +84,13 @@ def yott_placer(initial_placement: dict(),
             initial_placement['total_tries'] += 1
             d = d+1
             for dm_column in dm_line:
-                nl = pl+dm_column[0]
-                nc = pc+dm_column[1]
-                if nl > matrix_len_sqrt-1 or \
-                        nc > matrix_len_sqrt-1 or \
-                        nl < 0 or nc < 0:
+                bl = al+dm_column[0]
+                bc = ac+dm_column[1]
+                if bl > matrix_len_sqrt-1 or \
+                        bc > matrix_len_sqrt-1 or \
+                        bl < 0 or bc < 0:
                     continue
-                cell = nl*matrix_len_sqrt + nc
+                cell = bl*matrix_len_sqrt + bc
                 if placement[cell] is None:
                     initial_placement['total_swaps'] += 1
                     nodes_positions[b] = cell
@@ -279,7 +304,29 @@ def create_placement(g: nx.DiGraph,
                 distance_matrix[d-1].append([-i, -j])
             if [-i, j] not in distance_matrix[d-1]:
                 distance_matrix[d-1].append([-i, j])
-    del i, j, d
+    del d, j
+
+    temp = []
+    liberty_matrix = []
+    # for mesh architecture
+    for i in range(matrix_len):
+        l = i//matrix_len_sqrt
+        c = i % matrix_len_sqrt
+        if (l == 0 and c == 0) or \
+            (l == 0 and c == matrix_len_sqrt-1) or\
+                (l == matrix_len_sqrt-1 and c == 0) or\
+                (l == matrix_len_sqrt-1 and c == matrix_len_sqrt-1):
+            temp.append(2)
+        elif (l == 0) or (c == 0) or\
+                (l == matrix_len_sqrt-1) or (c == matrix_len_sqrt-1):
+            temp.append(3)
+        else:
+            temp.append(4)
+    del l, c
+
+    for i in range(n_placements):
+        liberty_matrix.append(temp.copy())
+    del i, temp
 
     nodes_positions = {}
     for n in nodes:
@@ -297,7 +344,7 @@ def create_placement(g: nx.DiGraph,
                 'final_cost': None
             }
         edges_dict_vec.append(edges_dict)
-    del e, i
+    del e, i, edges_dict
 
     placements = {}
     # initialize the data dictionary
@@ -320,19 +367,25 @@ def create_placement(g: nx.DiGraph,
                     matrix_len,
                     matrix_len_sqrt,
                     distance_matrix,
-                    nodes_positions
+                    nodes_positions,
+                    liberty_matrix[i],
+                    annotations,
+                    liberty_degree
                     )
         # correcting the edges
         for e in edges:
-            if e[2] == 1:
+            if e[2] == 'IN':
                 a = placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['a']
                 b = placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['b']
                 placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['a'] = b
                 placements[str(i)]['edges']['%s_%s' % (e[0], e[1])]['b'] = a
+                del a, b
+        del e
         for n in nodes:
             nodes_positions[n] = None
+        del n
     print("SA Main    : Done process")
-    del i, e
+    del i
     return placements
 
 

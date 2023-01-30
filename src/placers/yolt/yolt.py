@@ -19,7 +19,7 @@ def yolt_placer(initial_placement: dict(),
                 distance_matrix: list(list()),
                 nodes_positions: list()
                 ):
-    # FIXME Corrigir zigzag
+
     edges = initial_placement['edges']
     placement = initial_placement['placement']
     total_cost = 0
@@ -33,13 +33,13 @@ def yolt_placer(initial_placement: dict(),
                     nodes_positions[a] = choice
                     placement[choice] = a
                     break
-        pl = nodes_positions[a]//matrix_len_sqrt
-        pc = nodes_positions[a] % matrix_len_sqrt
+        al = nodes_positions[a]//matrix_len_sqrt
+        ac = nodes_positions[a] % matrix_len_sqrt
         d = 0
         if nodes_positions[b] is not None:
-            nl = nodes_positions[b]//matrix_len_sqrt
-            nc = nodes_positions[b] % matrix_len_sqrt
-            d = abs(pl-nl)+abs(pc-nc)
+            bl = nodes_positions[b]//matrix_len_sqrt
+            bc = nodes_positions[b] % matrix_len_sqrt
+            d = abs(al-bl)+abs(ac-bc)
             edges[e]['final_cost'] = d
             total_cost += d
             continue
@@ -48,13 +48,13 @@ def yolt_placer(initial_placement: dict(),
             initial_placement['total_tries'] += 1
             d = d+1
             for dm_column in dm_line:
-                nl = pl+dm_column[0]
-                nc = pc+dm_column[1]
-                if nl > matrix_len_sqrt-1 or \
-                        nc > matrix_len_sqrt-1 or \
-                        nl < 0 or nc < 0:
+                bl = al+dm_column[0]
+                bc = ac+dm_column[1]
+                if bl > matrix_len_sqrt-1 or \
+                        bc > matrix_len_sqrt-1 or \
+                        bl < 0 or bc < 0:
                     continue
-                cell = nl*matrix_len_sqrt + nc
+                cell = bl*matrix_len_sqrt + bc
                 if placement[cell] is None:
                     initial_placement['total_swaps'] += 1
                     nodes_positions[b] = cell
