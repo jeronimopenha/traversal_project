@@ -172,32 +172,7 @@ void output_graph_raw(
             f << ";";
         }
     }
-
-    // f << "digraph g {\n";
-
-    /*for (int j = 0; j < g.num_nodes(); ++j)
-    {
-        // printf("%d [label = %s;op = %s;", j, g.get_name_node(j).c_str(), g.get_name_op(j).c_str());
-        f << j << " [label = " << g.get_name_node(j).c_str() << ";op = " << g.get_name_op(j).c_str() << ";";
-        if (!g.get_name_value(j).empty())
-        {
-            // printf("value = %s;",g.get_name_value(j).c_str());
-            f << "value = " << g.get_name_value(j).c_str() << ";";
-        }
-        // printf("]\n");
-        f << "]\n";
-    }*/
-
-    /*for (int j = 0; j < EDGE_SIZE; ++j)
-    {
-        a = vector_edges[j].first;
-        b = vector_edges[j].second;
-        value = edges_cost[idx][make_pair(a, b)] - 1;
-        // printf("%d -> %d [port=%d; weight=%d];\n", a, b, port[b]++, value);
-        f << a << " -> " << b << " [port=" << port[b]++ << "; weight=" << value << ";]\n";
-    }
-    // printf("}\n");
-    f << "}\n";*/
+    f.close();
 }
 
 #endif

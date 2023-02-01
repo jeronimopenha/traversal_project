@@ -201,7 +201,30 @@ void yott_main(
     for (int i = 0; i < times; i++)
         output_graph_raw(i, grid[i], GRID_SIZE, GRID_SIZE, name, "yott", times, arch);
 
-    bool *successfullRoutings = new bool[times]; 
+    string str_arch = "";
+    if (arch == 0)
+        str_arch = "mesh";
+    else if (arch == 1)
+        str_arch = "1hop";
+    else if (arch == 2)
+        str_arch = "chess";
+    else if (arch == 3)
+        str_arch = "hex";
+    string output = "../exp_results/placements/yott/" + str_arch + "/" + to_string(times) + "/" + name + ".map";
+
+    ofstream f;
+    f.open(output);
+
+    for (int i = 0; i < N[0] * M[0]; ++i)
+    {
+        f << i << ";" << g.get_name_node(i).c_str();
+
+        if (i < (M[0] * N[0]) - 1)
+            f << "\n";
+    }
+    f.close();
+
+    /*bool *successfullRoutings = new bool[times]; 
     for (int i = 0; i < times; ++i) {
         successfullRoutings[i] = true;
     }
@@ -219,7 +242,7 @@ void yott_main(
 
     int best_index = get_best_index_yott(times, EDGE_SIZE, vector_edges, edges_cost, successfullRoutings);
 
-    output_graph_yott(vector_edges, edges_cost, best_index, EDGE_SIZE, g, name, "yott", times, arch);
+    output_graph_yott(vector_edges, edges_cost, best_index, EDGE_SIZE, g, name, "yott", times, arch);*/
 }
 
 void routing_yott(

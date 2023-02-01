@@ -15,19 +15,19 @@ digraph atax {
     13 [label = in13 op = in ] ;
     14 [label = out14 op = out ] ;
 
-    1 -> 0 [port = 0  weight = 0 ]; 
-    12 -> 0 [port = 1  weight = 10 ]; 
-    0 -> 2 [port = 0  weight = 0 ] ;
-    4 -> 3 [port = 0  weight = 0 ] ;
-    12 -> 3 [port = 1  weight = 0 ] ;
-    3 -> 5 [port = 0  weight = 0 ] ;
-    7 -> 6 [port = 0  weight = 0 ] ;
-    6 -> 8 [port = 0  weight = 0 ] ;
-    5 -> 9 [port = 0  weight = 0 ] ;
-    8 -> 9 [port = 1  weight = 0 ] ;
-    2 -> 10 [port = 0  weight = 0 ] ;
-    9 -> 10 [port = 1  weight = 0 ] ;
-    10 -> 11 [port = 0  weight = 0 ] ;
-    13 -> 12 [port = 0  weight = 0 ] ;
-    0 -> 14 [port = 0  weight = 0 ] ;
+    1 -> 0 [port = 0  w = 0 ];
+    12 -> 0 [port = 1  w = 10 ];
+    0 -> 2 [port = 0  w = 0 ] ;
+    4 -> 3 [port = 0  w = 0 ] ;
+    12 -> 3 [port = 1  w = 0 ] ;
+    3 -> 5 [port = 0  w = 0 ] ;
+    7 -> 6 [port = 0  w = 0 ] ;
+    6 -> 8 [port = 0  w = 0 ] ;
+    5 -> 9 [port = 0  w = 0 ] ;
+    8 -> 9 [port = 1  w = 0 ] ;
+    2 -> 10 [port = 0  w = 0 ] ;
+    9 -> 10 [port = 1  w = 0 ] ;
+    10 -> 11 [port = 0  w = 0 ] ;
+    13 -> 12 [port = 0  w = 0 ] ;
+    0 -> 14 [port = 0  w = 0 ] ;
 }

@@ -12,7 +12,7 @@ GRAPH=(
     #mvt      
     #syrk
     atax
-    conv3
+    #conv3
     arf
     collapse_pyr
     cosine1

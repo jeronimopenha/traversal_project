@@ -24,7 +24,10 @@ void sa_main(
     const int edges = g.num_edges();
 
     // Adding size of grid
-    const int dim = ceil(sqrt(nodes));
+    // FIXME the line below was commented for the hardware router project
+    // To fix, change the line below with the next line
+    // const int dim = ceil(sqrt(nodes));
+    const int dim = ceil(sqrt(nodes - g.get_inputs().size() - g.get_outputs().size())) + 2;
 
     int *N = new int[NGRIDS];
     int *M = new int[NGRIDS];
@@ -120,6 +123,35 @@ void sa_main(
     //     printGrid(grid[0], N[0], M[0]);
     for (int i = 0; i < NGRIDS; i++)
         output_graph_raw(i, grid[i], N[0], M[0], name, "sa", NGRIDS, ARCH);
+
+    /*for (int i = 0; i < nodes; i++)
+    {
+        printf("%d %s\n", i, g.get_name_node(i).c_str());
+    }*/
+
+
+    string str_arch = "";
+    if (ARCH == 0)
+        str_arch = "mesh";
+    else if (ARCH == 1)
+        str_arch = "1hop";
+    else if (ARCH == 2)
+        str_arch = "chess";
+    else if (ARCH == 3)
+        str_arch = "hex";
+    string output = "../exp_results/placements/sa/" + str_arch+ "/" + to_string(NGRIDS) + "/" + name + ".map";
+
+    ofstream f;
+    f.open(output);
+
+    for (int i = 0; i < N[0] * M[0]; ++i)
+    {
+        f << i << ";" << g.get_name_node(i).c_str();
+
+        if (i < (M[0] * N[0]) - 1)
+            f << "\n";
+    }
+    f.close();
 
     /*
     printf("before: \n");
