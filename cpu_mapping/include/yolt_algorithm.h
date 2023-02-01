@@ -193,7 +193,9 @@ void yolt_main(
         }
     }
 
-    printGrid(grid[0], N[0], M[0]);
+    //printGrid(grid[0], N[0], M[0]);
+    for (int i = 0; i < times; i++)
+        output_graph_raw(i, grid[i], GRID_SIZE, GRID_SIZE, name, "yolt", times, arch);
 
     bool *successfullRoutings = new bool[times]; 
     for (int i = 0; i < times; ++i) {

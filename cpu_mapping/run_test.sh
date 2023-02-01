@@ -1,17 +1,23 @@
 set -e
 
-GRAPH=(
-	atax  
-    cholesky  
-    gemm    
-    gesummv  
-    symm  
-    trmm
-    bicg  
-    doitgen   
-    gemver  
-    mvt      
-    syrk
+GRAPH=(  
+    #cholesky  
+    #gemm    
+    #gesummv  
+    #symm  
+    #trmm
+    #bicg  
+    #doitgen   
+    #gemver  
+    #mvt      
+    #syrk
+    atax
+    conv3
+    arf
+    collapse_pyr
+    cosine1
+    ewf
+    h2v2_smooth
 )
 
 ARCH=( # 0 = mesh, 1 = 1-hop, 2 = chess, 3 = hex
@@ -20,9 +26,9 @@ ARCH=( # 0 = mesh, 1 = 1-hop, 2 = chess, 3 = hex
 )
 
 SIZE=(
-    1 
-    10 
-    100 
+    #1 
+    #10 
+    #100 
     1000
 )
 
@@ -33,13 +39,13 @@ PROG=( # 0 = yolt, 1 = yott, 2 = sa
 )
 
 # build and constructor the code
-mkdir -p build && cd build && cmake .. && make && cd ..
+mkdir -p build && cd build && cmake .. && make -j 7 && cd ..
 
-NUM_THREADS=16
+NUM_THREADS=8
 
 export OMP_NUM_THREADS=$NUM_THREADS
 
-mkdir -p results
+mkdir -p ../exp_results/placements
 
 for ((l=0; l < ${#PROG[@]}; l++)) do
     echo "Tool: "${PROG[l]}
@@ -48,21 +54,21 @@ for ((l=0; l < ${#PROG[@]}; l++)) do
         for ((j=0; j < ${#ARCH[@]}; j++)) do
             
             if [ ${ARCH[j]} == 0 ]; then
-                mkdir -p results/yolt/mesh/${SIZE[k]}
-                mkdir -p results/yott/mesh/${SIZE[k]}
-                mkdir -p results/sa/mesh/${SIZE[k]}
+                mkdir -p ../exp_results/placements/yolt/mesh/${SIZE[k]}
+                mkdir -p ../exp_results/placements/yott/mesh/${SIZE[k]}
+                mkdir -p ../exp_results/placements/sa/mesh/${SIZE[k]}
                 echo "ARCH: MESH"
             elif [ ${ARCH[j]} == 1 ]; then
-                mkdir -p results/yolt/1hop/${SIZE[k]}
-                mkdir -p results/yott/1hop/${SIZE[k]}
-                mkdir -p results/sa/1hop/${SIZE[k]}
+                mkdir -p ../exp_results/placements/yolt/1hop/${SIZE[k]}
+                mkdir -p ../exp_results/placements/yott/1hop/${SIZE[k]}
+                mkdir -p ../exp_results/placements/sa/1hop/${SIZE[k]}
                 echo "ARCH: 1HOP"
             fi
             
             for ((i=0; i < ${#GRAPH[@]}; i++)) do
 
                 echo "GRAPH: ${GRAPH[i]}"
-                DOT="bench/lisa/dac/"${GRAPH[i]}".dot"
+                DOT="../bench/test_bench/"${GRAPH[i]}".dot"
         
                 # bench ngrids program arch
                 ./build/main $DOT ${SIZE[k]} ${PROG[l]} ${ARCH[j]} 
