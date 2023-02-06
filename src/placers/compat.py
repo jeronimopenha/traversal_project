@@ -10,10 +10,6 @@ import networkx as nx
 from math import sqrt, ceil
 
 
-def compat_placements():
-    pass
-
-
 def create_nodes_map(map_file: str):
     nodes_map = {}
     with open(map_file) as f:

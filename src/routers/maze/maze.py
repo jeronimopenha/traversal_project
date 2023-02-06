@@ -1,18 +1,25 @@
+import os
+import sys
 
-'''
+if os.getcwd() not in sys.path:
+    sys.path.append(os.getcwd())
+
+import json
+import numpy as np
+
+
+def routing_mesh(list_edge, GRID_SIZE, positions):
+    '''
     Input:
         list_edge: lista de arestas [[0,1],[1,2],...] 0 -> 1 e 1->2, ...
         GRID_SIZE: tamanho do grid (considerei tamanho quadratico)
-        positions: dicionario da posicao do nodo que retorna uma tupla de valores x e y do PE. 
-            Exemplo, se é o PE 0 então os valores de x e y seriam 0 e 0, respectivamente
+        positions: dicionario da posicao do nodo que retorna uma tupla de valores x e y do PE.
+            Exemplo, se é o PE 0 então os valores de linha (i) e coluna (j) seriam 0 e 0, respectivamente
     Output:
         True: roteamento deu certo
         False: roteamento deu ruim
 
 '''
-
-
-def routing_mesh(list_edge, GRID_SIZE, positions):
 
     TOTAL_GRID_SIZE = GRID_SIZE * GRID_SIZE
     # uma matriz que sera preenchida com os nodos
@@ -55,25 +62,25 @@ def routing_mesh(list_edge, GRID_SIZE, positions):
                 grid[pe_curr][1][0] = a
                 pos_node_j += 1
                 change = True
-                #print("VIZ right 1")
+                # print("VIZ right 1")
             # go left
             elif diff_j < 0 and pe_curr-1 >= (pos_node_i)*GRID_SIZE and (grid[pe_curr][3][0] == -1 or grid[pe_curr][3][0] == a) and grid[pe_curr-1][1][0] != a and (pe_curr-1) not in count_per_curr:
                 grid[pe_curr][3][0] = a
                 pos_node_j -= 1
                 change = True
-                #print("VIZ left 1")
+                # print("VIZ left 1")
             # go down
             elif diff_i > 0 and pe_curr+GRID_SIZE < TOTAL_GRID_SIZE and (grid[pe_curr][2][0] == -1 or grid[pe_curr][2][0] == a) and grid[pe_curr+GRID_SIZE][0][0] != a and (pe_curr+GRID_SIZE) not in count_per_curr:
                 grid[pe_curr][2][0] = a
                 pos_node_i += 1
                 change = True
-                #print("VIZ down 1")
+                # print("VIZ down 1")
             # go up
             elif diff_i < 0 and pe_curr-GRID_SIZE >= 0 and (grid[pe_curr][0][0] == -1 or grid[pe_curr][0][0] == a) and grid[pe_curr-GRID_SIZE][2][0] != a and (pe_curr-GRID_SIZE) not in count_per_curr:
                 grid[pe_curr][0][0] = a
                 pos_node_i -= 1
                 change = True
-                #print("VIZ top 1")
+                # print("VIZ top 1")
 
             if not change:  # change, try a long path
 
@@ -82,24 +89,24 @@ def routing_mesh(list_edge, GRID_SIZE, positions):
                     grid[pe_curr][1][0] = a
                     pos_node_j += 1
                     change = True
-                    #print("right 1")
+                    # print("right 1")
                 # go left
                 elif pe_curr-1 >= (pos_node_i)*GRID_SIZE and (grid[pe_curr][3][0] == -1 or grid[pe_curr][3][0] == a) and grid[pe_curr-1][1][0] != a and (pe_curr-1) not in count_per_curr:
                     grid[pe_curr][3][0] = a
                     pos_node_j -= 1
                     change = True
-                    #print("left 1")
+                    # print("left 1")
                 # go down
                 elif pe_curr+GRID_SIZE < TOTAL_GRID_SIZE and (grid[pe_curr][2][0] == -1 or grid[pe_curr][2][0] == a) and grid[pe_curr+GRID_SIZE][0][0] != a and (pe_curr+GRID_SIZE) not in count_per_curr:
                     grid[pe_curr][2][0] = a
                     pos_node_i += 1
                     change = True
-                    #print("down 1")
+                    # print("down 1")
                 elif pe_curr-GRID_SIZE >= 0 and (grid[pe_curr][0][0] == -1 or grid[pe_curr][0][0] == a) and grid[pe_curr-GRID_SIZE][2][0] != a and (pe_curr-GRID_SIZE) not in count_per_curr:  # go up
                     grid[pe_curr][0][0] = a
                     pos_node_i -= 1
                     change = True
-                    #print("top 1")
+                    # print("top 1")
 
                 if not change:  # not routing
                     return False, grid, dic_path
@@ -161,49 +168,49 @@ def routing_1hop(list_edge, GRID_SIZE, positions):
                 grid[pe_curr][1][1] = a
                 pos_node_j += 2
                 change = True
-                #print("VIZ right 2")
+                # print("VIZ right 2")
             # go right
             elif diff_j > 0 and pe_curr+1 < (pos_node_i+1)*GRID_SIZE and (grid[pe_curr][1][0] == -1 or grid[pe_curr][1][0] == a) and grid[pe_curr+1][3][0] != a and (pe_curr+1) not in count_per_curr:
                 grid[pe_curr][1][0] = a
                 pos_node_j += 1
                 change = True
-                #print("VIZ right 1")
+                # print("VIZ right 1")
             # go left
             elif diff_j < 0 and dist_j >= 2 and pe_curr-2 >= (pos_node_i)*GRID_SIZE and (grid[pe_curr][3][1] == -1 or grid[pe_curr][3][1] == a) and grid[pe_curr-2][1][1] != a and (pe_curr-2) not in count_per_curr:
                 grid[pe_curr][3][1] = a
                 pos_node_j -= 2
                 change = True
-                #print("VIZ left 2")
+                # print("VIZ left 2")
             # go left
             elif diff_j < 0 and pe_curr-1 >= (pos_node_i)*GRID_SIZE and (grid[pe_curr][3][0] == -1 or grid[pe_curr][3][0] == a) and grid[pe_curr-1][1][0] != a and (pe_curr-1) not in count_per_curr:
                 grid[pe_curr][3][0] = a
                 pos_node_j -= 1
                 change = True
-                #print("VIZ left 1")
+                # print("VIZ left 1")
             # go down
             elif diff_i > 0 and dist_i >= 2 and pe_curr+2*GRID_SIZE < TOTAL_GRID_SIZE and (grid[pe_curr][2][1] == -1 or grid[pe_curr][2][1] == a) and grid[pe_curr+2*GRID_SIZE][0][1] != a and (pe_curr+2*GRID_SIZE) not in count_per_curr:
                 grid[pe_curr][2][1] = a
                 pos_node_i += 2
                 change = True
-                #print("VIZ down 2")
+                # print("VIZ down 2")
             # go down
             elif diff_i > 0 and pe_curr+GRID_SIZE < TOTAL_GRID_SIZE and (grid[pe_curr][2][0] == -1 or grid[pe_curr][2][0] == a) and grid[pe_curr+GRID_SIZE][0][0] != a and (pe_curr+GRID_SIZE) not in count_per_curr:
                 grid[pe_curr][2][0] = a
                 pos_node_i += 1
                 change = True
-                #print("VIZ down 1")
+                # print("VIZ down 1")
             # go up
             elif diff_i < 0 and dist_i >= 2 and pe_curr-2*GRID_SIZE >= 0 and (grid[pe_curr][0][1] == -1 or grid[pe_curr][0][1] == a) and grid[pe_curr-2*GRID_SIZE][2][1] != a and (pe_curr-2*GRID_SIZE) not in count_per_curr:
                 grid[pe_curr][0][1] = a
                 pos_node_i -= 2
                 change = True
-                #print("VIZ top 2")
+                # print("VIZ top 2")
             # go up
             elif diff_i < 0 and pe_curr-GRID_SIZE >= 0 and (grid[pe_curr][0][0] == -1 or grid[pe_curr][0][0] == a) and grid[pe_curr-GRID_SIZE][2][0] != a and (pe_curr-GRID_SIZE) not in count_per_curr:
                 grid[pe_curr][0][0] = a
                 pos_node_i -= 1
                 change = True
-                #print("VIZ top 1")
+                # print("VIZ top 1")
 
             if not change:  # change, try a long path
 
@@ -212,24 +219,24 @@ def routing_1hop(list_edge, GRID_SIZE, positions):
                     grid[pe_curr][1][0] = a
                     pos_node_j += 1
                     change = True
-                    #print("right 1")
+                    # print("right 1")
                 # go left
                 elif pe_curr-1 >= (pos_node_i)*GRID_SIZE and (grid[pe_curr][3][0] == -1 or grid[pe_curr][3][0] == a) and grid[pe_curr-1][1][0] != a and (pe_curr-1) not in count_per_curr:
                     grid[pe_curr][3][0] = a
                     pos_node_j -= 1
                     change = True
-                    #print("left 1")
+                    # print("left 1")
                 # go down
                 elif pe_curr+GRID_SIZE < TOTAL_GRID_SIZE and (grid[pe_curr][2][0] == -1 or grid[pe_curr][2][0] == a) and grid[pe_curr+GRID_SIZE][0][0] != a and (pe_curr+GRID_SIZE) not in count_per_curr:
                     grid[pe_curr][2][0] = a
                     pos_node_i += 1
                     change = True
-                    #print("down 1")
+                    # print("down 1")
                 elif pe_curr-GRID_SIZE >= 0 and (grid[pe_curr][0][0] == -1 or grid[pe_curr][0][0] == a) and grid[pe_curr-GRID_SIZE][2][0] != a and (pe_curr-GRID_SIZE) not in count_per_curr:  # go up
                     grid[pe_curr][0][0] = a
                     pos_node_i -= 1
                     change = True
-                    #print("top 1")
+                    # print("top 1")
 
                 if not change:  # not routing
                     return False
@@ -249,11 +256,58 @@ def routing_1hop(list_edge, GRID_SIZE, positions):
 
     return True
 
-# TODO
+
+def find_files_conditional(path: str, condition: str) -> list():
+    files_return = []
+    for dir, folder, files in os.walk(path):
+        for f in files:
+            if condition in f:
+                files_return.append(
+                    [os.path.join(dir, f), f, '%s' % f.split('.')[0]])
+    return files_return
 
 
-def save_routed_dot(dic_path: dict(), graph: nx.DiGraph(), name: str = 'routed.dot', path: str = './'):
-    '''ng = nx.DiGraph()
-    for node in graph.nodes(data=True):
-        a = 1'''
-    pass
+def read_json(files_placements: list()):
+    placements = {}
+    for file in files_placements:
+        with open(file[0]) as p_file:
+            contents = p_file.read()
+            placements[file[2]] = json.loads(contents)
+        p_file.close()
+    return placements
+
+
+def read_maze_edges(edges: dict()) -> list():
+    edges_vec = []
+    for e in edges.keys():
+        a = edges[e]['a']
+        b = edges[e]['b']
+        edges_vec.append([a, b])
+    return edges_vec
+
+
+def sort_third(val):
+    return val[2]
+
+
+def read_maze_edges_sorted(edges: dict(), reverse: bool = False) -> list():
+    edges_vec = []
+    for e in edges.keys():
+        a = edges[e]['a']
+        b = edges[e]['b']
+        cost = edges[e]['cost']
+        edges_vec.append([a, b, cost])
+    edges_vec.sort(key=sort_third, reverse=reverse)
+
+    return edges_vec
+
+
+def get_maze_positions(placement: list(), matrix_sqrt: int) -> list(tuple()):
+    positions = {}
+    for i in range(len(placement)):
+        n = placement[i]
+        if n is not None:
+            l = i//matrix_sqrt
+            c = i % matrix_sqrt
+            positions[n] = (l, c)
+    return positions
