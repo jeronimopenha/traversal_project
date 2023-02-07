@@ -286,7 +286,7 @@ def read_maze_edges(edges: dict()) -> list():
     return edges_vec
 
 
-def sort_third(val):
+def edges_sorted_third(val):
     return val[2]
 
 
@@ -297,7 +297,32 @@ def read_maze_edges_sorted(edges: dict(), reverse: bool = False) -> list():
         b = edges[e]['b']
         cost = edges[e]['cost']
         edges_vec.append([a, b, cost])
-    edges_vec.sort(key=sort_third, reverse=reverse)
+    edges_vec.sort(key=edges_sorted_third, reverse=reverse)
+
+    return edges_vec
+
+
+def read_maze_edges_multicast(edges: dict()) -> list():
+    nodes_data = {}
+    for e in edges.keys():
+        if edges[e]['a'] not in nodes_data.keys():
+            # 0 = n_edges
+            # 1 = sum of the edges cost
+            # 3 = list of the edges
+            nodes_data[edges[e]['a']] = [1, edges[e]
+                                         ['cost'], [[edges[e]['a'], edges[e]['b']]]]
+        else:
+            nodes_data[edges[e]['a']][0] += 1
+            nodes_data[edges[e]['a']][1] += edges[e]['cost']
+            nodes_data[edges[e]['a']][2].append([edges[e]['a'], edges[e]['b']])
+
+    edges_vec = []
+    for e in edges.keys():
+        a = edges[e]['a']
+        b = edges[e]['b']
+        cost = edges[e]['cost']
+        edges_vec.append([a, b, cost])
+    edges_vec.sort(key=edges_sorted_third, reverse=reverse)
 
     return edges_vec
 
