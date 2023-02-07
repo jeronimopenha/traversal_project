@@ -14,8 +14,16 @@ from src.routers.maze.maze import *
 if __name__ == '__main__':
     try:
         # SA - DOT WITH REGS
-        placements_input_path = './exp_results/placements/sa/'
-        results_output_path = './exp_results/routers/maze/sa/given/'
+        #placements_input_path = './exp_results/placements/sa/'
+        #results_output_path = './exp_results/routers/maze/sa/given/'
+
+        # YOLT - DOT WITH REGS
+        placements_input_path = './exp_results/placements/yolt/'
+        results_output_path = './exp_results/routers/maze/yolt/given/'
+
+        # YOTT - DOT WITH REGS
+        #placements_input_path = './exp_results/placements/yott/'
+        #results_output_path = './exp_results/routers/maze/yott/given/'
 
         files_placements = find_files_conditional(
             placements_input_path, '.json')

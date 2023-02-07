@@ -1,8 +1,8 @@
 import os
 import sys
 
-if os.getcwd() not in sys.path:
-    sys.path.append(os.getcwd())
+#if os.getcwd() not in sys.path:
+#    sys.path.append(os.getcwd())
 
 import json
 import numpy as np
@@ -267,9 +267,9 @@ def find_files_conditional(path: str, condition: str) -> list():
     return files_return
 
 
-def read_json(files_placements: list()):
+def read_json(files: list()):
     placements = {}
-    for file in files_placements:
+    for file in files:
         with open(file[0]) as p_file:
             contents = p_file.read()
             placements[file[2]] = json.loads(contents)
