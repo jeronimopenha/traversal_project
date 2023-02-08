@@ -1,0 +1,17 @@
+qtde multicast
+m_max
+m1, m2, m3
+
+d_max
+d1 d2 d3
+
+m
+
+
+Pré-processamento grafo para o placement quando o multicast for "grande"
+
+
+teste de aumento peso arestas grafo original 10% aumento 1 ou 2 com amostra de 1000 ver vazão antes e depois
+
+Testes do simulador
+https://excalidraw.com/#json=pQ5c4yAhfi0oVYBAh5ALR,btyebQzOnysBJkH5ZNdjcA
