@@ -14,12 +14,12 @@ from src.routers.maze.maze import *
 if __name__ == '__main__':
     try:
         # SA - DOT WITH REGS
-        #placements_input_path = './exp_results/placements/sa/'
-        #results_output_path = './exp_results/routers/maze/sa/given/'
+        placements_input_path = './exp_results/placements/sa/'
+        results_output_path = './exp_results/routers/maze/sa/given/'
 
         # YOLT - DOT WITH REGS
-        placements_input_path = './exp_results/placements/yolt/'
-        results_output_path = './exp_results/routers/maze/yolt/given/'
+        #placements_input_path = './exp_results/placements/yolt/'
+        #results_output_path = './exp_results/routers/maze/yolt/given/'
 
         # YOTT - DOT WITH REGS
         #placements_input_path = './exp_results/placements/yott/'
@@ -41,6 +41,9 @@ if __name__ == '__main__':
             routed, grid, dic_path = routing_mesh(
                 edges, matrix_sqrt, positions)
 
+            distances_max = 0
+            distances = {}
+
             if routed:
                 ed = {}
                 router_cost = 0
@@ -54,11 +57,23 @@ if __name__ == '__main__':
                         'cost': cost,
                         'path': dic_path[k]
                     }
+                    if cost > distances_max:
+                        distances_max = cost
+                    if cost not in distances.keys():
+                        distances[cost] = 0
+                    distances[cost] += 1
+                
+                dist_sorted_keys = sorted(distances.keys())
                 routings[pl] = {'benchmark': placements[pl]['benchmark'],
                                 'test': 'given',
                                 'placement_file': '%s.json' % pl,
+                                'min_cost': placements[pl]['min_cost'],
                                 'placer_cost': placements[pl]['total_cost'],
                                 'router_cost': router_cost,
+                                'multicast_max': placements[pl]['multicast_max'],
+                                'distances_max': distances_max,
+                                'multicasts': placements[pl]['multicasts'],
+                                'distances': {key: distances[key] for key in dist_sorted_keys},
                                 'positions': positions,
                                 'edges': ed
                                 }

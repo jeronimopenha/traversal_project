@@ -2,8 +2,27 @@
     "benchmark": "collapse_pyr",
     "test": "given",
     "placement_file": "collapse_pyr_526.json",
+    "min_cost": 95,
     "placer_cost": 128,
     "router_cost": 174,
+    "multicast_max": 2,
+    "distances_max": 13,
+    "multicasts": {
+        "0": 17,
+        "1": 43,
+        "2": 26
+    },
+    "distances": {
+        "1": 73,
+        "2": 8,
+        "3": 4,
+        "4": 2,
+        "5": 2,
+        "7": 2,
+        "8": 1,
+        "10": 2,
+        "13": 1
+    },
     "positions": {
         "55": [
             0,

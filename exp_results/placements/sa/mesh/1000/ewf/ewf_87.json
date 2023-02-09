@@ -3,6 +3,20 @@
     "placement_raw_file": "ewf.dot87.raw",
     "min_cost": 60,
     "total_cost": 74,
+    "multicast_max": 3,
+    "distances_max": 5,
+    "multicasts": {
+        "0": 5,
+        "1": 28,
+        "2": 10,
+        "3": 4
+    },
+    "distances": {
+        "1": 51,
+        "2": 6,
+        "3": 2,
+        "5": 1
+    },
     "placement": [
         "30",
         "32",

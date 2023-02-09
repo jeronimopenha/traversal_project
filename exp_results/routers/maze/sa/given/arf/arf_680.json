@@ -2,8 +2,21 @@
     "benchmark": "arf",
     "test": "given",
     "placement_file": "arf_680.json",
+    "min_cost": 40,
     "placer_cost": 46,
     "router_cost": 56,
+    "multicast_max": 2,
+    "distances_max": 11,
+    "multicasts": {
+        "0": 2,
+        "1": 32,
+        "2": 4
+    },
+    "distances": {
+        "1": 33,
+        "2": 6,
+        "11": 1
+    },
     "positions": {
         "34": [
             0,

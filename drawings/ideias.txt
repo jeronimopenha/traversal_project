@@ -4,10 +4,9 @@ m1, m2, m3
 
 d_max
 d1 d2 d3
+FEITO
 
-m
-
-
+FAZER!!!
 Pré-processamento grafo para o placement quando o multicast for "grande"
 
 

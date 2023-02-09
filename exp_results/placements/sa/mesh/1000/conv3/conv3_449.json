@@ -3,6 +3,18 @@
     "placement_raw_file": "conv3.dot449.raw",
     "min_cost": 26,
     "total_cost": 31,
+    "multicast_max": 4,
+    "distances_max": 5,
+    "multicasts": {
+        "0": 2,
+        "1": 22,
+        "4": 1
+    },
+    "distances": {
+        "1": 24,
+        "2": 1,
+        "5": 1
+    },
     "placement": [
         "19",
         "24",

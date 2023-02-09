@@ -2,8 +2,26 @@
     "benchmark": "cosine1",
     "test": "given",
     "placement_file": "cosine1_898.json",
+    "min_cost": 76,
     "placer_cost": 102,
     "router_cost": 140,
+    "multicast_max": 2,
+    "distances_max": 10,
+    "multicasts": {
+        "0": 8,
+        "1": 40,
+        "2": 18
+    },
+    "distances": {
+        "1": 58,
+        "2": 6,
+        "3": 5,
+        "4": 1,
+        "5": 1,
+        "7": 1,
+        "9": 1,
+        "10": 3
+    },
     "positions": {
         "54": [
             0,

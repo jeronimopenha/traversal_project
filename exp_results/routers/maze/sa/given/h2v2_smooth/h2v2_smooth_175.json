@@ -2,8 +2,22 @@
     "benchmark": "h2v2_smooth",
     "test": "given",
     "placement_file": "h2v2_smooth_175.json",
+    "min_cost": 67,
     "placer_cost": 78,
     "router_cost": 86,
+    "multicast_max": 2,
+    "distances_max": 7,
+    "multicasts": {
+        "0": 1,
+        "1": 59,
+        "2": 4
+    },
+    "distances": {
+        "1": 60,
+        "2": 4,
+        "4": 1,
+        "7": 2
+    },
     "positions": {
         "53": [
             0,

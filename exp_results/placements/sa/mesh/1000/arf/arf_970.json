@@ -3,6 +3,17 @@
     "placement_raw_file": "arf.dot970.raw",
     "min_cost": 40,
     "total_cost": 45,
+    "multicast_max": 2,
+    "distances_max": 2,
+    "multicasts": {
+        "0": 2,
+        "1": 32,
+        "2": 4
+    },
+    "distances": {
+        "1": 35,
+        "2": 5
+    },
     "placement": [
         null,
         "29",

@@ -3,6 +3,18 @@
     "placement_raw_file": "arf.dot858.raw",
     "min_cost": 40,
     "total_cost": 46,
+    "multicast_max": 2,
+    "distances_max": 3,
+    "multicasts": {
+        "0": 2,
+        "1": 32,
+        "2": 4
+    },
+    "distances": {
+        "1": 36,
+        "2": 2,
+        "3": 2
+    },
     "placement": [
         null,
         null,

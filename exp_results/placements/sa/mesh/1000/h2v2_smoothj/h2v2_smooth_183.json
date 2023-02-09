@@ -3,6 +3,19 @@
     "placement_raw_file": "h2v2_smooth.dot183.raw",
     "min_cost": 67,
     "total_cost": 80,
+    "multicast_max": 2,
+    "distances_max": 4,
+    "multicasts": {
+        "0": 1,
+        "1": 59,
+        "2": 4
+    },
+    "distances": {
+        "1": 57,
+        "2": 8,
+        "3": 1,
+        "4": 1
+    },
     "placement": [
         null,
         "52",

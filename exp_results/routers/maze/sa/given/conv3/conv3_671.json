@@ -2,8 +2,21 @@
     "benchmark": "conv3",
     "test": "given",
     "placement_file": "conv3_671.json",
+    "min_cost": 26,
     "placer_cost": 29,
     "router_cost": 39,
+    "multicast_max": 4,
+    "distances_max": 12,
+    "multicasts": {
+        "0": 2,
+        "1": 22,
+        "4": 1
+    },
+    "distances": {
+        "1": 23,
+        "2": 2,
+        "12": 1
+    },
     "positions": {
         "24": [
             0,

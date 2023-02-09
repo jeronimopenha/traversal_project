@@ -3,6 +3,20 @@
     "placement_raw_file": "collapse_pyr.dot882.raw",
     "min_cost": 95,
     "total_cost": 135,
+    "multicast_max": 2,
+    "distances_max": 5,
+    "multicasts": {
+        "0": 17,
+        "1": 43,
+        "2": 26
+    },
+    "distances": {
+        "1": 70,
+        "2": 14,
+        "3": 8,
+        "4": 2,
+        "5": 1
+    },
     "placement": [
         "85",
         "12",

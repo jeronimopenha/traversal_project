@@ -3,6 +3,20 @@
     "placement_raw_file": "cosine1.dot319.raw",
     "min_cost": 76,
     "total_cost": 110,
+    "multicast_max": 2,
+    "distances_max": 5,
+    "multicasts": {
+        "0": 8,
+        "1": 40,
+        "2": 18
+    },
+    "distances": {
+        "1": 54,
+        "2": 16,
+        "3": 2,
+        "4": 2,
+        "5": 2
+    },
     "placement": [
         "47",
         "2",

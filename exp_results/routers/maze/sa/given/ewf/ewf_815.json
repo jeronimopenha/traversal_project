@@ -2,8 +2,22 @@
     "benchmark": "ewf",
     "test": "given",
     "placement_file": "ewf_815.json",
+    "min_cost": 60,
     "placer_cost": 71,
     "router_cost": 71,
+    "multicast_max": 3,
+    "distances_max": 4,
+    "multicasts": {
+        "0": 5,
+        "1": 28,
+        "2": 10,
+        "3": 4
+    },
+    "distances": {
+        "1": 51,
+        "2": 8,
+        "4": 1
+    },
     "positions": {
         "41": [
             0,

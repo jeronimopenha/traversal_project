@@ -3,6 +3,18 @@
     "placement_raw_file": "cosine1.dot819.raw",
     "min_cost": 76,
     "total_cost": 101,
+    "multicast_max": 2,
+    "distances_max": 3,
+    "multicasts": {
+        "0": 8,
+        "1": 40,
+        "2": 18
+    },
+    "distances": {
+        "1": 55,
+        "2": 17,
+        "3": 4
+    },
     "placement": [
         null,
         "54",

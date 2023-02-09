@@ -3,6 +3,18 @@
     "placement_raw_file": "conv3.dot737.raw",
     "min_cost": 26,
     "total_cost": 31,
+    "multicast_max": 4,
+    "distances_max": 3,
+    "multicasts": {
+        "0": 2,
+        "1": 22,
+        "4": 1
+    },
+    "distances": {
+        "1": 22,
+        "2": 3,
+        "3": 1
+    },
     "placement": [
         "19",
         null,

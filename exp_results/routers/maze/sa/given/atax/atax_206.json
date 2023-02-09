@@ -2,8 +2,21 @@
     "benchmark": "atax",
     "test": "given",
     "placement_file": "atax_206.json",
+    "min_cost": 15,
     "placer_cost": 18,
     "router_cost": 20,
+    "multicast_max": 2,
+    "distances_max": 3,
+    "multicasts": {
+        "0": 2,
+        "1": 11,
+        "2": 2
+    },
+    "distances": {
+        "1": 11,
+        "2": 3,
+        "3": 1
+    },
     "positions": {
         "6": [
             1,

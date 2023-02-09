@@ -3,6 +3,17 @@
     "placement_raw_file": "atax.dot703.raw",
     "min_cost": 15,
     "total_cost": 16,
+    "multicast_max": 2,
+    "distances_max": 2,
+    "multicasts": {
+        "0": 2,
+        "1": 11,
+        "2": 2
+    },
+    "distances": {
+        "1": 14,
+        "2": 1
+    },
     "placement": [
         null,
         null,
