@@ -1,9 +1,25 @@
 {
     "benchmark": "atax",
-    "test": "greater_first",
+    "test": "g_l",
     "placement_file": "atax_821.json",
+    "min_cost": 15,
     "placer_cost": 17,
     "router_cost": 17,
+    "multicast_max": 2,
+    "distances_max": 2,
+    "multicasts": {
+        "0": 2,
+        "1": 11,
+        "2": 2
+    },
+    "distances_router": {
+        "1": 13,
+        "2": 2
+    },
+    "distances_placer": {
+        "1": 13,
+        "2": 2
+    },
     "positions": {
         "6": [
             0,

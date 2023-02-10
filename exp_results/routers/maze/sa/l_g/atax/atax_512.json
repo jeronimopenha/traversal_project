@@ -1,15 +1,27 @@
 {
     "benchmark": "atax",
-    "test": "less_first",
-    "placement_file": "atax_512.json",
+    "test": "l_g",
+    "placement_file": "atax_685.json",
+    "min_cost": 15,
     "placer_cost": 16,
     "router_cost": 16,
+    "multicast_max": 2,
+    "distances_max": 2,
+    "multicasts": {
+        "0": 2,
+        "1": 11,
+        "2": 2
+    },
+    "distances_router": {
+        "1": 14,
+        "2": 1
+    },
+    "distances_placer": {
+        "1": 14,
+        "2": 1
+    },
     "positions": {
-        "2": [
-            0,
-            1
-        ],
-        "1": [
+        "14": [
             0,
             2
         ],
@@ -17,15 +29,19 @@
             0,
             3
         ],
-        "14": [
+        "1": [
             0,
             4
+        ],
+        "11": [
+            1,
+            0
         ],
         "10": [
             1,
             1
         ],
-        "11": [
+        "2": [
             1,
             2
         ],
@@ -80,7 +96,7 @@
             "b": "0",
             "cost": 1,
             "path": [
-                2
+                4
             ]
         },
         "2_10": {
@@ -88,7 +104,7 @@
             "b": "10",
             "cost": 1,
             "path": [
-                1
+                7
             ]
         },
         "3_5": {

@@ -12,10 +12,14 @@
         "1": 59,
         "2": 4
     },
-    "distances": {
+    "distances_router": {
         "1": 59,
         "2": 6,
         "3": 2
+    },
+    "distances_placer": {
+        "1": 61,
+        "2": 6
     },
     "positions": {
         "44": [

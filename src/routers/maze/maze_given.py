@@ -73,7 +73,8 @@ if __name__ == '__main__':
                                 'multicast_max': placements[pl]['multicast_max'],
                                 'distances_max': distances_max,
                                 'multicasts': placements[pl]['multicasts'],
-                                'distances': {key: distances[key] for key in dist_sorted_keys},
+                                'distances_router': {key: distances[key] for key in dist_sorted_keys},
+                                'distances_placer':placements[pl]['distances'],
                                 'positions': positions,
                                 'edges': ed
                                 }
