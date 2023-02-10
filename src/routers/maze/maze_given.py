@@ -62,7 +62,7 @@ if __name__ == '__main__':
                     if cost not in distances.keys():
                         distances[cost] = 0
                     distances[cost] += 1
-                
+
                 dist_sorted_keys = sorted(distances.keys())
                 routings[pl] = {'benchmark': placements[pl]['benchmark'],
                                 'test': 'given',
@@ -77,10 +77,28 @@ if __name__ == '__main__':
                                 'positions': positions,
                                 'edges': ed
                                 }
-        for k in routings:
+        stats = {}
+        for r in routings.keys():
+            benchmark = routings[r]['benchmark']
+            if benchmark not in stats.keys():
+                stats[benchmark] = []
+            stats[benchmark].append(routings[r])
+
+        for stat in stats.keys():
+            stats[stat].sort(key=lambda v: v['router_cost'])
+
+        for stat in stats.keys():
+            for i in range(len(stats[stat])):
+                b = stats[stat][i]
+                p = '%s%s/%s_%s.json' % (results_output_path, b['benchmark'],b['benchmark'], '{:0>3}'.format(i))
+                with open(p, 'w') as json_file:
+                    json.dump(b, json_file, indent=4)
+                json_file.close()
+
+        '''for k in routings:
             with open('%s%s/%s.json' % (results_output_path, placements[k]['benchmark'], k), 'w') as json_file:
                 json.dump(routings[k], json_file, indent=4)
-            json_file.close()
+            json_file.close()'''
 
     except Exception as e:
         print(e)
