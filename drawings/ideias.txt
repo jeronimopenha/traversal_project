@@ -6,7 +6,12 @@ d_max
 d1 d2 d3
 FEITO
 
-Executar as ordens - FEITO
+Executar as ordens
+
+Gráfico dos routers
+fazer gráfico 100 melhores pra cada benchmark
+
+FEITO
 
 
 FAZER!!!
@@ -21,8 +26,7 @@ teste de aumento peso arestas grafo original 10% aumento 1 ou 2 com amostra de 1
 Testes do simulador
 https://excalidraw.com/#json=pQ5c4yAhfi0oVYBAh5ALR,btyebQzOnysBJkH5ZNdjcA
 
-Gráfico dos routers
-fazer gráfico 100 melhores pra cada benchmark
+
 
 
 fazer o router_cost
