@@ -22,8 +22,10 @@ Testes do simulador
 https://excalidraw.com/#json=pQ5c4yAhfi0oVYBAh5ALR,btyebQzOnysBJkH5ZNdjcA
 
 Gráfico dos routers
+fazer gráfico 100 melhores pra cada benchmark
+
+
 fazer o router_cost
 rodar os simuladores
 tirar regs
-fazer gráfico 100 melhores pra cada benchmark
 custo e vazão
