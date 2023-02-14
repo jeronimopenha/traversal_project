@@ -33,3 +33,12 @@ fazer o router_cost
 rodar os simuladores
 tirar regs
 custo e vazão
+
+
+Roteador com backtrack
+voltar 1,2,3
+código simples python x,y se der ruim tenta de novo. x e y procurando a menor distância. x peimeiro se não der y
+quando dá errado recuar
+primeiro custo 1 e depois as outras
+
+teste de quadrante - se 1 coincidir o multicast já pode ser usado
