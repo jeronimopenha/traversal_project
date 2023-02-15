@@ -290,7 +290,7 @@ def edges_sorted_third(val):
     return val[2]
 
 
-def read_maze_edges_sorted(edges: dict(), reverse: bool = False) -> list():
+def read_edges_sorted(edges: dict(), reverse: bool = False) -> list():
     edges_vec = []
     for e in edges.keys():
         a = edges[e]['a']
@@ -322,12 +322,12 @@ def read_maze_edges_multicast(edges: dict()) -> list():
         b = edges[e]['b']
         cost = edges[e]['cost']
         edges_vec.append([a, b, cost])
-    edges_vec.sort(key=edges_sorted_third, reverse=reverse)
+    edges_vec.sort(key=edges_sorted_third)
 
     return edges_vec
 
 
-def get_maze_positions(placement: list(), matrix_sqrt: int) -> list(tuple()):
+def get_nodes_positions(placement: list(), matrix_sqrt: int) -> list(tuple()):
     positions = {}
     for i in range(len(placement)):
         n = placement[i]

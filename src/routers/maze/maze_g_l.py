@@ -27,9 +27,9 @@ if __name__ == '__main__':
         # random edges to routing
         for pl in placements.keys():
             matrix_sqrt = ceil(sqrt(len(placements[pl]['placement'])))
-            edges = read_maze_edges_sorted(placements[pl]['edges'],True)
+            edges = read_edges_sorted(placements[pl]['edges'],True)
 
-            positions = get_maze_positions(placements[pl]['placement'], matrix_sqrt)
+            positions = get_nodes_positions(placements[pl]['placement'], matrix_sqrt)
 
             routed, grid, dic_path = routing_mesh(
                 edges, matrix_sqrt, positions)

@@ -9,21 +9,14 @@ import json
 import networkx as nx
 from math import ceil, sqrt
 from src.routers.maze.maze import *
+from src.routers.simple.simple import *
 
 
 if __name__ == '__main__':
     try:
         # SA - DOT WITH REGS
-        placements_input_path = './exp_results/placements/sa/'
-        results_output_path = './exp_results/routers/maze/sa/given/'
-
-        # YOLT - DOT WITH REGS
-        #placements_input_path = './exp_results/placements/yolt/'
-        #results_output_path = './exp_results/routers/maze/yolt/given/'
-
-        # YOTT - DOT WITH REGS
-        #placements_input_path = './exp_results/placements/yott/'
-        #results_output_path = './exp_results/routers/maze/yott/given/'
+        placements_input_path = './exp_results/sincrono/placements/sa/mesh/1000/conv3/'
+        results_output_path = './exp_results/routers/maze/sa/l_g/'
 
         files_placements = find_files_conditional(
             placements_input_path, '.json')
@@ -33,12 +26,12 @@ if __name__ == '__main__':
         # random edges to routing
         for pl in placements.keys():
             matrix_sqrt = ceil(sqrt(len(placements[pl]['placement'])))
-            edges = read_maze_edges(placements[pl]['edges'])
+            edges = read_edges_sorted(placements[pl]['edges'])
 
             positions = get_nodes_positions(
                 placements[pl]['placement'], matrix_sqrt)
 
-            routed, grid, dic_path = routing_mesh(
+            routed, grid, dic_path = routing(
                 edges, matrix_sqrt, positions)
 
             distances_max = 0
@@ -65,7 +58,7 @@ if __name__ == '__main__':
 
                 dist_sorted_keys = sorted(distances.keys())
                 routings[pl] = {'benchmark': placements[pl]['benchmark'],
-                                'test': 'given',
+                                'test': 'l_g',
                                 'placement_file': '%s.json' % pl,
                                 'min_cost': placements[pl]['min_cost'],
                                 'placer_cost': placements[pl]['total_cost'],
@@ -74,10 +67,11 @@ if __name__ == '__main__':
                                 'distances_max': distances_max,
                                 'multicasts': placements[pl]['multicasts'],
                                 'distances_router': {key: distances[key] for key in dist_sorted_keys},
-                                'distances_placer':placements[pl]['distances'],
+                                'distances_placer': placements[pl]['distances'],
                                 'positions': positions,
                                 'edges': ed
                                 }
+
         stats = {}
         for r in routings.keys():
             benchmark = routings[r]['benchmark']
@@ -88,10 +82,11 @@ if __name__ == '__main__':
         for stat in stats.keys():
             stats[stat].sort(key=lambda v: v['router_cost'])
 
-        for stat in stats.keys():
+        for stat in stats.keGRID_SIZEys():
             for i in range(len(stats[stat])):
                 b = stats[stat][i]
-                p = '%s%s/%s_%s.json' % (results_output_path, b['benchmark'],b['benchmark'], '{:0>3}'.format(i))
+                p = '%s%s/%s_%s.json' % (results_output_path,
+                                         b['benchmark'], b['benchmark'], '{:0>3}'.format(i))
                 with open(p, 'w') as json_file:
                     json.dump(b, json_file, indent=4)
                 json_file.close()

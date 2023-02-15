@@ -30,7 +30,7 @@ if __name__ == '__main__':
             matrix_sqrt = ceil(sqrt(len(placements[pl]['placement'])))
             edges = read_maze_edges_multicast(placements[pl]['edges'])
 
-            positions = get_maze_positions(
+            positions = get_nodes_positions(
                 placements[pl]['placement'], matrix_sqrt)
 
             routed, grid, dic_path = routing_mesh(

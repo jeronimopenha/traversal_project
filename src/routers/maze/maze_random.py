@@ -36,7 +36,7 @@ if __name__ == '__main__':
                 edges.remove(e)
             edges = temp
 
-            positions = get_maze_positions(
+            positions = get_nodes_positions(
                 placements[pl]['placement'], matrix_sqrt)
 
             routed, grid, dic_path = routing_mesh(
