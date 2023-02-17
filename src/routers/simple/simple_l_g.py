@@ -15,8 +15,8 @@ from src.routers.simple.simple import *
 if __name__ == '__main__':
     try:
         # SA - DOT WITH REGS
-        placements_input_path = './exp_results/sincrono/placements/sa/mesh/1000/conv3/'
-        results_output_path = './exp_results/routers/maze/sa/l_g/'
+        placements_input_path = './exp_results/sincrono/placements/sa/mesh/1000/'
+        results_output_path = './exp_results/sincrono/routers/simple/sa/l_g/'
 
         files_placements = find_files_conditional(
             placements_input_path, '.json')
@@ -36,6 +36,9 @@ if __name__ == '__main__':
 
             distances_max = 0
             distances = {}
+
+            if not routed:
+                s=1
 
             if routed:
                 ed = {}
@@ -82,7 +85,7 @@ if __name__ == '__main__':
         for stat in stats.keys():
             stats[stat].sort(key=lambda v: v['router_cost'])
 
-        for stat in stats.keGRID_SIZEys():
+        for stat in stats.keys():
             for i in range(len(stats[stat])):
                 b = stats[stat][i]
                 p = '%s%s/%s_%s.json' % (results_output_path,

@@ -117,7 +117,11 @@ def routing(list_edge: list(list()), grid_size: int, positions: dict()):
         b_c = positions[str(b)][1]
 
         dic_path[edge_key] = []
-        find_route(grid_size, grid,  dic_path[edge_key], a, a_l, a_c, b_l, b_c)
+        ret = find_route(grid_size, grid,
+                         dic_path[edge_key], a, a_l, a_c, b_l, b_c)
+        if not ret:
+            return False, grid, dic_path
+    return True, grid, dic_path
 
     '''  # verify if is routing
     for j in range(0, len(list_edge)):
