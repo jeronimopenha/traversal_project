@@ -76,6 +76,7 @@ if __name__ == '__main__':
 
         for i in range(len(files_l)):
             graph_fix(files_l[i][0])
+        #graph_fix('/home/jeronimo/Documentos/GIT/traversal_project/bench/test_bench/assincrono/collapse_pyr.dot')
 
     except Exception as e:
         print(e)

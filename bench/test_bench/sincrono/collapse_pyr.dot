@@ -29,7 +29,7 @@ digraph "collapse_pyr" {
 27 [label=sub27, op=sub];
 28 [label=mul28, op=muli, value=2];
 29 [label=add29, op=addi, value=2];
-30 [label=reg30, op=reg];
+30 [label=add30, op=add];
 31 [label=reg31, op=reg];
 32 [label=reg32, op=reg];
 33 [label=reg33, op=reg];
@@ -50,7 +50,7 @@ digraph "collapse_pyr" {
 48 [label=mul48, op=muli, value=2];
 49 [label=add49, op=addi, value=2];
 50 [label=add50, op=addi, value=2];
-51 [label=reg51, op=reg];
+51 [label=add51, op=add];
 52 [label=add52, op=addi, value=2];
 53 [label=add53, op=addi, value=2];
 54 [label=reg54, op=reg];
@@ -76,7 +76,7 @@ digraph "collapse_pyr" {
 74 [label=in74, op=in];
 75 [label=in75, op=in];
 76 [label=in76, op=in];
-77 [label=in77, op=in];
+77 [label=reg77, op=reg];
 78 [label=out78, op=out];
 79 [label=out79, op=out];
 80 [label=out80, op=out];
