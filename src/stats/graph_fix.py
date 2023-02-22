@@ -14,10 +14,12 @@ def graph_fix(sdot: str):
     nodes = g.nodes()
     edges = g.edges()
     port_count = {}
+    while '\\n' in nodes.keys():
+        g.remove_node('\\n')
     for p in nodes.keys():
-        if p == '\\n':
+        '''if p == '\\n':
             g.remove_node('\\n')
-            continue
+            continue'''
         lb = nodes[p]['label'] = nodes[p]['label'].lower().replace('_', '')
 
         port_count[p] = 0
