@@ -7,7 +7,7 @@ if os.getcwd() not in sys.path:
 
 import json
 import csv
-import pr_graph as _u
+import wother.pr_graph as _u
 
 
 input_path = '/home/jeronimo/Documents/GIT/traversal_project/bench/results/m_bench/simple_traverse/place_1000_tries/'
