@@ -1,0 +1,5 @@
+{
+    "benchmark": "test_simul_45",
+    "simul_step": "original",
+    "throughput": 99.95
+}

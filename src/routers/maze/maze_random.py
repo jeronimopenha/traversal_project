@@ -21,7 +21,7 @@ if __name__ == '__main__':
         rnd.seed(0)
         files_placements = find_files_conditional(
             placements_input_path, '.json')
-        placements = read_json(files_placements)
+        placements = read_json_files(files_placements)
         routings = {}
 
         # random edges to routing

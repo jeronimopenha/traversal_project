@@ -7,19 +7,19 @@ from make_test_bench import make_test_bench
 def add_regs(dataflow):
     df = dataflow.copy()
     for edge in dataflow.edges():
-        if int(dataflow.edges[edge]['weight']) > 0:
+        if int(dataflow.edges[edge]['w']) > 0:
             src = edge[0]
             dst = edge[1]
             port = int(dataflow.edges[edge]['port'])
-            for r in range(int(dataflow.edges[edge]['weight'])):
+            for r in range(int(dataflow.edges[edge]['w'])):
                 id = '%s_%s' % edge + '_%d' % r
                 df.add_node(id)
                 nx.set_node_attributes(df, {id: {'label': 'reg', 'op': 'reg'}})
                 df.add_edge(src, id)
-                nx.set_edge_attributes(df, {(src, id): {'port': 0, 'weight': 0}})
+                nx.set_edge_attributes(df, {(src, id): {'port': 0, 'w': 0}})
                 src = id
             df.add_edge(src, dst)
-            nx.set_edge_attributes(df, {(src, dst): {'port': port, 'weight': 0}})
+            nx.set_edge_attributes(df, {(src, dst): {'port': port, 'w': 0}})
             df.remove_edge(edge[0], edge[1])
     return df
 

@@ -267,14 +267,14 @@ def find_files_conditional(path: str, condition: str) -> list():
     return files_return
 
 
-def read_json(files: list()):
-    placements = {}
+def read_json_files(files: list()):
+    data = {}
     for file in files:
         with open(file[0]) as p_file:
             contents = p_file.read()
-            placements[file[2]] = json.loads(contents)
+            data[file[2]] = json.loads(contents)
         p_file.close()
-    return placements
+    return data
 
 
 def read_maze_edges(edges: dict()) -> list():
