@@ -131,7 +131,7 @@ def make_test_bench(file, dataflow_dot):
 
     simulation.setup_clock(m, clk, hperiod=1)
     simulation.setup_reset(m, rst, period=1)
-    simulation.setup_waveform(m)
+    #simulation.setup_waveform(m)
 
     m.Always(Posedge(clk))(
         If(rst)(

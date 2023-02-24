@@ -139,7 +139,7 @@ if __name__ == '__main__':
         # executing the SA algorithm in multithreads
         threads = list()
         #n_threads = 1  # os.cpu_count()//2
-        n_threads = os.cpu_count()//2
+        n_threads = os.cpu_count()
         for i in range(n_threads):
             x = mp.Process(target=thread_function, args=(i,
                                                          n_threads,

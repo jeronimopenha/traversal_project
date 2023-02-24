@@ -45,12 +45,6 @@ module bench_test_bench_test_simul_cost_2_test_simul_27
   end
 
 
-  initial begin
-    $dumpfile("uut.vcd");
-    $dumpvars(0);
-  end
-
-
   always @(posedge clk) begin
     if(rst) begin
       count_clock <= 0;
