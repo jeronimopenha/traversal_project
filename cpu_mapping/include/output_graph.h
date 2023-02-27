@@ -157,7 +157,7 @@ void output_graph_raw(
 
     int a, b, dir, value;
 
-    string output = "../exp_results/placements/" + tool + "/" + str_arch + "/" + to_string(size) + "/" + name + to_string(idx) + ".raw";
+    string output = "../exp_results/placements/" + tool + "/" + str_arch + "/assincrono_optimal/" + to_string(size) + "/" + name + to_string(idx) + ".raw";
 
     ofstream f;
     f.open(output);

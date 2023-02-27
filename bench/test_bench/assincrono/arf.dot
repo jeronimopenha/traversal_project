@@ -1,4 +1,4 @@
-strict digraph "arf" {
+digraph "arf" {
 0 [alap=6, asap=1, label=mul0, op=muli, value=2];
 1 [alap=6, asap=1, label=mul1, op=muli, value=2];
 2 [alap=1, asap=1, label=mul2, op=muli, value=2];

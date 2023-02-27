@@ -1,0 +1,5 @@
+{
+    "benchmark": "collapse_pyr",
+    "simul_step": "original",
+    "throughput": 57.11
+}

@@ -1,4 +1,4 @@
-strict digraph "collapse_pyr" {
+digraph "collapse_pyr" {
 0 [alap=2, asap=2, label=add0, op=addi, value=2];
 2 [alap=4, asap=4, label=sub2, op=sub];
 3 [alap=4, asap=4, label=sub3, op=sub];

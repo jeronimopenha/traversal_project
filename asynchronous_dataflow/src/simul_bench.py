@@ -87,7 +87,7 @@ def simul(file_l: list(), id:int):
     json_file.close()
 
 
-def thread_function(id: int, n_threads: int, files_l: list()):
+def worker_function(id: int, n_threads: int, files_l: list()):
     n_files = len(files_l)
     for idx in range(id, n_files, n_threads):
         if (idx < n_files):
@@ -137,19 +137,19 @@ if __name__ == '__main__':
                 file_l.append(data)
 
         # executing the SA algorithm in multithreads
-        threads = list()
+        workers = list()
         #n_threads = 1  # os.cpu_count()//2
-        n_threads = os.cpu_count()
-        for i in range(n_threads):
-            x = mp.Process(target=thread_function, args=(i,
-                                                         n_threads,
+        n_workers = os.cpu_count()
+        for i in range(n_workers):
+            x = mp.Process(target=worker_function, args=(i,
+                                                         n_workers,
                                                          file_l
                                                          ))
             print("Simulator Main    : creating and starting %s." % x.name)
-            threads.append(x)
+            workers.append(x)
             x.start()
 
-        for th in threads:
+        for th in workers:
             th.join()
             print("Simulator Main    : %s done." % th.name)
         a = 1

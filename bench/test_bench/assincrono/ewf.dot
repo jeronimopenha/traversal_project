@@ -1,4 +1,4 @@
-strict digraph "ewf" {
+digraph "ewf" {
 0 [alap=1, asap=1, label=add0, op=addi, value=2];
 1 [alap=3, asap=1, label=add1, op=addi, value=2];
 2 [alap=2, asap=2, label=add2, op=addi, value=2];

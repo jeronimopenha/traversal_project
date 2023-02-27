@@ -1,4 +1,4 @@
-strict digraph "conv3" {
+digraph "conv3" {
 0 [alap=3, asap=3, label=mul0, op=mul];
 1 [alap=2, asap=0, label=in1, op=in];
 3 [alap=4, asap=4, label=mul3, op=mul];

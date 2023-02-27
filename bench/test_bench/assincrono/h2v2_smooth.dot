@@ -1,4 +1,4 @@
-strict digraph "h2v2_smooth" {
+digraph "h2v2_smooth" {
 1 [alap=10, asap=0, label=in1, op=in];
 2 [alap=2, asap=0, label=in2, op=in];
 3 [alap=6, asap=1, label=add3, op=addi, value=2];

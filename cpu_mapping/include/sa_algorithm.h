@@ -139,7 +139,7 @@ void sa_main(
         str_arch = "chess";
     else if (ARCH == 3)
         str_arch = "hex";
-    string output = "../exp_results/placements/sa/" + str_arch+ "/" + to_string(NGRIDS) + "/" + name + ".map";
+    string output = "../exp_results/placements/sa/" + str_arch+ "/assincrono_optimal/" + to_string(NGRIDS) + "/" + name + ".map";
 
     ofstream f;
     f.open(output);

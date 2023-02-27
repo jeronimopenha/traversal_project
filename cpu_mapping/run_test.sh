@@ -12,7 +12,7 @@ GRAPH=(
     #mvt      
     #syrk
     atax
-    #conv3
+    conv3
     arf
     collapse_pyr
     cosine1
@@ -33,8 +33,8 @@ SIZE=(
 )
 
 PROG=( # 0 = yolt, 1 = yott, 2 = sa
-    0
-    1
+    #0
+    #1
     2
 )
 
@@ -54,13 +54,13 @@ for ((l=0; l < ${#PROG[@]}; l++)) do
         for ((j=0; j < ${#ARCH[@]}; j++)) do
             
             if [ ${ARCH[j]} == 0 ]; then
-                mkdir -p ../exp_results/placements/yolt/mesh/${SIZE[k]}
-                mkdir -p ../exp_results/placements/yott/mesh/${SIZE[k]}
-                mkdir -p ../exp_results/placements/sa/mesh/${SIZE[k]}
+                #mkdir -p ../exp_results/placements/yolt/mesh/${SIZE[k]}
+                #mkdir -p ../exp_results/placements/yott/mesh/${SIZE[k]}
+                mkdir -p ../exp_results/placements/sa/mesh/assincrono_optimal/${SIZE[k]}
                 echo "ARCH: MESH"
             elif [ ${ARCH[j]} == 1 ]; then
-                mkdir -p ../exp_results/placements/yolt/1hop/${SIZE[k]}
-                mkdir -p ../exp_results/placements/yott/1hop/${SIZE[k]}
+                #mkdir -p ../exp_results/placements/yolt/1hop/${SIZE[k]}
+                #mkdir -p ../exp_results/placements/yott/1hop/${SIZE[k]}
                 mkdir -p ../exp_results/placements/sa/1hop/${SIZE[k]}
                 echo "ARCH: 1HOP"
             fi
@@ -68,7 +68,7 @@ for ((l=0; l < ${#PROG[@]}; l++)) do
             for ((i=0; i < ${#GRAPH[@]}; i++)) do
 
                 echo "GRAPH: ${GRAPH[i]}"
-                DOT="../bench/test_bench/"${GRAPH[i]}".dot"
+                DOT="../bench/test_bench/assincrono_optimal/"${GRAPH[i]}".dot"
         
                 # bench ngrids program arch
                 ./build/main $DOT ${SIZE[k]} ${PROG[l]} ${ARCH[j]} 
