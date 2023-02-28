@@ -37,3 +37,10 @@ rodar os simuladores
 custo e vazão
 
 teste de quadrante - se 1 coincidir o multicast já pode ser usado
+
+
+Rodar simulador para os piores com 100 melhores e gerar o gráfico linha pra cada ordenado pela ordem do placer
+
+rodar mais grafos ótimos e sem regs
+
+QCA

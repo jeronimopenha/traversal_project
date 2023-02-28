@@ -117,9 +117,9 @@ def worker_function(id: int, n_workers: int, files_l: list()):
 
 if __name__ == '__main__':
     try:
-        input_path = './exp_results/placements/sa/mesh/assincrono/'
+        input_path = './exp_results/placements/sa/mesh/assincrono_optimal/'
         dot_path = './bench/test_bench/assincrono/'
-        output_path = './exp_results/simulations/placements/sa/mesh/assincrono/'
+        output_path = './exp_results/simulations/placements/sa/mesh/assincrono_optimal/'
 
         if os.path.exists(output_path):
             shutil.rmtree(output_path)
