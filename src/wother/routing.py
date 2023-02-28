@@ -26,7 +26,7 @@ def routing_mesh(list_edge, GRID_SIZE, positions):
         pos_a_j = positions[str(a)][1]
         pos_b_i = positions[str(b)][0]
         pos_b_j = positions[str(b)][1]
-
+        dic_path= {}
         dic_path[key] = []
         dist_walk = -1
 
@@ -122,7 +122,7 @@ def routing_1hop(list_edge, GRID_SIZE, positions):
         pos_a_j = positions[str(a)][1]
         pos_b_i = positions[str(b)][0]
         pos_b_j = positions[str(b)][1]
-
+        dic_path = {}
         dic_path[key] = []
         dist_walk = -1
 

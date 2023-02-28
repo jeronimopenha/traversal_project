@@ -198,8 +198,7 @@ def yott_placer(initial_placement: dict(),
             nodes_positions[b] = cell
             placement[cell] = b
             liberty_matrix[cell] = 0
-            update_liberty_matrix(cell, matrix_len_sqrt,jsmtwtfs34
-            
+            update_liberty_matrix(cell, matrix_len_sqrt,
                                   distance_matrix[0], liberty_matrix)
             # edges[e]['final_cost'] = d
             # total_cost += d

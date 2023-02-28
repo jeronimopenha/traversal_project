@@ -45,7 +45,7 @@ def create_simul(s_dot: str) -> Module:
     return m, file
 
 
-def simul(file_l: list(), id:int):
+def simul(file_l: list(), id: int):
     dot = file_l[0]
     bench_name = file_l[1]
     verilog_path = file_l[3]
@@ -138,7 +138,7 @@ if __name__ == '__main__':
 
         # executing the SA algorithm in multithreads
         workers = list()
-        #n_threads = 1  # os.cpu_count()//2
+        # n_threads = 1  # os.cpu_count()//2
         n_workers = os.cpu_count()
         for i in range(n_workers):
             x = mp.Process(target=worker_function, args=(i,
@@ -152,6 +152,9 @@ if __name__ == '__main__':
         for th in workers:
             th.join()
             print("Simulator Main    : %s done." % th.name)
+        for wk in range(n_workers):
+            if os.path.exists("%d.out" % wk):
+                os.remove("%d.out" % wk)
         a = 1
 
     except Exception as e:
