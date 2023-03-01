@@ -112,11 +112,12 @@ if __name__ == '__main__':
         csv_rows = []
         for t in csv_data.keys():
             for k in csv_data[t].keys():
-                for i in range(len(csv_data[k])):
+                for i in range(len(csv_data[t][k])):
                     row = []
+                    row.append(t)
                     row.append(k)
-                    row.append(csv_data[k][i][0])
-                    row.append(csv_data[k][i][1])
+                    row.append(csv_data[t][k][i][0])
+                    row.append(csv_data[t][k][i][1])
                     csv_rows.append(row)
                     del row
                 del i

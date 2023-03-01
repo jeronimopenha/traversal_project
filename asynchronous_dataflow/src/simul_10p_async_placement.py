@@ -45,7 +45,8 @@ def simul(file_l: list(), id: int):
     verilog_path = file_l[2]
     data_output_path = file_l[3]
     results_path = file_l[4]
-    diff = file_l[5]
+    dot_path = file_l[5]
+    diff = file_l[6]
 
     json_edges = []
     for e in file_l[0]['edges'].keys():
@@ -69,8 +70,12 @@ def simul(file_l: list(), id: int):
             for je in json_edges:
                 if p == je[0] and f == je[1]:
                     edges._adjdict[p][f]['w'] = str(je[2]-1)
+                    edges._adjdict[p][f]['label'] = edges._adjdict[p][f]['w']
                     json_edges.remove(je)
                     break
+
+    nx.nx_pydot.write_dot(dataflow_dot, '%s%s_%s.dot' %
+                          (dot_path, bench_name, diff))
 
     m = create_simul(dataflow_dot, file)
     m.to_verilog('%s%s_%s.v' % (verilog_path, file, diff))
@@ -117,9 +122,9 @@ def worker_function(id: int, n_workers: int, files_l: list()):
 
 if __name__ == '__main__':
     try:
-        input_path = './exp_results/placements/sa/mesh/assincrono_optimal/'
+        input_path = './exp_results/placements/sa/mesh/assincrono/'
         dot_path = './bench/test_bench/assincrono/'
-        output_path = './exp_results/simulations/placements/sa/mesh/assincrono_optimal/'
+        output_path = './exp_results/simulations/placements/sa/mesh/assincrono/'
 
         if os.path.exists(output_path):
             shutil.rmtree(output_path)
@@ -164,6 +169,10 @@ if __name__ == '__main__':
                     os.mkdir(temp)
                 data.append(temp)
                 temp = '%sresults/' % s
+                if not os.path.exists(temp):
+                    os.mkdir(temp)
+                data.append(temp)
+                temp = '%sdot/' % s
                 if not os.path.exists(temp):
                     os.mkdir(temp)
                 data.append(temp)

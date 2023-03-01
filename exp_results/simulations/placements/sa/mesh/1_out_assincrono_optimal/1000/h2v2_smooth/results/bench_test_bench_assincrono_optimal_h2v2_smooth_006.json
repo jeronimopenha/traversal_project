@@ -1,0 +1,5 @@
+{
+    "benchmark": "h2v2_smooth",
+    "simul_step": "original",
+    "throughput": 99.82
+}

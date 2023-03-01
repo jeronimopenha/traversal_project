@@ -1,11 +1,12 @@
 from veriloggen import *
 
 from make_component import make_dataflow
+import networkx as nx
 
 
 def make_producer():
     m = Module('producer')
-    producer_id = m.Parameter('producer_id',0)
+    producer_id = m.Parameter('producer_id', 0)
     data_width = m.Parameter('data_width', 8)
     fail_rate = m.Parameter('fail_rate', 0)
     is_const = m.Parameter('is_const', 'false')
@@ -32,9 +33,9 @@ def make_producer():
             ack(0),
             randd(EmbeddedCode('$abs($random%101)+1')),
             stop(Mux(randd > fail_rate, 0, 1)),
-            #If(ack)(
+            # If(ack)(
             #    Write("p_%d,%d\\n",producer_id,dout)
-            #),
+            # ),
             If(req & ~ack & Not(stop))(
                 ack(1),
                 dout(dout_next),
@@ -84,7 +85,7 @@ def make_consumer():
     return m
 
 
-def make_test_bench(file, dataflow_dot):
+def make_test_bench(file: str, dataflow_dot: nx.DiGraph()):
     dataflow = make_dataflow(dataflow_dot)
     m = Module(file)
     data_width = m.Localparam('data_width', 32)
@@ -122,7 +123,7 @@ def make_test_bench(file, dataflow_dot):
     count_clock = m.Real('count_clock', 32)
 
     m.EmbeddedCode('')
-    consumers_done = m.Wire('consumers_done',n_out)
+    consumers_done = m.Wire('consumers_done', n_out)
     done = m.Wire('done')
     for i in range(n_out):
         consumers_done[i].assign(count_consumer[i] >= max_data_size)
@@ -131,7 +132,9 @@ def make_test_bench(file, dataflow_dot):
 
     simulation.setup_clock(m, clk, hperiod=1)
     simulation.setup_reset(m, rst, period=1)
-    #simulation.setup_waveform(m)
+    # simulation.setup_waveform(m)
+
+    i = m.Integer('i')
 
     m.Always(Posedge(clk))(
         If(rst)(
@@ -139,8 +142,11 @@ def make_test_bench(file, dataflow_dot):
         ),
         count_clock.inc(),
         If(done)(
-            Display(file + " throughput: %5.2f%%", Mul(100.0,
-                    (count_consumer[0] / (count_clock / 4.0)))),
+            For(i(0), i < n_out, i.inc())(
+                Display(file + " throughput: %d : %5.2f%%", i,
+                        Mul(100.0, (count_consumer[i] / (count_clock / 4.0)))),
+
+            ),
             Finish()
         )
     )
@@ -152,7 +158,7 @@ def make_test_bench(file, dataflow_dot):
         op = str.lower(dataflow_dot.nodes[no]['op'])
         if op == 'in':
             param = [
-                ('producer_id',int(no)),
+                ('producer_id', int(no)),
                 ('data_width', data_width),
                 ('fail_rate', fail_rate_producer),
                 ('initial_value', initial_value),

@@ -1,0 +1,24 @@
+strict digraph "atax" {
+0 [alap=2, asap=2, label=mul0, op=mul];
+1 [alap=1, asap=0, label=in1, op=in];
+3 [alap=2, asap=2, label=mul3, op=mul];
+4 [alap=1, asap=0, label=in4, op=in];
+7 [alap=2, asap=0, label=in7, op=in];
+9 [alap=3, asap=3, label=mul9, op=mul];
+10 [alap=4, asap=4, label=add10, op=add];
+11 [alap=5, asap=5, label=out11, op=out];
+12 [alap=1, asap=1, label=add12, op=addi, value=2];
+13 [alap=0, asap=0, label=in13, op=in];
+14 [alap=3, asap=3, label=out14, op=out];
+0 -> 10  [port=0, w=0];
+0 -> 14  [port=0, w=0];
+1 -> 0  [port=0, w=0];
+3 -> 9  [port=0, w=0];
+4 -> 3  [port=0, w=0];
+7 -> 9  [port=1, w=0];
+9 -> 10  [port=1, w=0];
+10 -> 11  [port=0, w=0];
+12 -> 0  [port=1, w=0];
+12 -> 3  [label=1, port=1, w=1];
+13 -> 12  [port=0, w=0];
+}
