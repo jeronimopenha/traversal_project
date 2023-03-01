@@ -44,3 +44,7 @@ Rodar simulador para os piores com 100 melhores e gerar o gráfico linha pra cad
 rodar mais grafos ótimos e sem regs
 
 QCA
+
+script rodar vários
+rodar 10,100,1000
+gráfico linhas
