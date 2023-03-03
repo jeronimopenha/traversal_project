@@ -68,12 +68,12 @@ module bench_test_bench_assincrono_ewf
   always @(posedge clk) begin
     if(rst) begin
       count_clock <= 0;
-    end 
+    end
     count_clock <= count_clock + 1;
     if(done) begin
       $display("bench_test_bench_assincrono_ewf throughput: %5.2f%%", (100.0 * (count_consumer[0] / (count_clock / 4.0))));
       $finish;
-    end 
+    end
   end
 
 
@@ -274,9 +274,9 @@ module producer #
         dout <= dout_next;
         if(is_const == "false") begin
           dout_next <= dout_next + 1;
-        end 
+        end
         count <= count + 1;
-      end 
+      end
     end
   end
 
@@ -315,11 +315,11 @@ module consumer #
       stop <= (randd > fail_rate)? 0 : 1;
       if(!stop) begin
         req <= 1;
-      end 
+      end
       if(ack) begin
         count <= count + 1;
         $write("c_%d, %d\n", consumer_id, din);
-      end 
+      end
     end
   end
 
