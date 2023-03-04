@@ -9,14 +9,11 @@ import networkx as nx
 import json
 from veriloggen import *
 import multiprocessing as mp
-from src.util import get_files, create_folders, fix_networkx_digraph
+from src.util import get_files, create_folders, fix_networkx_digraph, insert_slash_in_path
 from src.simulator.simul_make_test_bench import make_test_bench
 
 
-#mudança: 20230055854131
-#novo: 20230055854391
-
-def create_data_to_simulate(file_dic: dict(), output_path: str) -> dict():
+def dot_create_data_to_simulate(file_dic: dict(), output_path: str) -> dict():
     # take data for one dot
     create_folders('%sverilog' % output_path)
     create_folders('%soutput' % output_path)
@@ -26,8 +23,7 @@ def create_data_to_simulate(file_dic: dict(), output_path: str) -> dict():
     # creating the needed data to simulations
     name = file_dic['file_name'].replace('.dot', '')
     file_dic['name'] = name
-    if output_path[-1] != '/':
-        output_path += '/'
+    output_path = insert_slash_in_path(output_path)
     file_dic['output_base_path'] = output_path
 
     # creating the digraph object to generate the verilog simulator
@@ -79,7 +75,7 @@ def start_simulation(files_dic: dict()):
 
     for wk in workers:
         wk.join()
-        print("Simul_dot_batch: %s simulation process done." % wk.name)
+        print("Simulator: %s simulation process done." % wk.name)
 
 
 def worker_function(id: int, n_workers: int, files_dic: dict()):
@@ -87,7 +83,7 @@ def worker_function(id: int, n_workers: int, files_dic: dict()):
     n_files = len(keys)
     for idx in range(id, n_files, n_workers):
         if (idx < n_files):
-            print("Simul: Running simulation %d" % idx)
+            print("Worker: Running simulation %d" % idx)
             m = files_dic[keys[idx]]['module']
             verilog_path = '%sverilog/%s.v' % (
                 files_dic[keys[idx]]['output_base_path'], files_dic[keys[idx]]['name'])
@@ -129,7 +125,8 @@ def write_output_results(file_dic: dict(), rslt: str):
         json.dump(simul_results, json_file, indent=4)
     json_file.close()
 
-    data = {}
+    # FIXME For the output data uncoment the lines below
+    '''data = {}
     # counter = 0
     for line in lines:
         parts = line.split(',')
@@ -140,7 +137,7 @@ def write_output_results(file_dic: dict(), rslt: str):
         data[c].append(d)
     with open('%s/output/%s.json' % (file_dic['output_base_path'], file_dic['name']), 'w') as json_file:
         json.dump(data, json_file, indent=4)
-    json_file.close()
+    json_file.close()'''
 
 
 def simul_dot_batch(dot_files_path: str, output_path: str) -> dict():
@@ -153,18 +150,49 @@ def simul_dot_batch(dot_files_path: str, output_path: str) -> dict():
     for file in file_dic.keys():
         print('%d/%d' % (counter, len(file_dic.keys())), end='\r')
         counter += 1
-        file_dic[file] = create_data_to_simulate(file_dic[file], output_path)
+        file_dic[file] = dot_create_data_to_simulate(
+            file_dic[file], output_path)
 
     print()
     print('Simul_dot_batch: starting simulation')
-    workers = list()
+    start_simulation(file_dic)
+    '''workers = list()
     # n_workers = 1
     n_workers = os.cpu_count()
     for i in range(min(n_workers, len(file_dic))):
         #worker_function(i, min(n_workers, len(file_dic)), file_dic)
         x = mp.Process(target=worker_function, args=(i,
-                                                     min(n_workers, len(file_dic)),
+                                                     min(n_workers, len(
+                                                         file_dic)),
                                                      file_dic
+                                                     ))
+        print("Simul_dot_batch: creating and starting %s simulation process." % x.name)
+        workers.append(x)
+        x.start()
+
+    for wk in workers:
+        wk.join()
+        print("Simul_dot_batch: %s simulation process done." % wk.name)'''
+
+
+def simul_graph_batch(graphs: dict(), output_path: str) -> dict():
+
+    # Create the output folders
+    create_folders('%sverilog' % output_path)
+    create_folders('%soutput' % output_path)
+    create_folders('%sdot' % output_path)
+    create_folders('%sresults' % output_path)
+
+    print('Simul_graph_batch: starting simulation')
+    workers = list()
+    # n_workers = 1
+    n_workers = os.cpu_count()
+    for i in range(min(n_workers, len(graphs))):
+        #worker_function(i, min(n_workers, len(graphs)), graphs)
+        x = mp.Process(target=worker_function, args=(i,
+                                                     min(n_workers, len(
+                                                         graphs)),
+                                                     graphs
                                                      ))
         print("Simul_dot_batch: creating and starting %s simulation process." % x.name)
         workers.append(x)

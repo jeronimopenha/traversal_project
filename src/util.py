@@ -25,13 +25,13 @@ def get_files(initial_path: str, ext_contition: str = None) -> list():
                 if ext_contition in f:
                     files_l[f] = {'file_name': f,
                                   'file_name_no_ext': f.split('.')[0],
-                                  'file_full_path': '%s/%s' % (temp, f),
+                                  'file_full_path': '%s%s' % (temp, f),
                                   'base_path': dir
                                   }
             else:
                 files_l[f] = {'file_name': f,
                               'file_name_no_ext': f.split('.')[0],
-                              'file_full_path': '%s/%s' % (temp, f),
+                              'file_full_path': '%s%s' % (temp, f),
                               'base_path': dir
                               }
     return files_l
@@ -60,11 +60,21 @@ def fix_networkx_digraph(g=nx.DiGraph()):
         g.remove_node('\\n')
 
 
-def read_json_files(files: list()):
+def read_json_files(files: dict()):
     data = {}
     for file in files:
+        # FIXME file is now a dict, not a vector
         with open(file[0]) as p_file:
             contents = p_file.read()
             data[file[2]] = json.loads(contents)
         p_file.close()
+    return data
+
+
+def read_json_file(file: str):
+    data = ''
+    with open(file) as p_file:
+        contents = p_file.read()
+        data = json.loads(contents)
+    p_file.close()
     return data
