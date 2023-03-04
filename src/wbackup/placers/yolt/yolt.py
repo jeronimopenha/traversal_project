@@ -11,6 +11,7 @@ import time
 from math import ceil, sqrt, exp
 import multiprocessing as mp
 import networkx as nx
+from src.util import fix_networkx_digraph
 
 
 def yolt_placer(initial_placement: dict(),
@@ -313,8 +314,7 @@ if __name__ == '__main__':
 
         for i in range(len(files_l)):
             g = nx.DiGraph(nx.nx_pydot.read_dot(files_l[i][0]))
-            while '\\n' in list(g.nodes):
-                g.remove_node('\\n')
+            fix_networkx_digraph(g)
             ret = create_placement(g, n_exec)
             for j in range(len(ret)):
                 # placement

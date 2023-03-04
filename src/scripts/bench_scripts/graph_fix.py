@@ -6,19 +6,16 @@ if os.getcwd() not in sys.path:
 
 import traceback
 import networkx as nx
+from src.util import fix_networkx_digraph
 
 
 def create_asap_alap(g:nx.DiGraph()):
-    #g = nx.DiGraph(nx.nx_pydot.read_dot(s_dot))
-    #g.remove_node('\\n')
     nodes = g.nodes()
     edges = g.edges()
     q_asap = []
     q_alap = []
     n = {}
     for k in nodes.keys():
-        if '\\n' in k:
-            continue
         n[k] = {'asap': 0, 'alap': len(edges)+1, 'n_pred': len(g._pred[k]),
                 'n_succ': len(g._succ[k]), 'succ': g._succ[k], 'pred': g._pred[k]}
         if len(g._pred[k]) == 0:
@@ -52,16 +49,11 @@ def create_asap_alap(g:nx.DiGraph()):
 
 def graph_fix(sdot: str):
     g = nx.DiGraph(nx.nx_pydot.read_dot(sdot))
-    # g.remove_node('\\n')
     nodes = g.nodes()
     edges = g.edges()
     port_count = {}
-    while '\\n' in nodes.keys():
-        g.remove_node('\\n')
+    fix_networkx_digraph(g)
     for p in nodes.keys():
-        '''if p == '\\n':
-            g.remove_node('\\n')
-            continue'''
         lb = nodes[p]['label'] = nodes[p]['label'].lower().replace('_', '')
 
         port_count[p] = 0

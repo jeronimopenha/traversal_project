@@ -257,26 +257,6 @@ def routing_1hop(list_edge, GRID_SIZE, positions):
     return True
 
 
-def find_files_conditional(path: str, condition: str) -> list():
-    files_return = []
-    for dir, folder, files in os.walk(path):
-        for f in files:
-            if condition in f:
-                files_return.append(
-                    [os.path.join(dir, f), f, '%s' % f.split('.')[0]])
-    return files_return
-
-
-def read_json_files(files: list()):
-    data = {}
-    for file in files:
-        with open(file[0]) as p_file:
-            contents = p_file.read()
-            data[file[2]] = json.loads(contents)
-        p_file.close()
-    return data
-
-
 def read_maze_edges(edges: dict()) -> list():
     edges_vec = []
     for e in edges.keys():

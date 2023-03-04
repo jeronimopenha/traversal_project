@@ -11,7 +11,7 @@ from src.util import create_folders
 
 if __name__ == '__main__':
     try:
-        dot_path = '/home/jeronimo/Documents/GIT/traversal_project/bench/test_bench/test_simul/cost_1/'
+        dot_path = './bench/test_bench/test_simul/cost_1/'
         output_path = './exp_results/simulations/test/'
         create_folders(output_path,True)
         simul_dot_batch(dot_path,output_path)

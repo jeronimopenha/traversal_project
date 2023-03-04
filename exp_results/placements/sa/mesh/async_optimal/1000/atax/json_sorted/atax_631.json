@@ -1,0 +1,106 @@
+{
+    "benchmark": "atax",
+    "placement_raw_file": "atax.dot881.raw",
+    "min_cost": 12,
+    "total_cost": 12,
+    "multicast_max": 2,
+    "distances_max": 1,
+    "multicasts": {
+        "0": 2,
+        "1": 8,
+        "2": 2
+    },
+    "distances": {
+        "1": 12
+    },
+    "placement": [
+        null,
+        null,
+        "1",
+        null,
+        null,
+        null,
+        "5",
+        "0",
+        "14",
+        null,
+        "11",
+        "10",
+        "12",
+        "13",
+        null,
+        "7",
+        "9",
+        "3",
+        null,
+        null,
+        null,
+        null,
+        "4",
+        null,
+        null
+    ],
+    "edges": {
+        "0_5": {
+            "a": "0",
+            "b": "5",
+            "cost": 1
+        },
+        "0_14": {
+            "a": "0",
+            "b": "14",
+            "cost": 1
+        },
+        "1_0": {
+            "a": "1",
+            "b": "0",
+            "cost": 1
+        },
+        "3_9": {
+            "a": "3",
+            "b": "9",
+            "cost": 1
+        },
+        "4_3": {
+            "a": "4",
+            "b": "3",
+            "cost": 1
+        },
+        "5_10": {
+            "a": "5",
+            "b": "10",
+            "cost": 1
+        },
+        "7_9": {
+            "a": "7",
+            "b": "9",
+            "cost": 1
+        },
+        "9_10": {
+            "a": "9",
+            "b": "10",
+            "cost": 1
+        },
+        "10_11": {
+            "a": "10",
+            "b": "11",
+            "cost": 1
+        },
+        "12_0": {
+            "a": "12",
+            "b": "0",
+            "cost": 1
+        },
+        "12_3": {
+            "a": "12",
+            "b": "3",
+            "cost": 1
+        },
+        "13_12": {
+            "a": "13",
+            "b": "12",
+            "cost": 1
+        }
+    },
+    "dest": "./exp_results/placements/sa/mesh/async_optimal/1000/atax"
+}

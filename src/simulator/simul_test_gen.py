@@ -8,6 +8,7 @@ if os.getcwd() not in sys.path:
 import traceback
 import networkx as nx
 import random as rnd
+from src.util import fix_networkx_digraph
 
 if __name__ == '__main__':
     try:
@@ -26,8 +27,7 @@ if __name__ == '__main__':
             for j in range(qty[i]):
                 g = nx.DiGraph(nx.nx_pydot.read_dot(input_file))
                 nodes = g.nodes()
-                while '\\n' in nodes.keys():
-                    g.remove_node('\\n')
+                fix_networkx_digraph(g)
                 edges = list(g.edges)
                 choices = []
                 total_cost = i

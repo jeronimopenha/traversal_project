@@ -9,7 +9,7 @@ import networkx as nx
 import json
 from veriloggen import *
 import multiprocessing as mp
-from src.util import get_files, create_folders
+from src.util import get_files, create_folders, fix_networkx_digraph
 from src.simulator.simul_make_test_bench import make_test_bench
 
 
@@ -33,10 +33,7 @@ def create_data_to_simulate(file_dic: dict(), output_path: str) -> dict():
     # creating the digraph object to generate the verilog simulator
     file_dic['dataflow'] = nx.DiGraph(
         nx.nx_pydot.read_dot(file_dic['file_full_path']))
-    # cleaning the nx reading commmon problem
-    nodes = file_dic['dataflow'].nodes
-    while '\\n' in nodes.keys():
-        file_dic['dataflow'].remove_node('\\n')
+    fix_networkx_digraph(file_dic['dataflow'])
     # adding regs to simulate the delays sent on edges
     file_dic['dataflow_regs'] = simul_add_regs(
         file_dic['dataflow'])

@@ -110,8 +110,6 @@ def make_test_bench(file: str, dataflow_dot: nx.DiGraph()) -> Module():
     n_in = 0
     n_out = 0
     for no in dataflow_dot.nodes:
-        if no == '\\n':
-            continue
         op = str.lower(dataflow_dot.nodes[no]['op'])
         if op == 'in':
             n_in += 1
