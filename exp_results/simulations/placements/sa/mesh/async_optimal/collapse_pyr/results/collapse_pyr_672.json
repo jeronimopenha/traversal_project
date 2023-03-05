@@ -1,0 +1,5 @@
+{
+    "benchmark": "collapse_pyr_672",
+    "throughput_worst": 64.23,
+    "throughput_avg": 64.23
+}

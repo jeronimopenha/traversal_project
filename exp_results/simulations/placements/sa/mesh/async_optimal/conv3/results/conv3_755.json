@@ -1,0 +1,5 @@
+{
+    "benchmark": "conv3_755",
+    "throughput_worst": 62.47,
+    "throughput_avg": 62.47
+}

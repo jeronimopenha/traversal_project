@@ -37,9 +37,9 @@ if __name__ == '__main__':
             send_to_simul = {}
             counter = 1
             for placement in placement_files.keys():
-                if counter > 10:
+                '''if counter > 10:
                     print()
-                    break
+                    break'''
                 if placement_files[placement]['benchmark'] == bench:
                     print(counter, end='\r')
                     counter += 1

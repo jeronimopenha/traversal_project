@@ -1,0 +1,5 @@
+{
+    "benchmark": "cosine1_911",
+    "throughput_worst": 74.93,
+    "throughput_avg": 74.93
+}

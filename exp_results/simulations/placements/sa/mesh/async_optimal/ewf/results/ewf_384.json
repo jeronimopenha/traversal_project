@@ -1,0 +1,5 @@
+{
+    "benchmark": "ewf_384",
+    "throughput_worst": 74.86,
+    "throughput_avg": 74.86
+}

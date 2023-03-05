@@ -1,0 +1,5 @@
+{
+    "benchmark": "h2v2_smooth_160",
+    "throughput_worst": 79.86,
+    "throughput_avg": 79.86
+}
