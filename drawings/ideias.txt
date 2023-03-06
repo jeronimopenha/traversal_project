@@ -21,7 +21,7 @@ FEITO
 
 
 FAZER!!!
-
+/run/media/jeronimo/0a044ed5-90af-4fd1-bf9f-949ada3a1ae2/Amanda/
 desenhar as matrizes roteadas com ou sem as menores
 
 Pré-processamento grafo para o placement quando o multicast for "grande"
@@ -48,3 +48,5 @@ QCA
 script rodar vários
 rodar 10,100,1000
 gráfico linhas
+
+aprender o ABC
