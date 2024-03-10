@@ -2,7 +2,7 @@ from veriloggen import *
 import networkx as nx
 
 
-def create_wires(m: Module(), df: nx.DiGraph()) -> dict():
+def create_wires(m: Module(), df: nx.DiGraph()) -> dict:
     data_width = m.get_params()['data_width']
     wires = {}
     for no in df.nodes:
@@ -38,7 +38,7 @@ def create_wires(m: Module(), df: nx.DiGraph()) -> dict():
     return wires
 
 
-def get_immediate(no: dict()) -> int:
+def get_immediate(no: dict) -> int:
     immediate = 0
     operators = ['addi', 'subi', 'muli']
     name = str.lower(no['op'])
@@ -47,7 +47,7 @@ def get_immediate(no: dict()) -> int:
     return immediate
 
 
-def create_con_node(df: nx.DiGraph(), no: str) -> list():
+def create_con_node(df: nx.DiGraph(), no: str) -> list:
     din = ''
     req_l = ''
     ack_l = ''
@@ -172,7 +172,7 @@ def make_async_operator() -> Module():
     genfor = m.GenerateFor(g(0), g < input_size, g.inc(), 'rcv')
     genfor.Always(Posedge(ack_l[g]))(
         din_r[Mul(data_width, g):Mul(data_width, g + 1)
-              ](din[Mul(data_width, g):Mul(data_width, g + 1)])
+        ](din[Mul(data_width, g):Mul(data_width, g + 1)])
     )
 
     operator = make_operator()
@@ -216,7 +216,7 @@ def make_operator() -> Module():
     return m
 
 
-def make_dataflow(df:nx.DiGraph()):
+def make_dataflow(df: nx.DiGraph()):
     m = Module(df.name)
     data_width = m.Parameter('data_width', 32)
     clk = m.Input('clk')

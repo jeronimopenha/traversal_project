@@ -13,7 +13,7 @@ from src.util import get_files, create_folders, fix_networkx_digraph, insert_sla
 from src.simulator.simul_make_test_bench import make_test_bench
 
 
-def dot_create_data_to_simulate(file_dic: dict(), output_path: str) -> dict():
+def dot_create_data_to_simulate(file_dic: dict, output_path: str) -> dict:
     # take data for one dot
     create_folders('%sverilog' % output_path)
     create_folders('%soutput' % output_path)
@@ -59,7 +59,7 @@ def simul_add_regs(dataflow: nx.DiGraph()):
     return df
 
 
-def start_simulation(files_dic: dict()):
+def start_simulation(files_dic: dict):
     workers = list()
     # n_workers = 1
     n_workers = os.cpu_count()
@@ -78,11 +78,11 @@ def start_simulation(files_dic: dict()):
         print("Simulator: %s simulation process done." % wk.name)
 
 
-def worker_function(id: int, n_workers: int, files_dic: dict()):
+def worker_function(id: int, n_workers: int, files_dic: dict):
     keys = list(files_dic.keys())
     n_files = len(keys)
     for idx in range(id, n_files, n_workers):
-        if (idx < n_files):
+        if idx < n_files:
             print("Worker: Running simulation %d" % idx)
             m = files_dic[keys[idx]]['module']
             verilog_path = '%sverilog/%s.v' % (
@@ -140,8 +140,7 @@ def write_output_results(file_dic: dict(), rslt: str):
     json_file.close()'''
 
 
-def simul_dot_batch(dot_files_path: str, output_path: str) -> dict():
-
+def simul_dot_batch(dot_files_path: str, output_path: str):
     # get the dot files list
     file_dic = get_files(dot_files_path, '.dot')
     # creating the needed data to simulations
@@ -175,8 +174,7 @@ def simul_dot_batch(dot_files_path: str, output_path: str) -> dict():
         print("Simul_dot_batch: %s simulation process done." % wk.name)'''
 
 
-def simul_graph_batch(graphs: dict(), output_path: str) -> dict():
-
+def simul_graph_batch(graphs: dict, output_path: str) -> dict:
     # Create the output folders
     create_folders('%sverilog' % output_path)
     create_folders('%soutput' % output_path)
@@ -188,7 +186,7 @@ def simul_graph_batch(graphs: dict(), output_path: str) -> dict():
     # n_workers = 1
     n_workers = os.cpu_count()
     for i in range(min(n_workers, len(graphs))):
-        #worker_function(i, min(n_workers, len(graphs)), graphs)
+        # worker_function(i, min(n_workers, len(graphs)), graphs)
         x = mp.Process(target=worker_function, args=(i,
                                                      min(n_workers, len(
                                                          graphs)),

@@ -14,15 +14,15 @@ def insert_slash_in_path(str_path: str) -> str:
     return str_temp
 
 
-def get_files(initial_path: str, ext_contition: str = None) -> list():
+def get_files(initial_path: str, ext_condition: str = None) -> list():
     files_l = {}
 
     for dir, folder, files in os.walk(initial_path):
         for f in files:
             temp = dir
             temp = insert_slash_in_path(temp)
-            if ext_contition is not None:
-                if ext_contition in f:
+            if ext_condition is not None:
+                if ext_condition in f:
                     files_l[f] = {'file_name': f,
                                   'file_name_no_ext': f.split('.')[0],
                                   'file_full_path': '%s%s' % (temp, f),
@@ -43,14 +43,15 @@ def create_folders(folder_path: str, recreate_folder: bool = False):
             shutil.rmtree(folder_path)
             os.mkdir(folder_path)
     else:
-        if folder_path[-1] == '/':
+        os.makedirs(folder_path)
+        '''if folder_path[-1] == '/':
             folder_path = folder_path[0:-1]
         folders = folder_path.replace('./', '').split('/')
         temp_path = './'
         for folder in folders:
-            temp_path += folder+'/'
+            temp_path += folder + '/'
             if not os.path.exists(temp_path):
-                os.mkdir(temp_path)
+                os.mkdir(temp_path)'''
 
 
 def fix_networkx_digraph(g=nx.DiGraph()):
@@ -60,7 +61,7 @@ def fix_networkx_digraph(g=nx.DiGraph()):
         g.remove_node('\\n')
 
 
-def read_json_files(files: dict()):
+def read_json_files(files: dict):
     data = {}
     for file in files:
         # FIXME file is now a dict, not a vector
